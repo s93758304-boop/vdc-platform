@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VDC — Your Digital Opportunity Platform</title>
+
+<style>
+:root{
+  --purple:#6d28d9;
+  --purple-dark:#4c1d95;
+  --purple-light:#f3e8ff;
+  --orange:#f97316;
+  --orange-light:#fff7ed;
+  --green:#008751;
+  --dark:#17121f;
+  --muted:#6b6474;
+  --white:#fff;
+  --bg:#faf9fc;
+  --border:#eee8f4;
+  --shadow:0 15px 45px rgba(76,29,149,.10);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--dark);
+  line-height:1.6;
+}
+
+a{text-decoration:none;color:inherit}
+
+.container{
+  width:min(1120px,92%);
+  margin:auto;
+}
+
+/* HEADER */
+header{
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+
+.nav{
+  height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:25px;
+  font-weight:900;
+  color:var(--purple);
+}
+
+.logo-box{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--purple),var(--orange));
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:21px;
+}
+
+.ng{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:12px;
+  font-weight:700;
+  color:#555;
+}
+
+.flag{
+  width:20px;
+  height:13px;
+  display:flex;
+  overflow:hidden;
+  border-radius:2px;
+  border:1px solid #ddd;
+}
+
+.flag span{flex:1}
+.flag .g{background:#008751}
+.flag .w{background:#fff}
+
+.nav-links{display:none}
+
+.nav-actions{
+  display:flex;
+  gap:7px;
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  font-weight:800;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.btn-outline{
+  background:#fff;
+  color:var(--purple);
+  border:1px solid #d9c9ee;
+}
+
+.btn-primary{
+  background:var(--purple);
+  color:#fff;
+}
+
+.btn-orange{
+  background:var(--orange);
+  color:#fff;
+}
+
+/* HERO */
+.hero{
+  padding:55px 0 35px;
+  background:
+    radial-gradient(circle at 90% 5%,#f1e8ff 0,transparent 30%),
+    linear-gradient(#fff,#faf9fc);
+}
+
+.hero-grid{
+  display:grid;
+  gap:35px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--purple-light);
+  color:var(--purple-dark);
+  padding:7px 12px;
+  border-radius:50px;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.badge-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+}
+
+h1{
+  font-size:42px;
+  line-height:1.08;
+  letter-spacing:-1.5px;
+  margin-bottom:18px;
+}
+
+h1 span{color:var(--purple)}
+
+.hero-text{
+  color:var(--muted);
+  font-size:16px;
+  max-width:560px;
+}
+
+.hero-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:25px;
+}
+
+/* DASHBOARD PREVIEW */
+.preview{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+
+.preview-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.preview-title{
+  font-size:13px;
+  font-weight:800;
+}
+
+.live{
+  color:var(--green);
+  font-size:11px;
+  font-weight:800;
+  display:flex;
+  gap:5px;
+  align-items:center;
+}
+
+.live i{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+}
+
+.balance{
+  background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+  color:#fff;
+  border-radius:18px;
+  padding:22px;
+}
+
+.balance small{
+  opacity:.8;
+}
+
+.balance strong{
+  display:block;
+  font-size:30px;
+  margin-top:4px;
+}
+
+.preview-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.mini{
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:14px;
+}
+
+.mini svg{
+  width:22px;
+  color:var(--purple);
+}
+
+.mini small{
+  display:block;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.mini b{font-size:17px}
+
+/* STATS */
+.stats{
+  padding:10px 0 35px;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.stat{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+  text-align:center;
+}
+
+.stat b{
+  display:block;
+  color:var(--purple);
+  font-size:18px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* SECTIONS */
+section{
+  padding:65px 0;
+}
+
+.section-head{
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.section-head .tag{
+  color:var(--orange);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.section-head h2{
+  font-size:29px;
+  margin:7px 0;
+}
+
+.section-head p{
+  color:var(--muted);
+  max-width:600px;
+  margin:auto;
+}
+
+/* HOW */
+.steps{
+  display:grid;
+  gap:13px;
+}
+
+.step{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  display:flex;
+  gap:16px;
+}
+
+.step-icon{
+  min-width:45px;
+  height:45px;
+  border-radius:13px;
+  background:var(--purple-light);
+  color:var(--purple);
+  display:grid;
+  place-items:center;
+}
+
+.step-icon svg{
+  width:22px;
+}
+
+.step h3{
+  font-size:16px;
+}
+
+.step p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:3px;
+}
+
+/* VIP */
+.vip-grid{
+  display:grid;
+  gap:14px;
+}
+
+.vip{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:19px;
+  padding:21px;
+  position:relative;
+}
+
+.vip.featured{
+  border:2px solid var(--purple);
+}
+
+.vip-number{
+  color:var(--purple);
+  font-size:12px;
+  font-weight:900;
+}
+
+.vip h3{
+  font-size:23px;
+  margin:3px 0;
+}
+
+.vip-price{
+  font-size:22px;
+  font-weight:900;
+}
+
+.vip p{
+  color:var(--muted);
+  font-size:13px;
+  margin:8px 0 16px;
+}
+
+.vip .btn{
+  width:100%;
+}
+
+/* WAYS */
+.earn-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.earn-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.earn-icon{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:var(--orange-light);
+  color:var(--orange);
+}
+
+.earn-icon svg{width:22px}
+
+.earn-card h3{
+  margin-top:13px;
+  font-size:16px;
+}
+
+.earn-card p{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* NIGERIA */
+.ng-section{
+  background:linear-gradient(135deg,#fff,#faf4ff);
+}
+
+.ng-box{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:25px;
+  box-shadow:var(--shadow);
+}
+
+.ng-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.big-flag{
+  width:48px;
+  height:32px;
+  display:flex;
+  border:1px solid #ddd;
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.big-flag span{flex:1}
+.big-flag .g{background:#008751}
+.big-flag .w{background:#fff}
+
+.ng-box h2{
+  font-size:25px;
+}
+
+.ng-box p{
+  color:var(--muted);
+  margin:15px 0;
+}
+
+.bank-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.bank-pills span{
+  padding:7px 10px;
+  border-radius:20px;
+  background:#f6f2fa;
+  font-size:11px;
+  font-weight:700;
+}
+
+/* ACTIVITY */
+.activity{
+  background:#fff;
+}
+
+.activity-list{
+  display:grid;
+  gap:10px;
+  max-width:650px;
+  margin:auto;
+}
+
+.activity-item{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:13px;
+}
+
+.activity-icon{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--purple-light);
+  color:var(--purple);
+}
+
+.activity-icon svg{width:18px}
+
+.activity-item p{
+  font-size:12px;
+}
+
+.activity-item small{
+  color:#999;
+}
+
+/* FAQ */
+.faq{
+  display:grid;
+  gap:10px;
+}
+
+details{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:17px;
+}
+
+summary{
+  cursor:pointer;
+  font-weight:800;
+  font-size:14px;
+}
+
+details p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:10px;
+}
+
+/* CTA */
+.final{
+  padding:40px 0 70px;
+}
+
+.cta{
+  background:linear-gradient(135deg,var(--purple-dark),var(--purple));
+  color:#fff;
+  border-radius:25px;
+  padding:35px 22px;
+  text-align:center;
+}
+
+.cta h2{
+  font-size:28px;
+}
+
+.cta p{
+  opacity:.85;
+  margin:10px auto 22px;
+  max-width:500px;
+}
+
+/* FOOTER */
+footer{
+  background:#17121f;
+  color:#fff;
+  padding:35px 0;
+}
+
+.footer-top{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.footer-logo{color:#fff}
+
+footer p{
+  color:#aaa;
+  font-size:12px;
+  margin-top:10px;
+  max-width:400px;
+}
+
+.footer-links{
+  display:flex;
+  gap:18px;
+  font-size:12px;
+  color:#bbb;
+}
+
+.copy{
+  border-top:1px solid #302a36;
+  margin-top:25px;
+  padding-top:18px;
+  color:#888;
+  font-size:11px;
+}
+
+/* DESKTOP */
+@media(min-width:800px){
+
+  .nav-links{
+    display:flex;
+    gap:25px;
+    font-size:13px;
+    font-weight:700;
+    color:#615969;
+  }
+
+  .nav-actions .btn{
+    padding:10px 15px;
+  }
+
+  .hero{
+    padding:85px 0 50px;
+  }
+
+  .hero-grid{
+    grid-template-columns:1.05fr .95fr;
+    align-items:center;
+  }
+
+  h1{font-size:58px}
+
+  .stats-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .steps{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .step{
+    display:block;
+  }
+
+  .step-icon{
+    margin-bottom:16px;
+  }
+
+  .vip-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .earn-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+
+    <a class="logo" href="#">
+      <span class="logo-box">V</span>
+      VDC
+    </a>
+
+    <nav class="nav-links">
+      <a href="#how">How It Works</a>
+      <a href="#vip">VIP</a>
+      <a href="#earn">Ways to Earn</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+    <div class="nav-actions">
+      <span class="ng">
+        <span class="flag">
+          <span class="g"></span>
+          <span class="w"></span>
+          <span class="g"></span>
+        </span>
+        NG
+      </span>
+      <a class="btn btn-outline" href="login.html">Login</a>
+      <a class="btn btn-primary" href="register.html">Join</a>
+    </div>
+
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+
+    <div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Built for Nigeria
+      </div>
+
+      <h1>
+        Your <span>VDC</span> account.<br>
+        Your digital opportunities.
+      </h1>
+
+      <p class="hero-text">
+        Create your VDC account with your Nigerian phone number,
+        explore VIP access, complete available activities and discover
+        different ways to participate on one platform.
+      </p>
+
+      <div class="hero-buttons">
+        <a class="btn btn-primary" href="register.html">
+          Create Account
+        </a>
+        <a class="btn btn-outline" href="#how">
+          How VDC Works
+        </a>
+      </div>
+    </div>
+
+    <div class="preview">
+
+      <div class="preview-top">
+        <span class="preview-title">VDC Account Preview</span>
+        <span class="live"><i></i> Active</span>
+      </div>
+
+      <div class="balance">
+        <small>Total Account Balance</small>
+        <strong>₦125,000</strong>
+        <small>Example interface value</small>
+      </div>
+
+      <div class="preview-grid">
+
+        <div class="mini">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M12 3v18M5 8h14M5 16h14"/>
+          </svg>
+          <small>VIP Status</small>
+          <b>VIP 3</b>
+        </div>
+
+        <div class="mini">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M4 19V5m0 14h16M8 15l3-4 3 2 5-7"/>
+          </svg>
+          <small>Tasks</small>
+          <b>Available</b>
+        </div>
+
+        <div class="mini">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" stroke-width="2"/>
+            <path stroke-width="2" d="M8 12h8M12 8v8"/>
+          </svg>
+          <small>Ways to Earn</small>
+          <b>Explore</b>
+        </div>
+
+        <div class="mini">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M4 17l8-10 8 10"/>
+            <path stroke-width="2" d="M12 7v14"/>
+          </svg>
+          <small>Withdrawal</small>
+          <b>₦ Naira</b>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="container stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <b>₦</b>
+      <span>Naira Platform</span>
+    </div>
+    <div class="stat">
+      <b>12</b>
+      <span>VIP Levels</span>
+    </div>
+    <div class="stat">
+      <b>24h</b>
+      <span>Task Cycle</span>
+    </div>
+    <div class="stat">
+      <b>NG</b>
+      <span>Nigeria Focused</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW -->
+<section id="how">
+  <div class="container">
+
+    <div class="section-head">
+      <span class="tag">Simple Process</span>
+      <h2>How VDC Works</h2>
+      <p>Everything is managed from your VDC account.</p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+            <circle cx="12" cy="7" r="4" stroke-width="2"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Create Account</h3>
+          <p>Register using your Nigerian phone number and verify with OTP.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M12 3v18M5 8h14M5 16h14"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Choose VIP</h3>
+          <p>Explore the available VDC VIP levels and their stated terms.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M4 19V5m0 14h16M8 15l3-4 3 2 5-7"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Explore Activities</h3>
+          <p>Access eligible tasks and other available ways to participate.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M4 17l8-10 8 10"/>
+            <path stroke-width="2" d="M12 7v14"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Manage Your Wallet</h3>
+          <p>Track your actual account transactions and eligible withdrawals.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VIP -->
+<section id="vip" style="background:#fff">
+  <div class="container">
+
+    <div class="section-head">
+      <span class="tag">VDC Access</span>
+      <h2>VIP Levels</h2>
+      <p>Choose from 12 configurable VIP levels. Full benefits and terms are shown before activation.</p>
+    </div>
+
+    <div class="vip-grid">
+
+      <div class="vip featured">
+        <span class="vip-number">VIP 01</span>
+        <h3>Starter</h3>
+        <div class="vip-price">₦3,000</div>
+        <p>Entry-level VDC access and eligible activities.</p>
+        <a href="register.html" class="btn btn-primary">View VIP</a>
+      </div>
+
+      <div class="vip">
+        <span class="vip-number">VIP 02</span>
+        <h3>Growth</h3>
+        <div class="vip-price">₦7,000</div>
+        <p>Expanded access based on the published VIP terms.</p>
+        <a href="register.html" class="btn btn-outline">View VIP</a>
+      </div>
+
+      <div class="vip">
+        <span class="vip-number">VIP 03</span>
+        <h3>Plus</h3>
+        <div class="vip-price">₦11,000</div>
+        <p>Additional activities according to the applicable terms.</p>
+        <a href="register.html" class="btn btn-outline">View VIP</a>
+      </div>
+
+      <div class="vip">
+        <span class="vip-number">VIP 04–12</span>
+        <h3>More Levels</h3>
+        <div class="vip-price">₦15k+</div>
+        <p>Higher levels with separately displayed eligibility and benefits.</p>
+        <a href="register.html" class="btn btn-outline">Explore</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WAYS TO EARN -->
+<section id="earn">
+  <div class="container">
+
+    <div class="section-head">
+      <span class="tag">Ways To Participate</span>
+      <h2>Explore VDC</h2>
+      <p>Different sections of the platform can provide different activities and opportunities.</p>
+    </div>
+
+    <div class="earn-grid">
+
+      <div class="earn-card">
+        <div class="earn-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M9 11l3 3L20 6"/>
+            <path stroke-width="2" d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h10"/>
+          </svg>
+        </div>
+        <h3>Tasks</h3>
+        <p>Complete eligible tasks available for your account.</p>
+      </div>
+
+      <div class="earn-card">
+        <div class="earn-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" stroke-width="2"/>
+            <path stroke-width="2" d="M8 12h8M12 8v8"/>
+          </svg>
+        </div>
+        <h3>Lucky Draw</h3>
+        <p>Enter available draws and view published prize rules.</p>
+      </div>
+
+      <div class="earn-card">
+        <div class="earn-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="9" cy="7" r="3" stroke-width="2"/>
+            <path stroke-width="2" d="M3 20a6 6 0 0112 0M16 11a3 3 0 013 3M18 20a5 5 0 00-2-4"/>
+          </svg>
+        </div>
+        <h3>Referrals</h3>
+        <p>Invite eligible users and track your referral activity.</p>
+      </div>
+
+      <div class="earn-card">
+        <div class="earn-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/>
+          </svg>
+        </div>
+        <h3>More Coming</h3>
+        <p>Additional VDC opportunities can be added through the admin panel.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NIGERIA -->
+<section class="ng-section">
+  <div class="container">
+
+    <div class="ng-box">
+
+      <div class="ng-title">
+        <div class="big-flag">
+          <span class="g"></span>
+          <span class="w"></span>
+          <span class="g"></span>
+        </div>
+
+        <div>
+          <h2>Made for Nigeria</h2>
+          <span style="font-size:12px;color:#777">
+            Naira-based account experience
+          </span>
+        </div>
+      </div>
+
+      <p>
+        VDC is designed around a Nigerian user experience,
+        including Nigerian phone verification, Naira balances
+        and Nigerian bank withdrawal support.
+      </p>
+
+      <div class="bank-pills">
+        <span>₦ Naira</span>
+        <span>Phone OTP</span>
+        <span>Nigerian Banks</span>
+        <span>Local Account</span>
+        <span>Mobile First</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITY -->
+<section class="activity">
+  <div class="container">
+
+    <div class="section-head">
+      <span class="tag">VDC Activity</span>
+      <h2>Recent Platform Activity</h2>
+      <p>Actual platform events can appear here after the VDC system is connected.</p>
+    </div>
+
+    <div class="activity-list">
+
+      <div class="activity-item">
+        <div class="activity-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M12 3v18M5 8h14"/>
+          </svg>
+        </div>
+        <div>
+          <p><strong>******0776</strong> upgraded their VIP level.</p>
+          <small>Recent activity</small>
+        </div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M9 11l3 3L20 6"/>
+            <path stroke-width="2" d="M4 5v14h16"/>
+          </svg>
+        </div>
+        <div>
+          <p><strong>******Daniel</strong> completed an available task.</p>
+          <small>Recent activity</small>
+        </div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M4 17l8-10 8 10"/>
+            <path stroke-width="2" d="M12 7v14"/>
+          </svg>
+        </div>
+        <div>
+          <p><strong>******0814</strong> submitted a withdrawal request.</p>
+          <small>Recent activity</small>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+
+    <div class="section-head">
+      <span class="tag">Questions</span>
+      <h2>Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq">
+
+      <details>
+        <summary>How do I create a VDC account?</summary>
+        <p>Create an account using your Nigerian phone number and verify it with the OTP sent to you.</p>
+      </details>
+
+      <details>
+        <summary>Does VDC use email registration?</summary>
+        <p>No. The VDC registration flow is designed around phone-number verification.</p>
+      </details>
+
+      <details>
+        <summary>What are VIP levels?</summary>
+        <p>VDC will provide up to 12 configurable VIP levels. Each level will display its price, benefits and applicable terms before activation.</p>
+      </details>
+
+      <details>
+        <summary>How do withdrawals work?</summary>
+        <p>Eligible withdrawals are handled in Nigerian Naira through supported Nigerian bank accounts during the withdrawal period configured by VDC.</p>
+      </details>
+
+      <details>
+        <summary>Are displayed earnings guaranteed?</summary>
+        <p>No. Any financial return or benefit displayed by VDC must be based on the actual applicable terms and underlying activity. The platform should not present example figures as guaranteed profits.</p>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="container final">
+  <div class="cta">
+    <h2>Ready to explore VDC?</h2>
+    <p>Create your account with your Nigerian phone number and access the VDC platform.</p>
+    <a href="register.html" class="btn btn-orange">Create VDC Account</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="container">
+
+    <div class="footer-top">
+
+      <div>
+        <a class="logo footer-logo" href="#">
+          <span class="logo-box">V</span>
+          VDC
+        </a>
+        <p>
+          A Nigeria-focused digital platform with account,
+          VIP, task, referral and other activity features.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="#faq">FAQ</a>
+        <a href="#">Support</a>
+      </div>
+
+    </div>
+
+    <div class="copy">
+      © 2026 VDC. All rights reserved.
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
