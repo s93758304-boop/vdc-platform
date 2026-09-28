@@ -37,7 +37,6 @@ a{text-decoration:none;color:inherit}
   margin:auto;
 }
 
-/* HEADER */
 header{
   background:#fff;
   border-bottom:1px solid var(--border);
@@ -96,7 +95,9 @@ header{
 .flag .g{background:#008751}
 .flag .w{background:#fff}
 
-.nav-links{display:none}
+.nav-links{
+  display:none;
+}
 
 .nav-actions{
   display:flex;
@@ -132,6 +133,7 @@ header{
 }
 
 /* HERO */
+
 .hero{
   padding:55px 0 35px;
   background:
@@ -171,7 +173,9 @@ h1{
   margin-bottom:18px;
 }
 
-h1 span{color:var(--purple)}
+h1 span{
+  color:var(--purple);
+}
 
 .hero-text{
   color:var(--muted);
@@ -187,6 +191,7 @@ h1 span{color:var(--purple)}
 }
 
 /* DASHBOARD PREVIEW */
+
 .preview{
   background:#fff;
   border:1px solid var(--border);
@@ -264,9 +269,12 @@ h1 span{color:var(--purple)}
   margin-top:5px;
 }
 
-.mini b{font-size:17px}
+.mini b{
+  font-size:17px;
+}
 
 /* STATS */
+
 .stats{
   padding:10px 0 35px;
 }
@@ -297,6 +305,7 @@ h1 span{color:var(--purple)}
 }
 
 /* SECTIONS */
+
 section{
   padding:65px 0;
 }
@@ -326,6 +335,7 @@ section{
 }
 
 /* HOW */
+
 .steps{
   display:grid;
   gap:13px;
@@ -365,6 +375,7 @@ section{
 }
 
 /* VIP */
+
 .vip-grid{
   display:grid;
   gap:14px;
@@ -409,6 +420,7 @@ section{
 }
 
 /* WAYS */
+
 .earn-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -432,7 +444,9 @@ section{
   color:var(--orange);
 }
 
-.earn-icon svg{width:22px}
+.earn-icon svg{
+  width:22px;
+}
 
 .earn-card h3{
   margin-top:13px;
@@ -445,6 +459,7 @@ section{
 }
 
 /* NIGERIA */
+
 .ng-section{
   background:linear-gradient(135deg,#fff,#faf4ff);
 }
@@ -472,9 +487,17 @@ section{
   overflow:hidden;
 }
 
-.big-flag span{flex:1}
-.big-flag .g{background:#008751}
-.big-flag .w{background:#fff}
+.big-flag span{
+  flex:1;
+}
+
+.big-flag .g{
+  background:#008751;
+}
+
+.big-flag .w{
+  background:#fff;
+}
 
 .ng-box h2{
   font-size:25px;
@@ -500,47 +523,38 @@ section{
 }
 
 /* ACTIVITY */
+
 .activity{
   background:#fff;
 }
 
-.activity-list{
-  display:grid;
-  gap:10px;
+.activity-empty{
   max-width:650px;
   margin:auto;
+  padding:30px 20px;
+  text-align:center;
+  border:1px dashed #dcd3e5;
+  border-radius:18px;
 }
 
-.activity-item{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:13px;
-}
-
-.activity-icon{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:var(--purple-light);
+.activity-empty svg{
+  width:35px;
   color:var(--purple);
+  margin-bottom:10px;
 }
 
-.activity-icon svg{width:18px}
-
-.activity-item p{
-  font-size:12px;
+.activity-empty h3{
+  font-size:16px;
 }
 
-.activity-item small{
-  color:#999;
+.activity-empty p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
 }
 
 /* FAQ */
+
 .faq{
   display:grid;
   gap:10px;
@@ -566,6 +580,7 @@ details p{
 }
 
 /* CTA */
+
 .final{
   padding:40px 0 70px;
 }
@@ -589,6 +604,7 @@ details p{
 }
 
 /* FOOTER */
+
 footer{
   background:#17121f;
   color:#fff;
@@ -602,7 +618,9 @@ footer{
   flex-wrap:wrap;
 }
 
-.footer-logo{color:#fff}
+.footer-logo{
+  color:#fff;
+}
 
 footer p{
   color:#aaa;
@@ -627,6 +645,7 @@ footer p{
 }
 
 /* DESKTOP */
+
 @media(min-width:800px){
 
   .nav-links{
@@ -650,7 +669,9 @@ footer p{
     align-items:center;
   }
 
-  h1{font-size:58px}
+  h1{
+    font-size:58px;
+  }
 
   .stats-grid{
     grid-template-columns:repeat(4,1fr);
@@ -684,7 +705,7 @@ footer p{
 <header>
   <div class="container nav">
 
-    <a class="logo" href="#">
+    <a class="logo" href="index.html">
       <span class="logo-box">V</span>
       VDC
     </a>
@@ -697,6 +718,7 @@ footer p{
     </nav>
 
     <div class="nav-actions">
+
       <span class="ng">
         <span class="flag">
           <span class="g"></span>
@@ -705,8 +727,11 @@ footer p{
         </span>
         NG
       </span>
-      <a class="btn btn-outline" href="login.html">Login</a>
-      <a class="btn btn-primary" href="register.html">Join</a>
+
+      <a class="btn btn-outline" href="auth.html">Login</a>
+
+      <a class="btn btn-primary" href="auth.html">Join</a>
+
     </div>
 
   </div>
@@ -715,10 +740,12 @@ footer p{
 <main>
 
 <!-- HERO -->
+
 <section class="hero">
   <div class="container hero-grid">
 
     <div>
+
       <div class="badge">
         <span class="badge-dot"></span>
         Built for Nigeria
@@ -736,272 +763,448 @@ footer p{
       </p>
 
       <div class="hero-buttons">
-        <a class="btn btn-primary" href="register.html">
+
+        <a class="btn btn-primary" href="auth.html">
           Create Account
         </a>
+
         <a class="btn btn-outline" href="#how">
           How VDC Works
         </a>
+
       </div>
+
     </div>
 
     <div class="preview">
 
       <div class="preview-top">
         <span class="preview-title">VDC Account Preview</span>
-        <span class="live"><i></i> Active</span>
+
+        <span class="live">
+          <i></i>
+          Active
+        </span>
       </div>
 
       <div class="balance">
-        <small>Total Account Balance</small>
-        <strong>₦125,000</strong>
-        <small>Example interface value</small>
+        <small>Account Balance Preview</small>
+        <strong>₦—</strong>
+        <small>Actual balance appears after account login</small>
       </div>
 
       <div class="preview-grid">
 
         <div class="mini">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M12 3v18M5 8h14M5 16h14"/>
           </svg>
+
           <small>VIP Status</small>
-          <b>VIP 3</b>
+          <b>Account</b>
+
         </div>
 
         <div class="mini">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M4 19V5m0 14h16M8 15l3-4 3 2 5-7"/>
           </svg>
+
           <small>Tasks</small>
           <b>Available</b>
+
         </div>
 
         <div class="mini">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="9" stroke-width="2"/>
             <path stroke-width="2" d="M8 12h8M12 8v8"/>
           </svg>
+
           <small>Ways to Earn</small>
           <b>Explore</b>
+
         </div>
 
         <div class="mini">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M4 17l8-10 8 10"/>
             <path stroke-width="2" d="M12 7v14"/>
           </svg>
+
           <small>Withdrawal</small>
           <b>₦ Naira</b>
+
         </div>
 
       </div>
+
     </div>
 
   </div>
 </section>
 
 <!-- STATS -->
+
 <div class="container stats">
+
   <div class="stats-grid">
+
     <div class="stat">
       <b>₦</b>
       <span>Naira Platform</span>
     </div>
+
     <div class="stat">
       <b>12</b>
       <span>VIP Levels</span>
     </div>
+
     <div class="stat">
       <b>24h</b>
       <span>Task Cycle</span>
     </div>
+
     <div class="stat">
       <b>NG</b>
       <span>Nigeria Focused</span>
     </div>
+
   </div>
+
 </div>
 
-<!-- HOW -->
+<!-- HOW IT WORKS -->
+
 <section id="how">
+
   <div class="container">
 
     <div class="section-head">
+
       <span class="tag">Simple Process</span>
+
       <h2>How VDC Works</h2>
-      <p>Everything is managed from your VDC account.</p>
+
+      <p>
+        Everything is managed from your VDC account.
+      </p>
+
     </div>
 
     <div class="steps">
 
       <div class="step">
+
         <div class="step-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
             <circle cx="12" cy="7" r="4" stroke-width="2"/>
           </svg>
+
         </div>
+
         <div>
+
           <h3>Create Account</h3>
-          <p>Register using your Nigerian phone number and verify with OTP.</p>
+
+          <p>
+            Register using your Nigerian phone number and verify with OTP.
+          </p>
+
         </div>
+
       </div>
 
       <div class="step">
+
         <div class="step-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M12 3v18M5 8h14M5 16h14"/>
           </svg>
+
         </div>
+
         <div>
+
           <h3>Choose VIP</h3>
-          <p>Explore the available VDC VIP levels and their stated terms.</p>
+
+          <p>
+            Explore the available VDC VIP levels and their stated terms.
+          </p>
+
         </div>
+
       </div>
 
       <div class="step">
+
         <div class="step-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M4 19V5m0 14h16M8 15l3-4 3 2 5-7"/>
           </svg>
+
         </div>
+
         <div>
+
           <h3>Explore Activities</h3>
-          <p>Access eligible tasks and other available ways to participate.</p>
+
+          <p>
+            Access eligible tasks and other available ways to participate.
+          </p>
+
         </div>
+
       </div>
 
       <div class="step">
+
         <div class="step-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M4 17l8-10 8 10"/>
             <path stroke-width="2" d="M12 7v14"/>
           </svg>
+
         </div>
+
         <div>
+
           <h3>Manage Your Wallet</h3>
-          <p>Track your actual account transactions and eligible withdrawals.</p>
+
+          <p>
+            Track your actual account transactions and eligible withdrawals.
+          </p>
+
         </div>
+
       </div>
 
     </div>
+
   </div>
+
 </section>
 
 <!-- VIP -->
+
 <section id="vip" style="background:#fff">
+
   <div class="container">
 
     <div class="section-head">
+
       <span class="tag">VDC Access</span>
+
       <h2>VIP Levels</h2>
-      <p>Choose from 12 configurable VIP levels. Full benefits and terms are shown before activation.</p>
+
+      <p>
+        Choose from 12 configurable VIP levels.
+        Full benefits and terms are shown before activation.
+      </p>
+
     </div>
 
     <div class="vip-grid">
 
       <div class="vip featured">
+
         <span class="vip-number">VIP 01</span>
+
         <h3>Starter</h3>
+
         <div class="vip-price">₦3,000</div>
-        <p>Entry-level VDC access and eligible activities.</p>
-        <a href="register.html" class="btn btn-primary">View VIP</a>
+
+        <p>
+          Entry-level VDC access and eligible activities.
+        </p>
+
+        <a href="auth.html" class="btn btn-primary">
+          View VIP
+        </a>
+
       </div>
 
       <div class="vip">
+
         <span class="vip-number">VIP 02</span>
+
         <h3>Growth</h3>
+
         <div class="vip-price">₦7,000</div>
-        <p>Expanded access based on the published VIP terms.</p>
-        <a href="register.html" class="btn btn-outline">View VIP</a>
+
+        <p>
+          Expanded access based on the published VIP terms.
+        </p>
+
+        <a href="auth.html" class="btn btn-outline">
+          View VIP
+        </a>
+
       </div>
 
       <div class="vip">
+
         <span class="vip-number">VIP 03</span>
+
         <h3>Plus</h3>
+
         <div class="vip-price">₦11,000</div>
-        <p>Additional activities according to the applicable terms.</p>
-        <a href="register.html" class="btn btn-outline">View VIP</a>
+
+        <p>
+          Additional activities according to the applicable terms.
+        </p>
+
+        <a href="auth.html" class="btn btn-outline">
+          View VIP
+        </a>
+
       </div>
 
       <div class="vip">
+
         <span class="vip-number">VIP 04–12</span>
+
         <h3>More Levels</h3>
+
         <div class="vip-price">₦15k+</div>
-        <p>Higher levels with separately displayed eligibility and benefits.</p>
-        <a href="register.html" class="btn btn-outline">Explore</a>
+
+        <p>
+          Higher levels with separately displayed eligibility and benefits.
+        </p>
+
+        <a href="auth.html" class="btn btn-outline">
+          Explore
+        </a>
+
       </div>
 
     </div>
+
   </div>
+
 </section>
 
 <!-- WAYS TO EARN -->
+
 <section id="earn">
+
   <div class="container">
 
     <div class="section-head">
+
       <span class="tag">Ways To Participate</span>
+
       <h2>Explore VDC</h2>
-      <p>Different sections of the platform can provide different activities and opportunities.</p>
+
+      <p>
+        Different sections of the platform can provide different
+        activities and opportunities.
+      </p>
+
     </div>
 
     <div class="earn-grid">
 
       <div class="earn-card">
+
         <div class="earn-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M9 11l3 3L20 6"/>
             <path stroke-width="2" d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h10"/>
           </svg>
+
         </div>
+
         <h3>Tasks</h3>
-        <p>Complete eligible tasks available for your account.</p>
+
+        <p>
+          Complete eligible tasks available for your account.
+        </p>
+
       </div>
 
       <div class="earn-card">
+
         <div class="earn-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="9" stroke-width="2"/>
             <path stroke-width="2" d="M8 12h8M12 8v8"/>
           </svg>
+
         </div>
+
         <h3>Lucky Draw</h3>
-        <p>Enter available draws and view published prize rules.</p>
+
+        <p>
+          Enter available draws and view published prize rules.
+        </p>
+
       </div>
 
       <div class="earn-card">
+
         <div class="earn-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <circle cx="9" cy="7" r="3" stroke-width="2"/>
             <path stroke-width="2" d="M3 20a6 6 0 0112 0M16 11a3 3 0 013 3M18 20a5 5 0 00-2-4"/>
           </svg>
+
         </div>
+
         <h3>Referrals</h3>
-        <p>Invite eligible users and track your referral activity.</p>
+
+        <p>
+          Invite eligible users and track your referral activity.
+        </p>
+
       </div>
 
       <div class="earn-card">
+
         <div class="earn-icon">
+
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-width="2" d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/>
           </svg>
+
         </div>
+
         <h3>More Coming</h3>
-        <p>Additional VDC opportunities can be added through the admin panel.</p>
+
+        <p>
+          Additional VDC opportunities can be added through the admin panel.
+        </p>
+
       </div>
 
     </div>
+
   </div>
+
 </section>
 
 <!-- NIGERIA -->
+
 <section class="ng-section">
+
   <div class="container">
 
     <div class="ng-box">
 
       <div class="ng-title">
+
         <div class="big-flag">
           <span class="g"></span>
           <span class="w"></span>
@@ -1009,11 +1212,15 @@ footer p{
         </div>
 
         <div>
+
           <h2>Made for Nigeria</h2>
+
           <span style="font-size:12px;color:#777">
             Naira-based account experience
           </span>
+
         </div>
+
       </div>
 
       <p>
@@ -1023,143 +1230,203 @@ footer p{
       </p>
 
       <div class="bank-pills">
+
         <span>₦ Naira</span>
         <span>Phone OTP</span>
         <span>Nigerian Banks</span>
         <span>Local Account</span>
         <span>Mobile First</span>
+
       </div>
 
     </div>
+
   </div>
+
 </section>
 
 <!-- ACTIVITY -->
+
 <section class="activity">
+
   <div class="container">
 
     <div class="section-head">
+
       <span class="tag">VDC Activity</span>
+
       <h2>Recent Platform Activity</h2>
-      <p>Actual platform events can appear here after the VDC system is connected.</p>
-    </div>
 
-    <div class="activity-list">
-
-      <div class="activity-item">
-        <div class="activity-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M12 3v18M5 8h14"/>
-          </svg>
-        </div>
-        <div>
-          <p><strong>******0776</strong> upgraded their VIP level.</p>
-          <small>Recent activity</small>
-        </div>
-      </div>
-
-      <div class="activity-item">
-        <div class="activity-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M9 11l3 3L20 6"/>
-            <path stroke-width="2" d="M4 5v14h16"/>
-          </svg>
-        </div>
-        <div>
-          <p><strong>******Daniel</strong> completed an available task.</p>
-          <small>Recent activity</small>
-        </div>
-      </div>
-
-      <div class="activity-item">
-        <div class="activity-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M4 17l8-10 8 10"/>
-            <path stroke-width="2" d="M12 7v14"/>
-          </svg>
-        </div>
-        <div>
-          <p><strong>******0814</strong> submitted a withdrawal request.</p>
-          <small>Recent activity</small>
-        </div>
-      </div>
+      <p>
+        Verified platform events will appear here after the VDC
+        system is connected.
+      </p>
 
     </div>
+
+    <div class="activity-empty">
+
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" stroke-width="2"/>
+        <path stroke-width="2" d="M12 8v4l3 2"/>
+      </svg>
+
+      <h3>Activity will appear here</h3>
+
+      <p>
+        Recent verified VDC account events will be displayed
+        automatically once the platform is connected.
+      </p>
+
+    </div>
+
   </div>
+
 </section>
 
 <!-- FAQ -->
+
 <section id="faq">
+
   <div class="container">
 
     <div class="section-head">
+
       <span class="tag">Questions</span>
+
       <h2>Frequently Asked Questions</h2>
+
     </div>
 
     <div class="faq">
 
       <details>
-        <summary>How do I create a VDC account?</summary>
-        <p>Create an account using your Nigerian phone number and verify it with the OTP sent to you.</p>
+
+        <summary>
+          How do I create a VDC account?
+        </summary>
+
+        <p>
+          Create an account using your Nigerian phone number
+          and verify it with the OTP sent to you.
+        </p>
+
       </details>
 
       <details>
-        <summary>Does VDC use email registration?</summary>
-        <p>No. The VDC registration flow is designed around phone-number verification.</p>
+
+        <summary>
+          Does VDC use email registration?
+        </summary>
+
+        <p>
+          No. The VDC registration flow is designed around
+          phone-number verification.
+        </p>
+
       </details>
 
       <details>
-        <summary>What are VIP levels?</summary>
-        <p>VDC will provide up to 12 configurable VIP levels. Each level will display its price, benefits and applicable terms before activation.</p>
+
+        <summary>
+          What are VIP levels?
+        </summary>
+
+        <p>
+          VDC will provide up to 12 configurable VIP levels.
+          Each level will display its price, benefits and
+          applicable terms before activation.
+        </p>
+
       </details>
 
       <details>
-        <summary>How do withdrawals work?</summary>
-        <p>Eligible withdrawals are handled in Nigerian Naira through supported Nigerian bank accounts during the withdrawal period configured by VDC.</p>
+
+        <summary>
+          How do withdrawals work?
+        </summary>
+
+        <p>
+          Eligible withdrawals are handled in Nigerian Naira
+          through supported Nigerian bank accounts during the
+          withdrawal period configured by VDC.
+        </p>
+
       </details>
 
       <details>
-        <summary>Are displayed earnings guaranteed?</summary>
-        <p>No. Any financial return or benefit displayed by VDC must be based on the actual applicable terms and underlying activity. The platform should not present example figures as guaranteed profits.</p>
+
+        <summary>
+          Are displayed earnings guaranteed?
+        </summary>
+
+        <p>
+          No. Any financial return or benefit displayed by VDC
+          must be based on the actual applicable terms and
+          underlying activity. Example figures should not be
+          presented as guaranteed profits.
+        </p>
+
       </details>
 
     </div>
+
   </div>
+
 </section>
 
 <!-- CTA -->
+
 <div class="container final">
+
   <div class="cta">
+
     <h2>Ready to explore VDC?</h2>
-    <p>Create your account with your Nigerian phone number and access the VDC platform.</p>
-    <a href="register.html" class="btn btn-orange">Create VDC Account</a>
+
+    <p>
+      Create your account with your Nigerian phone number
+      and access the VDC platform.
+    </p>
+
+    <a href="auth.html" class="btn btn-orange">
+      Create VDC Account
+    </a>
+
   </div>
+
 </div>
 
 </main>
 
 <footer>
+
   <div class="container">
 
     <div class="footer-top">
 
       <div>
-        <a class="logo footer-logo" href="#">
+
+        <a class="logo footer-logo" href="index.html">
+
           <span class="logo-box">V</span>
           VDC
+
         </a>
+
         <p>
           A Nigeria-focused digital platform with account,
           VIP, task, referral and other activity features.
         </p>
+
       </div>
 
       <div class="footer-links">
+
         <a href="#">Terms</a>
         <a href="#">Privacy</a>
         <a href="#faq">FAQ</a>
         <a href="#">Support</a>
+
       </div>
 
     </div>
@@ -1169,6 +1436,7 @@ footer p{
     </div>
 
   </div>
+
 </footer>
 
 </body>
