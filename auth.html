@@ -3,221 +3,254 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VDC — Login / Register</title>
 
-<title>VDC — Login & Register</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background: #ffffff;
-    color: #24113f;
-    min-height: 100vh;
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#fff;
+    color:#222;
+    min-height:100vh;
 }
 
-.header {
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    border-bottom: 1px solid #eeeeee;
+.header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    border-bottom:1px solid #eee;
+    background:#fff;
 }
 
-.logo {
-    font-size: 25px;
-    font-weight: 800;
-    color: #6824a8;
+.logo{
+    text-decoration:none;
+    font-size:27px;
+    font-weight:800;
+    color:#6524c8;
 }
 
-.ng {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 13px;
-    font-weight: 600;
+.logo span{
+    color:#ff7a00;
 }
 
-.flag {
-    width: 24px;
-    height: 16px;
-    display: flex;
+.container{
+    width:100%;
+    max-width:470px;
+    margin:0 auto;
+    padding:35px 20px 50px;
 }
 
-.flag span {
-    flex: 1;
+.title{
+    text-align:center;
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:8px;
+    color:#25202c;
 }
 
-.green {
-    background: #008751;
+.subtitle{
+    text-align:center;
+    color:#777;
+    font-size:14px;
+    margin-bottom:25px;
 }
 
-.white {
-    background: #ffffff;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+.tabs{
+    display:flex;
+    background:#f3eff9;
+    border-radius:12px;
+    padding:4px;
+    margin-bottom:25px;
 }
 
-.container {
-    width: 100%;
-    max-width: 460px;
-    margin: auto;
-    padding: 35px 20px 50px;
+.tab{
+    width:50%;
+    border:0;
+    padding:13px;
+    border-radius:9px;
+    background:transparent;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    color:#777;
 }
 
-.heading {
-    text-align: center;
-    margin-bottom: 28px;
+.tab.active{
+    background:#6524c8;
+    color:#fff;
 }
 
-.heading h1 {
-    font-size: 29px;
-    margin-bottom: 9px;
+.form-group{
+    margin-bottom:17px;
 }
 
-.heading p {
-    color: #777;
-    font-size: 14px;
+label{
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:7px;
 }
 
-.tabs {
-    display: flex;
-    background: #f4f1f8;
-    padding: 5px;
-    border-radius: 12px;
-    margin-bottom: 25px;
+input{
+    width:100%;
+    height:52px;
+    border:1px solid #ddd;
+    border-radius:11px;
+    padding:0 14px;
+    font-size:16px;
+    outline:none;
+    background:#fff;
 }
 
-.tab {
-    width: 50%;
-    padding: 12px;
-    border: 0;
-    background: transparent;
-    border-radius: 9px;
-    font-weight: 700;
-    color: #777;
-    cursor: pointer;
+input:focus{
+    border-color:#6524c8;
 }
 
-.tab.active {
-    background: #6824a8;
-    color: white;
+.phone-row{
+    display:flex;
+    gap:8px;
 }
 
-.form {
-    display: none;
+.country-code{
+    width:78px;
+    flex-shrink:0;
+    height:52px;
+    border:1px solid #ddd;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
+    font-weight:700;
+    background:#fafafa;
 }
 
-.form.active {
-    display: block;
+.phone-input{
+    flex:1;
 }
 
-.input-group {
-    margin-bottom: 17px;
+.terms{
+    display:flex;
+    gap:9px;
+    align-items:flex-start;
+    margin:18px 0;
+    font-size:13px;
+    color:#666;
+    line-height:1.4;
 }
 
-label {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 14px;
-    font-weight: 600;
+.terms input{
+    width:17px;
+    height:17px;
+    margin-top:1px;
 }
 
-input {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #dddddd;
-    border-radius: 10px;
-    outline: none;
-    font-size: 15px;
+.terms a{
+    color:#6524c8;
+    text-decoration:none;
+    font-weight:700;
 }
 
-input:focus {
-    border-color: #6824a8;
+.main-btn{
+    width:100%;
+    height:53px;
+    border:0;
+    border-radius:12px;
+    background:linear-gradient(90deg,#6524c8,#8a43e8);
+    color:#fff;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
 }
 
-.btn {
-    width: 100%;
-    padding: 15px;
-    border: 0;
-    border-radius: 10px;
-    background: #6824a8;
-    color: white;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
+.main-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
 }
 
-.btn:hover {
-    opacity: .92;
+.secondary-btn{
+    width:100%;
+    height:50px;
+    border:1px solid #6524c8;
+    border-radius:12px;
+    background:#fff;
+    color:#6524c8;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
 }
 
-.forgot {
-    display: block;
-    text-align: right;
-    margin-top: 12px;
-    color: #6824a8;
-    font-size: 13px;
-    text-decoration: none;
+.message{
+    display:none;
+    padding:12px 14px;
+    border-radius:10px;
+    margin-bottom:18px;
+    font-size:14px;
+    line-height:1.4;
 }
 
-.note {
-    text-align: center;
-    font-size: 12px;
-    color: #777;
-    margin-top: 18px;
-    line-height: 1.5;
+.message.success{
+    display:block;
+    background:#ecfff4;
+    color:#08783e;
+    border:1px solid #b8efd0;
 }
 
-.terms {
-    margin: 15px 0;
-    font-size: 13px;
-    color: #666;
+.message.error{
+    display:block;
+    background:#fff0f0;
+    color:#b42318;
+    border:1px solid #f1b7b7;
 }
 
-.terms label {
-    display: flex;
-    align-items: flex-start;
-    gap: 7px;
-    font-weight: normal;
-    line-height: 1.4;
+.otp-box{
+    display:none;
 }
 
-.terms input {
-    width: auto;
-    margin-top: 3px;
+.otp-box.show{
+    display:block;
 }
 
-.back {
-    display: block;
-    text-align: center;
-    margin-top: 25px;
-    color: #6824a8;
-    text-decoration: none;
-    font-size: 14px;
+.auth-form.hidden{
+    display:none;
 }
 
-.message {
-    display: none;
-    padding: 12px;
-    margin-bottom: 18px;
-    border-radius: 9px;
-    background: #f4f1f8;
-    color: #6824a8;
-    font-size: 13px;
-    text-align: center;
+.forgot{
+    display:block;
+    text-align:right;
+    margin-top:10px;
+    color:#6524c8;
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    cursor:pointer;
 }
 
-@media (max-width: 400px) {
-    .container {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
+.info{
+    margin-top:25px;
+    padding:14px;
+    border-radius:11px;
+    background:#fff7ef;
+    border:1px solid #ffd7ad;
+    color:#7a4a16;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.footer{
+    text-align:center;
+    margin-top:35px;
+    color:#999;
+    font-size:12px;
 }
 </style>
 </head>
@@ -225,305 +258,572 @@ input:focus {
 <body>
 
 <header class="header">
-
-    <a href="index.html"
-       style="text-decoration:none;">
-        <div class="logo">VDC</div>
-    </a>
-
-    <div class="ng">
-
-        <div class="flag">
-            <span class="green"></span>
-            <span class="white"></span>
-            <span class="green"></span>
-        </div>
-
-        Nigeria
-
-    </div>
-
+    <a href="index.html" class="logo">VDC<span>.</span></a>
 </header>
-
 
 <main class="container">
 
-    <div class="heading">
-
-        <h1>Welcome to VDC</h1>
-
-        <p>
-            Access your VDC account
-        </p>
-
-    </div>
-
+    <h1 class="title">Welcome to VDC</h1>
+    <p class="subtitle">Login or create your VDC account using your Nigerian phone number.</p>
 
     <div class="tabs">
-
-        <button
-            class="tab active"
-            onclick="showForm('login', this)"
-            type="button">
-
-            Login
-
-        </button>
-
-
-        <button
-            class="tab"
-            onclick="showForm('register', this)"
-            type="button">
-
-            Register
-
-        </button>
-
+        <button class="tab active" id="loginTab">Login</button>
+        <button class="tab" id="registerTab">Register</button>
     </div>
 
-
-    <div id="message"
-         class="message">
-    </div>
-
+    <div id="message" class="message"></div>
 
     <!-- LOGIN -->
+    <form id="loginForm" class="auth-form">
 
-    <form
-        id="login"
-        class="form active"
-        onsubmit="loginForm(event)">
+        <div class="form-group">
+            <label>Phone Number</label>
 
-        <div class="input-group">
-
-            <label>
-                Phone Number
-            </label>
-
-            <input
-                id="loginPhone"
-                type="tel"
-                inputmode="tel"
-                placeholder="08012345678"
-                required>
-
+            <div class="phone-row">
+                <div class="country-code">+234</div>
+                <input
+                    id="loginPhone"
+                    class="phone-input"
+                    type="tel"
+                    inputmode="numeric"
+                    placeholder="8012345678"
+                    maxlength="10"
+                    required
+                >
+            </div>
         </div>
 
-
-        <button
-            class="btn"
-            type="submit">
-
-            Continue
-
+        <button type="submit" class="main-btn" id="loginBtn">
+            Send Login OTP
         </button>
 
-
-        <a
-            href="#"
-            class="forgot"
-            onclick="forgotPassword(); return false;">
-
-            Forgot password?
-
+        <a class="forgot" id="recoveryBtn">
+            Need to recover your account?
         </a>
 
-
-        <p class="note">
-
-            Phone verification will be required
-            when account authentication is connected.
-
-        </p>
-
     </form>
-
 
 
     <!-- REGISTER -->
+    <form id="registerForm" class="auth-form hidden">
 
-    <form
-        id="register"
-        class="form"
-        onsubmit="registerForm(event)">
-
-        <div class="input-group">
-
-            <label>
-                Full Name
-            </label>
-
+        <div class="form-group">
+            <label>Full Name</label>
             <input
-                id="registerName"
+                id="fullName"
                 type="text"
                 placeholder="Enter your full name"
-                required>
-
+                required
+            >
         </div>
 
+        <div class="form-group">
+            <label>Phone Number</label>
 
-        <div class="input-group">
-
-            <label>
-                Phone Number
-            </label>
-
-            <input
-                id="registerPhone"
-                type="tel"
-                inputmode="tel"
-                placeholder="08012345678"
-                required>
-
+            <div class="phone-row">
+                <div class="country-code">+234</div>
+                <input
+                    id="registerPhone"
+                    class="phone-input"
+                    type="tel"
+                    inputmode="numeric"
+                    placeholder="8012345678"
+                    maxlength="10"
+                    required
+                >
+            </div>
         </div>
 
-
-        <div class="input-group">
-
-            <label>
-                Referral Code
-            </label>
-
+        <div class="form-group">
+            <label>Referral Code <span style="font-weight:400;color:#999;">(Optional)</span></label>
             <input
                 id="referralCode"
                 type="text"
-                placeholder="Optional">
-
+                placeholder="Enter referral code"
+            >
         </div>
-
 
         <div class="terms">
-
-            <label>
-
-                <input
-                    type="checkbox"
-                    required>
-
-                <span>
-                    I agree to the VDC Terms
-                    and Privacy Policy.
-                </span>
-
-            </label>
-
+            <input id="terms" type="checkbox" required>
+            <span>
+                I agree to the VDC
+                <a href="index.html">Terms</a>
+                and understand the platform rules.
+            </span>
         </div>
 
-
-        <button
-            class="btn"
-            type="submit">
-
-            Create Account
-
+        <button type="submit" class="main-btn" id="registerBtn">
+            Create VDC Account
         </button>
-
-
-        <p class="note">
-
-            Phone verification will be required.
-
-        </p>
 
     </form>
 
 
-    <a
-        href="index.html"
-        class="back">
+    <!-- OTP -->
+    <div id="otpBox" class="otp-box">
 
-        Back to VDC
+        <div class="form-group">
+            <label>Verification Code</label>
 
-    </a>
+            <input
+                id="otp"
+                type="text"
+                inputmode="numeric"
+                maxlength="6"
+                placeholder="Enter 6-digit OTP"
+            >
+        </div>
+
+        <button class="main-btn" id="verifyBtn">
+            Verify OTP
+        </button>
+
+        <button class="secondary-btn" id="backBtn">
+            Change Phone Number
+        </button>
+
+    </div>
+
+
+    <div class="info">
+        <strong>Phone verification</strong><br>
+        VDC uses your Nigerian phone number for account verification. SMS OTP delivery must be enabled in Supabase before real verification messages can be sent.
+    </div>
+
+    <div class="footer">
+        © 2026 VDC. All rights reserved.
+    </div>
 
 </main>
 
 
 <script>
+/* =========================================================
+   SUPABASE CONFIGURATION
+========================================================= */
 
-function showForm(formId, button) {
+const SUPABASE_URL = "https://wiorfxlodrcawxdeowbg.supabase.co";
 
-    document
-        .querySelectorAll('.form')
-        .forEach(function(form) {
+const SUPABASE_KEY =
+"sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
 
-            form.classList.remove('active');
+const { createClient } = supabase;
 
-        });
-
-
-    document
-        .querySelectorAll('.tab')
-        .forEach(function(tab) {
-
-            tab.classList.remove('active');
-
-        });
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
-    document
-        .getElementById(formId)
-        .classList.add('active');
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const loginTab = document.getElementById("loginTab");
+const registerTab = document.getElementById("registerTab");
+
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+
+const loginPhone = document.getElementById("loginPhone");
+const registerPhone = document.getElementById("registerPhone");
+
+const fullName = document.getElementById("fullName");
+const referralCode = document.getElementById("referralCode");
+
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+
+const message = document.getElementById("message");
+
+const otpBox = document.getElementById("otpBox");
+const otpInput = document.getElementById("otp");
+const verifyBtn = document.getElementById("verifyBtn");
+const backBtn = document.getElementById("backBtn");
+
+const recoveryBtn = document.getElementById("recoveryBtn");
+
+let currentPhone = "";
+let currentMode = "login";
+
+let pendingName = "";
+let pendingReferral = "";
 
 
-    button.classList.add('active');
+/* =========================================================
+   MESSAGE
+========================================================= */
 
-    clearMessage();
+function showMessage(text, type = "error") {
+
+    message.textContent = text;
+
+    message.className = "message " + type;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
-
-
-function showMessage(text) {
-
-    const box =
-        document.getElementById('message');
-
-    box.textContent = text;
-
-    box.style.display = 'block';
-
-}
-
 
 function clearMessage() {
 
-    const box =
-        document.getElementById('message');
+    message.textContent = "";
 
-    box.style.display = 'none';
-
+    message.className = "message";
 }
 
 
-function loginForm(event) {
+/* =========================================================
+   PHONE FORMAT
+========================================================= */
+
+function formatNigeriaPhone(value) {
+
+    let phone = value.replace(/\D/g, "");
+
+    if (phone.startsWith("234")) {
+        phone = phone.substring(3);
+    }
+
+    if (phone.startsWith("0")) {
+        phone = phone.substring(1);
+    }
+
+    if (phone.length !== 10) {
+        return null;
+    }
+
+    return "+234" + phone;
+}
+
+
+/* =========================================================
+   TAB SWITCHING
+========================================================= */
+
+loginTab.addEventListener("click", () => {
+
+    loginTab.classList.add("active");
+    registerTab.classList.remove("active");
+
+    loginForm.classList.remove("hidden");
+    registerForm.classList.add("hidden");
+
+    otpBox.classList.remove("show");
+
+    currentMode = "login";
+
+    clearMessage();
+});
+
+
+registerTab.addEventListener("click", () => {
+
+    registerTab.classList.add("active");
+    loginTab.classList.remove("active");
+
+    registerForm.classList.remove("hidden");
+    loginForm.classList.add("hidden");
+
+    otpBox.classList.remove("show");
+
+    currentMode = "register";
+
+    clearMessage();
+});
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
-    showMessage(
-        'Phone verification will be connected when SMS authentication is enabled.'
-    );
+    clearMessage();
 
-}
+    const phone = formatNigeriaPhone(loginPhone.value);
+
+    if (!phone) {
+        showMessage("Please enter a valid Nigerian phone number.");
+        return;
+    }
+
+    currentPhone = phone;
+    currentMode = "login";
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Sending OTP...";
+
+    try {
+
+        const { error } = await db.auth.signInWithOtp({
+            phone: phone
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        loginForm.classList.add("hidden");
+        registerForm.classList.add("hidden");
+
+        otpBox.classList.add("show");
+
+        showMessage(
+            "A verification code has been requested for " + phone + ".",
+            "success"
+        );
+
+    } catch (error) {
+
+        showMessage(
+            error.message ||
+            "Unable to send OTP. Please check your Supabase phone authentication settings."
+        );
+
+    } finally {
+
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Send Login OTP";
+    }
+});
 
 
-function registerForm(event) {
+/* =========================================================
+   REGISTER
+========================================================= */
+
+registerForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
+    clearMessage();
+
+    const name = fullName.value.trim();
+
+    const phone = formatNigeriaPhone(registerPhone.value);
+
+    const referral = referralCode.value.trim();
+
+    if (name.length < 2) {
+        showMessage("Please enter your full name.");
+        return;
+    }
+
+    if (!phone) {
+        showMessage("Please enter a valid Nigerian phone number.");
+        return;
+    }
+
+    if (!document.getElementById("terms").checked) {
+        showMessage("Please accept the VDC terms before creating your account.");
+        return;
+    }
+
+    currentPhone = phone;
+    currentMode = "register";
+
+    pendingName = name;
+    pendingReferral = referral;
+
+    registerBtn.disabled = true;
+    registerBtn.textContent = "Sending OTP...";
+
+    try {
+
+        const { error } = await db.auth.signInWithOtp({
+
+            phone: phone,
+
+            options: {
+                shouldCreateUser: true,
+
+                data: {
+                    full_name: name,
+                    referral_code: referral || null,
+                    country: "Nigeria"
+                }
+            }
+
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        registerForm.classList.add("hidden");
+        loginForm.classList.add("hidden");
+
+        otpBox.classList.add("show");
+
+        showMessage(
+            "A verification code has been requested for " + phone + ".",
+            "success"
+        );
+
+    } catch (error) {
+
+        showMessage(
+            error.message ||
+            "Unable to send OTP. Please check your Supabase phone authentication settings."
+        );
+
+    } finally {
+
+        registerBtn.disabled = false;
+        registerBtn.textContent = "Create VDC Account";
+    }
+});
+
+
+/* =========================================================
+   VERIFY OTP
+========================================================= */
+
+verifyBtn.addEventListener("click", async () => {
+
+    clearMessage();
+
+    const token = otpInput.value.trim();
+
+    if (!/^\d{6}$/.test(token)) {
+        showMessage("Please enter the 6-digit verification code.");
+        return;
+    }
+
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = "Verifying...";
+
+    try {
+
+        const { data, error } = await db.auth.verifyOtp({
+
+            phone: currentPhone,
+
+            token: token,
+
+            type: "sms"
+
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data.user) {
+            throw new Error("Account verification completed, but no user was returned.");
+        }
+
+
+        /* =====================================================
+           UPDATE PROFILE AFTER REGISTRATION
+        ===================================================== */
+
+        if (currentMode === "register") {
+
+            const { error: profileError } = await db
+                .from("profiles")
+                .update({
+                    full_name: pendingName,
+                    referral_code: pendingReferral || null
+                })
+                .eq("id", data.user.id);
+
+            if (profileError) {
+
+                console.warn(
+                    "Profile update warning:",
+                    profileError.message
+                );
+            }
+        }
+
+
+        showMessage(
+            "Verification successful. Opening your VDC dashboard...",
+            "success"
+        );
+
+        setTimeout(() => {
+
+            window.location.href = "dashboard.html";
+
+        }, 1000);
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message ||
+            "Verification failed. Please check the OTP and try again."
+        );
+
+    } finally {
+
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = "Verify OTP";
+    }
+});
+
+
+/* =========================================================
+   CHANGE PHONE
+========================================================= */
+
+backBtn.addEventListener("click", () => {
+
+    otpBox.classList.remove("show");
+
+    otpInput.value = "";
+
+    clearMessage();
+
+    if (currentMode === "register") {
+
+        registerForm.classList.remove("hidden");
+
+    } else {
+
+        loginForm.classList.remove("hidden");
+
+    }
+});
+
+
+/* =========================================================
+   ACCOUNT RECOVERY
+========================================================= */
+
+recoveryBtn.addEventListener("click", () => {
+
     showMessage(
-        'Phone verification will be connected when SMS authentication is enabled.'
+        "Enter your registered Nigerian phone number and request a new OTP. VDC account recovery uses phone verification."
     );
 
+    loginTab.click();
+
+    loginPhone.focus();
+});
+
+
+/* =========================================================
+   CHECK EXISTING SESSION
+========================================================= */
+
+async function checkExistingSession() {
+
+    const { data } = await db.auth.getSession();
+
+    if (data && data.session) {
+
+        window.location.href = "dashboard.html";
+    }
 }
 
-
-function forgotPassword() {
-
-    showMessage(
-        'Account recovery will use phone verification. SMS recovery will be enabled when phone authentication is connected.'
-    );
-
-}
+checkExistingSession();
 
 </script>
 
