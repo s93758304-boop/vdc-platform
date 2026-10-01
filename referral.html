@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+
+<title>VDC — Refer & Earn</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --purple:#6d28d9;
+  --purple-dark:#4c1d95;
+  --purple-light:#f3e8ff;
+  --orange:#f97316;
+  --green:#008751;
+  --bg:#faf9fc;
+  --white:#fff;
+  --text:#171717;
+  --muted:#737373;
+  --border:#eeeeee;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+a{text-decoration:none;color:inherit}
+
+.header{
+  height:64px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+  color:var(--purple);
+}
+
+.logo span{color:var(--orange)}
+
+.back{
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--purple);
+}
+
+.back svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.container{
+  width:100%;
+  max-width:760px;
+  margin:auto;
+  padding:24px 16px 95px;
+}
+
+.title{
+  font-size:26px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.referral-card{
+  background:linear-gradient(
+    135deg,
+    var(--purple),
+    var(--purple-dark)
+  );
+  color:#fff;
+  border-radius:20px;
+  padding:22px;
+  margin-bottom:16px;
+  box-shadow:0 8px 24px rgba(76,29,149,.18);
+}
+
+.referral-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:rgba(255,255,255,.14);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:15px;
+}
+
+.referral-icon svg{
+  width:27px;
+  height:27px;
+  fill:none;
+  stroke:#fff;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.card-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.card-text{
+  font-size:12px;
+  line-height:1.5;
+  opacity:.85;
+}
+
+.link-box{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:8px;
+  font-weight:700;
+}
+
+.code-row{
+  display:flex;
+  gap:8px;
+}
+
+.code{
+  flex:1;
+  min-width:0;
+  background:#f7f5fa;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:13px;
+  font-size:15px;
+  font-weight:800;
+  color:var(--purple);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.copy{
+  border:0;
+  background:var(--purple);
+  color:#fff;
+  border-radius:11px;
+  padding:0 16px;
+  font-weight:700;
+  font-size:12px;
+}
+
+.link{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.4;
+  word-break:break-all;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:17px;
+}
+
+.stat-icon{
+  width:38px;
+  height:38px;
+  border-radius:11px;
+  background:var(--purple-light);
+  color:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:10px;
+}
+
+.stat-icon.green{
+  background:#e8f7f0;
+  color:var(--green);
+}
+
+.stat-icon svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.stat-value{
+  font-size:20px;
+  font-weight:800;
+  margin-top:4px;
+}
+
+.section-title{
+  font-size:17px;
+  font-weight:800;
+  margin:22px 0 11px;
+}
+
+.history{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:17px;
+  overflow:hidden;
+}
+
+.empty{
+  padding:25px 18px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.referral-row{
+  padding:15px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.referral-row:last-child{
+  border-bottom:0;
+}
+
+.user-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:var(--purple-light);
+  color:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.user-icon svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.row-content{
+  flex:1;
+}
+
+.row-title{
+  font-size:13px;
+  font-weight:700;
+}
+
+.row-date{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+}
+
+.row-status{
+  font-size:11px;
+  font-weight:700;
+  color:var(--green);
+}
+
+.notice{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:15px;
+  margin-top:18px;
+}
+
+.notice-title{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.notice-text{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:70px;
+  background:#fff;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:30;
+}
+
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  color:#777;
+  font-size:10px;
+  min-width:55px;
+}
+
+.nav-item svg{
+  width:19px;
+  height:19px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.nav-item.active{
+  color:var(--purple);
+  font-weight:700;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:82px;
+  transform:translateX(-50%) translateY(15px);
+  background:#171717;
+  color:#fff;
+  padding:10px 15px;
+  border-radius:10px;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  z-index:50;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:420px){
+  .stats{
+    gap:9px;
+  }
+
+  .copy{
+    padding:0 12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <a href="dashboard.html" class="logo">
+    VD<span>C</span>
+  </a>
+
+  <a href="dashboard.html" class="back" aria-label="Back">
+
+    <svg viewBox="0 0 24 24">
+      <path d="M19 12H5"></path>
+      <path d="M12 19l-7-7 7-7"></path>
+    </svg>
+
+  </a>
+
+</header>
+
+
+<main class="container">
+
+  <h1 class="title">
+    Refer & Earn
+  </h1>
+
+  <p class="subtitle">
+    Invite people to VDC using your referral link.
+  </p>
+
+
+  <section class="referral-card">
+
+    <div class="referral-icon">
+
+      <svg viewBox="0 0 24 24">
+        <circle cx="9" cy="8" r="3"></circle>
+        <circle cx="17" cy="9" r="2.5"></circle>
+        <path d="M3.5 19c.5-3 2.4-5 5.5-5s5 2 5.5 5"></path>
+        <path d="M15 14c2.8.2 4.5 1.8 5 4"></path>
+        <path d="M19 5v4"></path>
+        <path d="M17 7h4"></path>
+      </svg>
+
+    </div>
+
+    <div class="card-title">
+      Invite & Earn
+    </div>
+
+    <div class="card-text">
+      Share your VDC referral code with people you invite. Eligible referral rewards are recorded automatically when the required conditions are met.
+    </div>
+
+  </section>
+
+
+  <section class="link-box">
+
+    <div class="label">
+      YOUR REFERRAL CODE
+    </div>
+
+    <div class="code-row">
+
+      <div class="code" id="referralCode">
+        Loading...
+      </div>
+
+      <button class="copy" id="copyCode">
+        Copy
+      </button>
+
+    </div>
+
+
+    <div class="label" style="margin-top:16px;">
+      YOUR REFERRAL LINK
+    </div>
+
+    <div class="code-row">
+
+      <div class="code" id="referralLink">
+        Loading...
+      </div>
+
+      <button class="copy" id="copyLink">
+        Copy
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <section class="stats">
+
+    <div class="stat">
+
+      <div class="stat-icon">
+
+        <svg viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="3"></circle>
+          <circle cx="17" cy="9" r="2.5"></circle>
+          <path d="M3.5 19c.5-3 2.4-5 5.5-5s5 2 5.5 5"></path>
+          <path d="M15 14c2.8.2 4.5 1.8 5 4"></path>
+        </svg>
+
+      </div>
+
+      <div class="stat-label">
+        Total Referrals
+      </div>
+
+      <div class="stat-value" id="totalReferrals">
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-icon green">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v18"></path>
+          <path d="M17 7c0-2-2-3-5-3s-5 1-5 3 2 3 5 3 5 1 5 3-2 3-5 3-5-1-5-3"></path>
+        </svg>
+
+      </div>
+
+      <div class="stat-label">
+        Referral Rewards
+      </div>
+
+      <div class="stat-value" id="totalRewards">
+        ₦0.00
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <h2 class="section-title">
+    Referral History
+  </h2>
+
+
+  <section class="history" id="history">
+
+    <div class="empty">
+      Loading referral history...
+    </div>
+
+  </section>
+
+
+  <section class="notice">
+
+    <div class="notice-title">
+      Referral rewards
+    </div>
+
+    <div class="notice-text">
+      Referral rewards are only credited when the applicable VDC referral conditions are satisfied. VDC does not display fabricated referrals or earnings.
+    </div>
+
+  </section>
+
+</main>
+
+
+<nav class="bottom-nav">
+
+  <a href="dashboard.html" class="nav-item">
+
+    <svg viewBox="0 0 24 24">
+      <path d="M3 11l9-8 9 8"></path>
+      <path d="M5 10v10h14V10"></path>
+      <path d="M9 20v-6h6v6"></path>
+    </svg>
+
+    <div>Home</div>
+
+  </a>
+
+
+  <a href="tasks.html" class="nav-item">
+
+    <svg viewBox="0 0 24 24">
+      <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+      <path d="M8 7h8"></path>
+      <path d="M8 11h2"></path>
+      <path d="M8 15h2"></path>
+      <path d="M13 11l1.5 1.5L18 9"></path>
+    </svg>
+
+    <div>Tasks</div>
+
+  </a>
+
+
+  <a href="vip.html" class="nav-item">
+
+    <svg viewBox="0 0 24 24">
+      <path d="M12 20V5"></path>
+      <path d="M6 11l6-6 6 6"></path>
+      <path d="M5 20h14"></path>
+    </svg>
+
+    <div>VIP</div>
+
+  </a>
+
+
+  <a href="earn.html" class="nav-item active">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8"></circle>
+      <path d="M12 8v8"></path>
+      <path d="M8 12h8"></path>
+    </svg>
+
+    <div>Earn</div>
+
+  </a>
+
+
+  <a href="profile.html" class="nav-item">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3"></circle>
+      <path d="M5 21c.7-4 3-6 7-6s6.3 2 7 6"></path>
+    </svg>
+
+    <div>My</div>
+
+  </a>
+
+</nav>
+
+
+<div class="toast" id="toast">
+  Copied
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+  "https://wiorfxlodrcawxdeowbg.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+let referralCode = "";
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+async function copyText(text){
+
+  if(!text) return;
+
+  try{
+
+    await navigator.clipboard.writeText(text);
+
+    showToast("Copied");
+
+  }catch(error){
+
+    showToast("Unable to copy");
+
+  }
+
+}
+
+
+document.getElementById("copyCode")
+.addEventListener("click", () => {
+
+  copyText(referralCode);
+
+});
+
+
+document.getElementById("copyLink")
+.addEventListener("click", () => {
+
+  const link =
+    document.getElementById("referralLink").dataset.link;
+
+  copyText(link);
+
+});
+
+
+/* =========================
+   LOAD PAGE
+========================= */
+
+async function loadPage(){
+
+  const {
+    data:{session}
+  } = await supabaseClient.auth.getSession();
+
+
+  /* Referral page is private */
+
+  if(!session){
+
+    window.location.href =
+      "auth.html";
+
+    return;
+  }
+
+
+  const userId =
+    session.user.id;
+
+
+  /* =========================
+     PROFILE
+  ========================= */
+
+  const {
+    data:profile,
+    error:profileError
+  } = await supabaseClient
+    .from("profiles")
+    .select("referral_code")
+    .eq("id",userId)
+    .maybeSingle();
+
+
+  if(profileError){
+
+    console.error(profileError);
+
+  }
+
+
+  referralCode =
+    profile?.referral_code || "";
+
+
+  if(!referralCode){
+
+    referralCode =
+      "VDC" +
+      userId
+        .replace(/-/g,"")
+        .substring(0,8)
+        .toUpperCase();
+
+  }
+
+
+  document.getElementById("referralCode")
+    .textContent =
+    referralCode;
+
+
+  const referralLink =
+    window.location.origin +
+    "/auth.html?ref=" +
+    encodeURIComponent(referralCode);
+
+
+  const referralLinkElement =
+    document.getElementById("referralLink");
+
+
+  referralLinkElement.textContent =
+    referralLink;
+
+
+  referralLinkElement.dataset.link =
+    referralLink;
+
+
+  /* =========================
+     REFERRALS
+  ========================= */
+
+  const {
+    data:referrals,
+    error:referralError
+  } = await supabaseClient
+    .from("referrals")
+    .select("*")
+    .eq("referrer_id",userId)
+    .order("created_at",{ascending:false});
+
+
+  if(referralError){
+
+    console.error(referralError);
+
+  }
+
+
+  const referralList =
+    referrals || [];
+
+
+  document.getElementById("totalReferrals")
+    .textContent =
+    referralList.length;
+
+
+  renderHistory(referralList);
+
+
+  /* =========================
+     REWARDS
+  ========================= */
+
+  const {
+    data:rewards,
+    error:rewardError
+  } = await supabaseClient
+    .from("referral_rewards")
+    .select("*")
+    .eq("user_id",userId);
+
+
+  if(rewardError){
+
+    console.error(rewardError);
+
+  }
+
+
+  let totalRewards = 0;
+
+
+  (rewards || []).forEach(reward => {
+
+    totalRewards +=
+      Number(
+        reward.amount ||
+        reward.reward_amount ||
+        0
+      );
+
+  });
+
+
+  document.getElementById("totalRewards")
+    .textContent =
+    "₦" +
+    totalRewards.toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      }
+    );
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function renderHistory(referrals){
+
+  const history =
+    document.getElementById("history");
+
+
+  if(!referrals.length){
+
+    history.innerHTML = `
+      <div class="empty">
+        No referrals yet.<br>
+        Your referral activity will appear here after eligible referrals are recorded.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  history.innerHTML = "";
+
+
+  referrals.forEach(referral => {
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "referral-row";
+
+
+    const date =
+      referral.created_at
+      ? new Date(referral.created_at)
+          .toLocaleDateString(
+            "en-NG",
+            {
+              day:"numeric",
+              month:"short",
+              year:"numeric"
+            }
+          )
+      : "";
+
+
+    row.innerHTML = `
+
+      <div class="user-icon">
+
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="3"></circle>
+          <path d="M5 21c.7-4 3-6 7-6s6.3 2 7 6"></path>
+        </svg>
+
+      </div>
+
+      <div class="row-content">
+
+        <div class="row-title">
+          Referral recorded
+        </div>
+
+        <div class="row-date">
+          ${date}
+        </div>
+
+      </div>
+
+      <div class="row-status">
+        Recorded
+      </div>
+
+    `;
+
+
+    history.appendChild(row);
+
+  });
+
+}
+
+
+loadPage();
+
+</script>
+
+</body>
+</html>
