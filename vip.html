@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VDC — VIP Upgrade</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --purple-light:#f3e8ff;
+    --orange:#f97316;
+    --green:#008751;
+    --bg:#faf9fc;
+    --card:#fff;
+    --text:#171321;
+    --muted:#77727f;
+    --border:#eeeaf3;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button{
+    font-family:inherit;
+    border:0;
+    cursor:pointer;
+}
+
+.app{
+    max-width:760px;
+    margin:auto;
+    padding-bottom:35px;
+}
+
+.header{
+    height:68px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.back{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:#f7f3fb;
+    color:var(--purple);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    margin-right:12px;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:900;
+    color:var(--purple);
+}
+
+.logo span{
+    color:var(--orange);
+}
+
+.content{
+    padding:18px;
+}
+
+.intro{
+    margin-bottom:20px;
+}
+
+.intro h1{
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+.intro p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* CURRENT VIP */
+
+.current{
+    background:linear-gradient(135deg,var(--purple-dark),var(--purple));
+    color:#fff;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.current-label{
+    font-size:12px;
+    opacity:.8;
+}
+
+.current-level{
+    font-size:27px;
+    font-weight:800;
+    margin:5px 0 4px;
+}
+
+.current-text{
+    font-size:12px;
+    opacity:.85;
+}
+
+/* VIP GRID */
+
+.section-title{
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.vip-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.vip-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:17px;
+}
+
+.vip-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+}
+
+.level{
+    font-size:18px;
+    font-weight:800;
+}
+
+.price{
+    color:var(--purple);
+    font-size:18px;
+    font-weight:800;
+    text-align:right;
+}
+
+.vip-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:14px;
+}
+
+.detail{
+    background:#faf9fc;
+    border-radius:10px;
+    padding:10px;
+}
+
+.detail-label{
+    color:var(--muted);
+    font-size:10px;
+    margin-bottom:4px;
+}
+
+.detail-value{
+    font-size:13px;
+    font-weight:700;
+}
+
+.vip-action{
+    width:100%;
+    margin-top:13px;
+    padding:12px;
+    border-radius:11px;
+    background:var(--purple);
+    color:#fff;
+    font-weight:700;
+    font-size:12px;
+}
+
+.vip-action.current-btn{
+    background:#eeeaf3;
+    color:#77727f;
+    cursor:default;
+}
+
+.vip-action.locked{
+    background:#f1eef5;
+    color:#77727f;
+    cursor:not-allowed;
+}
+
+.note{
+    margin-top:18px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:15px;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.6;
+}
+
+.loading{
+    position:fixed;
+    inset:0;
+    background:var(--bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+}
+
+.loading-logo{
+    font-size:32px;
+    font-weight:900;
+    color:var(--purple);
+}
+
+.loading-logo span{
+    color:var(--orange);
+}
+
+.loading-text{
+    text-align:center;
+    margin-top:8px;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.message{
+    display:none;
+    padding:12px;
+    border-radius:11px;
+    margin-bottom:15px;
+    font-size:12px;
+}
+
+.message.error{
+    display:block;
+    background:#fff0f0;
+    color:#b42318;
+}
+
+.message.success{
+    display:block;
+    background:#edf9f3;
+    color:#087443;
+}
+
+@media(max-width:400px){
+    .content{
+        padding:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="loading" id="loading">
+    <div>
+        <div class="loading-logo">VDC<span>.</span></div>
+        <div class="loading-text">Loading VIP levels...</div>
+    </div>
+</div>
+
+<div class="app">
+
+    <header class="header">
+        <a href="dashboard.html" class="back">‹</a>
+        <div class="logo">VDC<span>.</span></div>
+    </header>
+
+    <main class="content">
+
+        <div class="intro">
+            <h1>VIP Upgrade</h1>
+            <p>
+                Choose an available VIP level to view its membership price,
+                task reward and daily task limit.
+            </p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <section class="current">
+            <div class="current-label">Your current level</div>
+            <div class="current-level" id="currentLevel">VIP 0</div>
+            <div class="current-text" id="currentText">
+                No active VIP level
+            </div>
+        </section>
+
+        <h2 class="section-title">Available VIP Levels</h2>
+
+        <div class="vip-list" id="vipList"></div>
+
+        <div class="note">
+            VIP upgrades are payment-gated. Selecting an upgrade does not
+            automatically activate a VIP level. The level becomes active only
+            after the corresponding payment has been verified.
+        </div>
+
+    </main>
+</div>
+
+<script>
+const SUPABASE_URL =
+    "https://wiorfxlodrcawxdeowbg.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+let currentUser = null;
+let currentVipLevel = 0;
+
+function naira(value){
+    return "₦" + Number(value || 0).toLocaleString("en-NG",{
+        minimumFractionDigits:0,
+        maximumFractionDigits:2
+    });
+}
+
+function showMessage(text,type){
+    const box = document.getElementById("message");
+
+    box.textContent = text;
+    box.className = "message " + type;
+}
+
+async function loadVIP(){
+
+    try{
+
+        const {
+            data:{
+                session
+            }
+        } = await db.auth.getSession();
+
+        if(!session){
+            window.location.href = "auth.html";
+            return;
+        }
+
+        currentUser = session.user;
+
+        /* GET ACTIVE VIP */
+
+        const {
+            data:userVip
+        } = await db
+            .from("user_vips")
+            .select(`
+                vip_level_id,
+                status,
+                vip_levels (
+                    level,
+                    name,
+                    reward_per_task,
+                    daily_task_limit
+                )
+            `)
+            .eq("user_id",currentUser.id)
+            .eq("status","active")
+            .order("vip_level_id",{ascending:false})
+            .limit(1)
+            .maybeSingle();
+
+        if(userVip && userVip.vip_levels){
+
+            currentVipLevel =
+                Number(userVip.vip_levels.level || 0);
+
+            document.getElementById("currentLevel").textContent =
+                "VIP " + currentVipLevel;
+
+            document.getElementById("currentText").textContent =
+                naira(userVip.vip_levels.reward_per_task) +
+                " per task • " +
+                userVip.vip_levels.daily_task_limit +
+                " tasks per day";
+
+        }
+
+        /* GET VIP LEVELS */
+
+        const {
+            data:levels,
+            error
+        } = await db
+            .from("vip_levels")
+            .select("*")
+            .order("level",{ascending:true});
+
+        if(error){
+            throw error;
+        }
+
+        renderVIPLevels(levels || []);
+
+        document.getElementById("loading").style.display = "none";
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("loading").style.display = "none";
+
+        showMessage(
+            "Unable to load VIP levels. Please refresh the page.",
+            "error"
+        );
+    }
+}
+
+function renderVIPLevels(levels){
+
+    const list =
+        document.getElementById("vipList");
+
+    list.innerHTML = "";
+
+    if(levels.length === 0){
+
+        list.innerHTML = `
+            <div class="note">
+                No VIP levels are currently available.
+            </div>
+        `;
+
+        return;
+    }
+
+    levels.forEach(vip => {
+
+        const level =
+            Number(vip.level || 0);
+
+        const price =
+            vip.price ??
+            vip.upgrade_price ??
+            vip.amount ??
+            0;
+
+        const reward =
+            vip.reward_per_task ??
+            0;
+
+        const limit =
+            vip.daily_task_limit ??
+            0;
+
+        let buttonText = "Upgrade";
+        let buttonClass = "vip-action";
+        let disabled = "";
+
+        if(level === currentVipLevel){
+
+            buttonText = "Current VIP";
+            buttonClass = "vip-action current-btn";
+            disabled = "disabled";
+
+        }else if(level < currentVipLevel){
+
+            buttonText = "Already Passed";
+            buttonClass = "vip-action locked";
+            disabled = "disabled";
+
+        }else if(level > currentVipLevel + 1){
+
+            buttonText = "Locked";
+            buttonClass = "vip-action locked";
+            disabled = "disabled";
+        }
+
+        const card = document.createElement("div");
+
+        card.className = "vip-card";
+
+        card.innerHTML = `
+            <div class="vip-top">
+
+                <div>
+                    <div class="level">
+                        ${vip.name || "VIP " + level}
+                    </div>
+                </div>
+
+                <div class="price">
+                    ${naira(price)}
+                </div>
+
+            </div>
+
+            <div class="vip-details">
+
+                <div class="detail">
+                    <div class="detail-label">
+                        Reward per task
+                    </div>
+
+                    <div class="detail-value">
+                        ${naira(reward)}
+                    </div>
+                </div>
+
+                <div class="detail">
+                    <div class="detail-label">
+                        Daily task limit
+                    </div>
+
+                    <div class="detail-value">
+                        ${limit} tasks
+                    </div>
+                </div>
+
+            </div>
+
+            <button
+                class="${buttonClass}"
+                ${disabled}
+                onclick="startUpgrade(${vip.id},${level},${price})"
+            >
+                ${buttonText}
+            </button>
+        `;
+
+        list.appendChild(card);
+    });
+}
+
+async function startUpgrade(vipId,level,price){
+
+    if(!currentUser){
+        window.location.href = "auth.html";
+        return;
+    }
+
+    if(level !== currentVipLevel + 1){
+        return;
+    }
+
+    /*
+      This only creates a pending upgrade order.
+      It does NOT activate VIP.
+      Actual activation requires verified payment.
+    */
+
+    try{
+
+        const {
+            data,
+            error
+        } = await db
+            .from("vip_upgrade_orders")
+            .insert({
+                user_id:currentUser.id,
+                vip_level_id:vipId,
+                amount:price,
+                status:"pending"
+            })
+            .select()
+            .single();
+
+        if(error){
+            throw error;
+        }
+
+        showMessage(
+            "Upgrade order created. Payment verification is required before your VIP level becomes active.",
+            "success"
+        );
+
+        /*
+          Payment provider integration will be connected later.
+          For now, do not mark the order as paid from the browser.
+        */
+
+        console.log("Pending VIP order:",data);
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Could not create the upgrade order. Please try again.",
+            "error"
+        );
+    }
+}
+
+loadVIP();
+</script>
+
+</body>
+</html>
