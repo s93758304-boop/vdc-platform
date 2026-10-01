@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VDC — Transaction History</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --purple-light:#f3eefe;
+    --orange:#f97316;
+    --bg:#faf9fc;
+    --card:#fff;
+    --text:#17131f;
+    --muted:#746f7c;
+    --border:#ece8f2;
+    --green:#047857;
+    --red:#b91c1c;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.app{
+    max-width:760px;
+    min-height:100vh;
+    margin:auto;
+    padding-bottom:90px;
+}
+
+/* HEADER */
+
+.header{
+    height:64px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+    gap:12px;
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.back{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    background:var(--purple-light);
+    color:var(--purple);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.back svg{
+    width:20px;
+    height:20px;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:800;
+    color:var(--purple-dark);
+}
+
+.logo span{
+    color:var(--orange);
+}
+
+.header-title{
+    margin-left:auto;
+    font-size:15px;
+    font-weight:700;
+}
+
+/* CONTENT */
+
+.content{
+    padding:20px 18px;
+}
+
+.page-title{
+    font-size:25px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.page-subtitle{
+    font-size:14px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-bottom:20px;
+}
+
+/* FILTER */
+
+.filter{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+    overflow-x:auto;
+}
+
+.filter button{
+    border:1px solid var(--border);
+    background:#fff;
+    color:#625b6c;
+    padding:9px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    white-space:nowrap;
+    cursor:pointer;
+}
+
+.filter button.active{
+    background:var(--purple);
+    color:#fff;
+    border-color:var(--purple);
+}
+
+/* SUMMARY */
+
+.summary{
+    background:linear-gradient(
+        135deg,
+        var(--purple-dark),
+        var(--purple)
+    );
+    color:#fff;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.summary-label{
+    font-size:12px;
+    opacity:.85;
+}
+
+.summary-value{
+    font-size:29px;
+    font-weight:800;
+    margin-top:6px;
+}
+
+/* LIST */
+
+.card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.transaction{
+    padding:16px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    gap:13px;
+    align-items:center;
+}
+
+.transaction:last-child{
+    border-bottom:0;
+}
+
+.icon{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+}
+
+.icon svg{
+    width:20px;
+    height:20px;
+}
+
+.icon.earning{
+    background:#ecfdf5;
+    color:var(--green);
+}
+
+.icon.withdrawal{
+    background:#fff7ed;
+    color:var(--orange);
+}
+
+.icon.other{
+    background:var(--purple-light);
+    color:var(--purple);
+}
+
+.transaction-main{
+    min-width:0;
+    flex:1;
+}
+
+.transaction-title{
+    font-size:14px;
+    font-weight:800;
+    margin-bottom:4px;
+}
+
+.transaction-description{
+    font-size:11px;
+    color:var(--muted);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.transaction-date{
+    font-size:10px;
+    color:#98919f;
+    margin-top:4px;
+}
+
+.transaction-amount{
+    font-size:14px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.transaction-amount.positive{
+    color:var(--green);
+}
+
+.transaction-amount.negative{
+    color:var(--red);
+}
+
+.empty{
+    text-align:center;
+    padding:45px 20px;
+    color:var(--muted);
+}
+
+.empty svg{
+    width:42px;
+    height:42px;
+    margin-bottom:12px;
+    color:#b7afc0;
+}
+
+.empty-title{
+    font-size:14px;
+    font-weight:800;
+    color:#51495b;
+    margin-bottom:5px;
+}
+
+.empty-text{
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* LOADING */
+
+.loading{
+    padding:35px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:760px;
+    height:72px;
+    background:rgba(255,255,255,.97);
+    border-top:1px solid var(--border);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    z-index:30;
+}
+
+.nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    color:#817a89;
+    font-size:10px;
+    font-weight:700;
+}
+
+.nav-item svg{
+    width:20px;
+    height:20px;
+}
+
+.nav-item.active{
+    color:var(--purple);
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+
+    <a href="profile.html" class="back">
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+        </svg>
+    </a>
+
+    <a href="index.html" class="logo">
+        VDC<span>.</span>
+    </a>
+
+    <div class="header-title">
+        History
+    </div>
+
+</header>
+
+
+<main class="content">
+
+    <h1 class="page-title">
+        Transaction History
+    </h1>
+
+    <p class="page-subtitle">
+        View your actual VDC wallet transactions and withdrawal records.
+    </p>
+
+
+    <section class="summary">
+
+        <div class="summary-label">
+            Current Balance
+        </div>
+
+        <div class="summary-value" id="balance">
+            ₦—
+        </div>
+
+    </section>
+
+
+    <div class="filter">
+
+        <button class="active" data-filter="all">
+            All
+        </button>
+
+        <button data-filter="earning">
+            Earnings
+        </button>
+
+        <button data-filter="withdrawal">
+            Withdrawals
+        </button>
+
+    </div>
+
+
+    <section class="card">
+
+        <div id="transactionList">
+
+            <div class="loading">
+                Loading transactions...
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<nav class="bottom-nav">
+
+    <a href="dashboard.html" class="nav-item">
+
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+            <path d="M3 11.5L12 4l9 7.5"/>
+            <path d="M5 10.5V20h14v-9.5"/>
+        </svg>
+
+        Home
+
+    </a>
+
+
+    <a href="tasks.html" class="nav-item">
+
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+            <path d="M9 11l2 2 4-4"/>
+            <rect x="4" y="4" width="16" height="16" rx="3"/>
+        </svg>
+
+        Tasks
+
+    </a>
+
+
+    <a href="vip.html" class="nav-item">
+
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+            <path d="M12 3l2.5 5.5L20 10l-4 4 1 6-5-3-5 3-1-6-4-4 5.5-1.5L12 3z"/>
+        </svg>
+
+        VIP
+
+    </a>
+
+
+    <a href="earn.html" class="nav-item">
+
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5"/>
+            <path d="M6 11l6-6 6 6"/>
+            <path d="M5 20h14"/>
+        </svg>
+
+        Earn
+
+    </a>
+
+
+    <a href="profile.html" class="nav-item active">
+
+        <svg viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c.8-4 3.3-6 8-6s7.2 2 8 6"/>
+        </svg>
+
+        My
+
+    </a>
+
+</nav>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://wiorfxlodrcawxdeowbg.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+let currentUser = null;
+let transactions = [];
+let currentFilter = "all";
+
+
+function money(value){
+
+    return "₦" +
+        Number(value || 0).toLocaleString(
+            "en-NG",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+async function checkAuth(){
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getSession();
+
+    if(
+        error ||
+        !data ||
+        !data.session
+    ){
+
+        window.location.href = "auth.html";
+
+        return false;
+    }
+
+    currentUser =
+        data.session.user;
+
+    return true;
+
+}
+
+
+async function loadBalance(){
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .maybeSingle();
+
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
+
+    document.getElementById("balance")
+        .textContent =
+        money(data?.balance || 0);
+
+}
+
+
+async function loadTransactions(){
+
+    const list =
+        document.getElementById(
+            "transactionList"
+        );
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("transactions")
+        .select("*")
+        .eq(
+            "user_id",
+            currentUser.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        )
+        .limit(100);
+
+
+    if(error){
+
+        console.error(error);
+
+        list.innerHTML = `
+            <div class="empty">
+
+                <div class="empty-title">
+                    Unable to load history
+                </div>
+
+                <div class="empty-text">
+                    Please try again later.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    transactions =
+        data || [];
+
+    renderTransactions();
+
+}
+
+
+function transactionCategory(type){
+
+    const value =
+        String(type || "")
+            .toLowerCase();
+
+    if(
+        value.includes("withdraw")
+    ){
+
+        return "withdrawal";
+    }
+
+    if(
+        value.includes("task") ||
+        value.includes("earning") ||
+        value.includes("reward") ||
+        value.includes("referral") ||
+        value.includes("lucky") ||
+        value.includes("credit")
+    ){
+
+        return "earning";
+    }
+
+    return "other";
+
+}
+
+
+function isPositive(type){
+
+    const category =
+        transactionCategory(type);
+
+    return category === "earning";
+
+}
+
+
+function renderTransactions(){
+
+    const list =
+        document.getElementById(
+            "transactionList"
+        );
+
+
+    let filtered =
+        transactions;
+
+
+    if(currentFilter !== "all"){
+
+        filtered =
+            transactions.filter(
+                item =>
+                    transactionCategory(
+                        item.type
+                    ) === currentFilter
+            );
+
+    }
+
+
+    if(!filtered.length){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.7">
+
+                    <path d="M7 3h10"/>
+                    <path d="M7 3v18"/>
+                    <path d="M17 3v18"/>
+                    <path d="M7 8h10"/>
+                    <path d="M7 16h10"/>
+
+                </svg>
+
+                <div class="empty-title">
+                    No transactions yet
+                </div>
+
+                <div class="empty-text">
+                    Your real VDC transactions will appear here
+                    when activity occurs on your account.
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        filtered.map(item => {
+
+            const category =
+                transactionCategory(
+                    item.type
+                );
+
+
+            const positive =
+                isPositive(item.type);
+
+
+            const amount =
+                Number(
+                    item.amount || 0
+                );
+
+
+            const date =
+                item.created_at
+                ? new Date(
+                    item.created_at
+                  ).toLocaleString(
+                    "en-NG",
+                    {
+                        dateStyle:"medium",
+                        timeStyle:"short"
+                    }
+                  )
+                : "";
+
+
+            let title =
+                item.type || "Transaction";
+
+
+            title =
+                title
+                    .replaceAll("_"," ")
+                    .replace(
+                        /\b\w/g,
+                        c => c.toUpperCase()
+                    );
+
+
+            const icon =
+                category === "withdrawal"
+                ? `
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M12 19V5"/>
+                        <path d="M6 11l6-6 6 6"/>
+                    </svg>
+                  `
+                : category === "earning"
+                ? `
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <path d="M12 19V5"/>
+                        <path d="M7 10l5-5 5 5"/>
+                        <path d="M5 20h14"/>
+                    </svg>
+                  `
+                : `
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 2"/>
+                    </svg>
+                  `;
+
+
+            return `
+
+                <div class="transaction">
+
+                    <div class="icon ${category}">
+                        ${icon}
+                    </div>
+
+                    <div class="transaction-main">
+
+                        <div class="transaction-title">
+                            ${title}
+                        </div>
+
+                        <div class="transaction-description">
+                            ${item.description || "VDC account transaction"}
+                        </div>
+
+                        <div class="transaction-date">
+                            ${date}
+                        </div>
+
+                    </div>
+
+                    <div class="transaction-amount ${
+                        positive
+                        ? "positive"
+                        : category === "withdrawal"
+                        ? "negative"
+                        : ""
+                    }">
+
+                        ${
+                            positive
+                            ? "+"
+                            : category === "withdrawal"
+                            ? "-"
+                            : ""
+                        }
+
+                        ${money(amount)}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+document.querySelectorAll(
+    ".filter button"
+).forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            document.querySelectorAll(
+                ".filter button"
+            ).forEach(btn =>
+                btn.classList.remove("active")
+            );
+
+            button.classList.add("active");
+
+            currentFilter =
+                button.dataset.filter;
+
+            renderTransactions();
+
+        }
+    );
+
+});
+
+
+async function init(){
+
+    const authenticated =
+        await checkAuth();
+
+    if(!authenticated){
+
+        return;
+    }
+
+    await loadBalance();
+
+    await loadTransactions();
+
+}
+
+
+init();
+
+</script>
+
+</body>
+</html>
