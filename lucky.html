@@ -18,7 +18,6 @@
   --text:#171717;
   --muted:#737373;
   --border:#eeeef2;
-  --green:#008751;
 }
 
 *{
@@ -100,6 +99,17 @@ button{
   font-size:14px;
   line-height:1.5;
   margin-bottom:20px;
+}
+
+.error{
+  display:none;
+  background:#fff1f2;
+  border:1px solid #fecdd3;
+  color:#be123c;
+  border-radius:13px;
+  padding:13px;
+  font-size:13px;
+  margin-bottom:15px;
 }
 
 .draw-card{
@@ -285,24 +295,6 @@ button{
   margin-bottom:18px;
 }
 
-.loading{
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-  padding:20px;
-}
-
-.error{
-  display:none;
-  background:#fff1f2;
-  border:1px solid #fecdd3;
-  color:#be123c;
-  border-radius:13px;
-  padding:13px;
-  font-size:13px;
-  margin-bottom:15px;
-}
-
 .bottom-nav{
   position:fixed;
   bottom:0;
@@ -363,8 +355,8 @@ svg{
   <div class="topbar-inner">
 
     <button class="back-btn" onclick="goBack()" aria-label="Back">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2">
+      <svg width="20" height="20" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2">
         <path d="M19 12H5"></path>
         <path d="M12 19l-7-7 7-7"></path>
       </svg>
@@ -403,8 +395,8 @@ svg{
     <h2>Lucky Draw</h2>
 
     <p>
-      Eligible members can participate according to the current
-      VDC Lucky Draw rules.
+      Eligible members can participate according to the
+      current VDC Lucky Draw rules.
     </p>
 
   </section>
@@ -439,8 +431,8 @@ svg{
     </div>
 
     <p>
-      Lucky Draw prizes are determined by the active VDC draw configuration.
-      No reward is guaranteed.
+      Lucky Draw prizes are determined by the active VDC draw
+      configuration. No reward is guaranteed.
     </p>
 
     <div class="prizes">
@@ -502,15 +494,19 @@ svg{
   <div class="nav-inner">
 
     <a class="nav-item" href="dashboard.html">
+
       <svg width="20" height="20" viewBox="0 0 24 24"
            fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M3 11.5L12 4l9 7.5"></path>
         <path d="M5 10.5V20h14v-9.5"></path>
       </svg>
+
       <span>Home</span>
+
     </a>
 
     <a class="nav-item" href="tasks.html">
+
       <svg width="20" height="20" viewBox="0 0 24 24"
            fill="none" stroke="currentColor" stroke-width="1.8">
         <rect x="5" y="3" width="14" height="18" rx="2"></rect>
@@ -518,33 +514,44 @@ svg{
         <path d="M9 11h6"></path>
         <path d="M9 15h4"></path>
       </svg>
+
       <span>Tasks</span>
+
     </a>
 
     <a class="nav-item" href="vip.html">
+
       <svg width="20" height="20" viewBox="0 0 24 24"
            fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M12 3l2.4 5 5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8L12 3z"></path>
       </svg>
+
       <span>VIP</span>
+
     </a>
 
     <a class="nav-item active" href="earn.html">
+
       <svg width="20" height="20" viewBox="0 0 24 24"
            fill="none" stroke="currentColor" stroke-width="1.8">
         <path d="M12 19V5"></path>
         <path d="M6 11l6-6 6 6"></path>
       </svg>
+
       <span>Earn</span>
+
     </a>
 
     <a class="nav-item" href="profile.html">
+
       <svg width="20" height="20" viewBox="0 0 24 24"
            fill="none" stroke="currentColor" stroke-width="1.8">
         <circle cx="12" cy="8" r="3"></circle>
         <path d="M5 20c.8-3.5 3-5 7-5s6.2 1.5 7 5"></path>
       </svg>
+
       <span>My</span>
+
     </a>
 
   </div>
@@ -580,6 +587,15 @@ function showError(message){
 
   box.textContent = message;
   box.style.display = "block";
+
+}
+
+function hideError(){
+
+  const box = document.getElementById("errorBox");
+
+  box.style.display = "none";
+
 }
 
 function formatNaira(value){
@@ -711,43 +727,89 @@ async function loadVip(){
 
 
 /* ==============================
-   CHECK DRAW
+   CHECK DRAW ELIGIBILITY
 ============================== */
 
 async function checkDrawEligibility(){
 
-  const button = document.getElementById("drawBtn");
-  const message = document.getElementById("drawMessage");
+  const button =
+    document.getElementById("drawBtn");
 
-  /*
-    The draw should only become active after
-    the backend has a valid draw configuration.
+  const message =
+    document.getElementById("drawMessage");
 
-    For now we keep the button disabled until
-    the Lucky Draw backend rules are connected.
-  */
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("lucky_draw_settings")
+    .select("enabled,min_vip")
+    .order("id",{ascending:false})
+    .limit(1)
+    .maybeSingle();
 
-  drawAvailable = false;
+  if(error){
 
-  button.disabled = true;
-
-  if(currentVip < 1){
+    console.error(error);
 
     message.textContent =
-      "You need an active VIP level before participating.";
+      "Unable to check Lucky Draw status.";
+
+    button.disabled = true;
 
     return;
 
   }
 
+  if(!data){
+
+    message.textContent =
+      "Lucky Draw settings are not configured.";
+
+    button.disabled = true;
+
+    return;
+
+  }
+
+  if(!data.enabled){
+
+    drawAvailable = false;
+
+    message.textContent =
+      "Lucky Draw is not currently open.";
+
+    button.disabled = true;
+
+    return;
+
+  }
+
+  if(currentVip < Number(data.min_vip || 1)){
+
+    drawAvailable = false;
+
+    message.textContent =
+      "You need an active VIP level to participate.";
+
+    button.disabled = true;
+
+    return;
+
+  }
+
+  drawAvailable = true;
+
   message.textContent =
-    "Lucky Draw is not currently open.";
+    "You are eligible to enter the Lucky Draw.";
+
+  button.disabled = false;
 
 }
 
 
 /* ==============================
-   ENTER DRAW
+   ENTER LUCKY DRAW
 ============================== */
 
 async function enterLuckyDraw(){
@@ -761,10 +823,68 @@ async function enterLuckyDraw(){
 
   if(!drawAvailable){
 
-    showError("Lucky Draw is not currently available.");
+    showError(
+      "Lucky Draw is not currently available."
+    );
+
     return;
 
   }
+
+  hideError();
+
+  const button =
+    document.getElementById("drawBtn");
+
+  const result =
+    document.getElementById("result");
+
+  button.disabled = true;
+  button.textContent = "Processing...";
+
+  result.style.display = "none";
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .rpc("enter_lucky_draw");
+
+  if(error){
+
+    console.error(error);
+
+    showError(
+      error.message ||
+      "Unable to enter Lucky Draw."
+    );
+
+    button.disabled = false;
+    button.textContent = "Enter Lucky Draw";
+
+    return;
+
+  }
+
+  const prize = Number(data || 0);
+
+  if(prize > 0){
+
+    result.textContent =
+      "Congratulations! You received " +
+      formatNaira(prize);
+
+  }else{
+
+    result.textContent =
+      "Your Lucky Draw result is ₦0.";
+
+  }
+
+  result.style.display = "block";
+
+  button.textContent =
+    "Draw Completed";
 
 }
 
