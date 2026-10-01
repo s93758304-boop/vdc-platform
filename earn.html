@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VDC — Ways to Earn</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --purple-light:#f3e8ff;
+    --orange:#f97316;
+    --bg:#faf9fc;
+    --white:#ffffff;
+    --text:#171717;
+    --muted:#737373;
+    --border:#eee;
+    --green:#008751;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.header{
+    height:64px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+    color:var(--purple);
+}
+
+.logo span{
+    color:var(--orange);
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.container{
+    width:100%;
+    max-width:760px;
+    margin:auto;
+    padding:20px 16px 95px;
+}
+
+.page-title{
+    margin-bottom:5px;
+    font-size:25px;
+    font-weight:800;
+}
+
+.page-subtitle{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:20px;
+}
+
+.balance-card{
+    background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+    color:#fff;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 8px 24px rgba(76,29,149,.18);
+}
+
+.balance-label{
+    font-size:13px;
+    opacity:.85;
+}
+
+.balance{
+    font-size:30px;
+    font-weight:800;
+    margin-top:5px;
+}
+
+.balance-note{
+    margin-top:7px;
+    font-size:12px;
+    opacity:.8;
+}
+
+.section-title{
+    font-size:17px;
+    font-weight:800;
+    margin:22px 0 11px;
+}
+
+.earn-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:17px;
+    margin-bottom:12px;
+    display:flex;
+    gap:14px;
+    align-items:center;
+}
+
+.earn-icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    background:var(--purple-light);
+    color:var(--purple);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    flex-shrink:0;
+}
+
+.earn-icon.orange{
+    background:#fff0e7;
+    color:var(--orange);
+}
+
+.earn-icon.green{
+    background:#e8f7f0;
+    color:var(--green);
+}
+
+.earn-content{
+    flex:1;
+}
+
+.earn-title{
+    font-size:15px;
+    font-weight:800;
+    margin-bottom:4px;
+}
+
+.earn-text{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.45;
+}
+
+.action{
+    border:0;
+    background:var(--purple);
+    color:#fff;
+    padding:10px 13px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.action.orange{
+    background:var(--orange);
+}
+
+.action.disabled{
+    background:#ddd;
+    color:#777;
+}
+
+.info-box{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+    margin-top:18px;
+}
+
+.info-title{
+    font-size:14px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.info-text{
+    font-size:12px;
+    line-height:1.6;
+    color:var(--muted);
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:70px;
+    background:#fff;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:30;
+}
+
+.nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    color:#777;
+    font-size:10px;
+    min-width:55px;
+}
+
+.nav-icon{
+    font-size:19px;
+}
+
+.nav-item.active{
+    color:var(--purple);
+    font-weight:700;
+}
+
+.loading{
+    text-align:center;
+    padding:20px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.message{
+    display:none;
+    padding:12px;
+    border-radius:12px;
+    background:#fff3e8;
+    color:#b45309;
+    font-size:12px;
+    margin-bottom:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="dashboard.html" class="logo">
+        VD<span>C</span>
+    </a>
+
+    <div class="header-right">
+        <a href="dashboard.html" class="icon-btn" aria-label="Dashboard">
+            ←
+        </a>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <h1 class="page-title">Ways to Earn</h1>
+
+    <p class="page-subtitle">
+        Explore the available earning opportunities on VDC.
+    </p>
+
+
+    <div id="message" class="message"></div>
+
+
+    <section class="balance-card">
+
+        <div class="balance-label">
+            Available Balance
+        </div>
+
+        <div class="balance" id="balance">
+            ₦—
+        </div>
+
+        <div class="balance-note">
+            Your actual wallet balance is shown after login.
+        </div>
+
+    </section>
+
+
+    <h2 class="section-title">
+        Earning Options
+    </h2>
+
+
+    <!-- TASKS -->
+
+    <div class="earn-card">
+
+        <div class="earn-icon">
+            ✓
+        </div>
+
+        <div class="earn-content">
+
+            <div class="earn-title">
+                Earn Tasks
+            </div>
+
+            <div class="earn-text">
+                Complete available VDC tasks and receive verified rewards.
+            </div>
+
+        </div>
+
+        <a href="tasks.html" class="action">
+            Open
+        </a>
+
+    </div>
+
+
+    <!-- LUCKY DRAW -->
+
+    <div class="earn-card">
+
+        <div class="earn-icon orange">
+            ★
+        </div>
+
+        <div class="earn-content">
+
+            <div class="earn-title">
+                Lucky Draw
+            </div>
+
+            <div class="earn-text">
+                Participate in available Lucky Draw events and qualify for random prizes.
+            </div>
+
+        </div>
+
+        <a href="lucky.html" class="action orange">
+            Open
+        </a>
+
+    </div>
+
+
+    <!-- REFERRAL -->
+
+    <div class="earn-card">
+
+        <div class="earn-icon green">
+            +
+        </div>
+
+        <div class="earn-content">
+
+            <div class="earn-title">
+                Refer & Earn
+            </div>
+
+            <div class="earn-text">
+                Invite people to VDC using your referral code and receive eligible referral rewards.
+            </div>
+
+        </div>
+
+        <a href="referral.html" class="action">
+            Open
+        </a>
+
+    </div>
+
+
+    <!-- VIP -->
+
+    <div class="earn-card">
+
+        <div class="earn-icon">
+            V
+        </div>
+
+        <div class="earn-content">
+
+            <div class="earn-title">
+                VIP Upgrade
+            </div>
+
+            <div class="earn-text">
+                View the available VIP levels and their task access and reward structure.
+            </div>
+
+        </div>
+
+        <a href="vip.html" class="action">
+            View
+        </a>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <div class="info-title">
+            About VDC earnings
+        </div>
+
+        <div class="info-text">
+            Rewards shown on VDC should only be credited after the required activity has been genuinely completed and verified. Availability of tasks, Lucky Draw events and referral rewards may vary.
+        </div>
+
+    </div>
+
+</main>
+
+
+<nav class="bottom-nav">
+
+    <a href="dashboard.html" class="nav-item">
+        <div class="nav-icon">⌂</div>
+        <div>Home</div>
+    </a>
+
+    <a href="tasks.html" class="nav-item">
+        <div class="nav-icon">✓</div>
+        <div>Tasks</div>
+    </a>
+
+    <a href="vip.html" class="nav-item">
+        <div class="nav-icon">V</div>
+        <div>VIP</div>
+    </a>
+
+    <a href="earn.html" class="nav-item active">
+        <div class="nav-icon">+</div>
+        <div>Earn</div>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+        <div class="nav-icon">○</div>
+        <div>My</div>
+    </a>
+
+</nav>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://wiorfxlodrcawxdeowbg.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+async function loadPage(){
+
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
+
+
+    if(!session){
+
+        window.location.href = "auth.html";
+
+        return;
+    }
+
+
+    const userId = session.user.id;
+
+
+    const { data: wallet } =
+        await supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+
+    if(wallet){
+
+        const amount =
+            Number(wallet.balance || 0);
+
+        document.getElementById("balance").textContent =
+            "₦" +
+            amount.toLocaleString("en-NG", {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            });
+
+    }
+
+}
+
+
+loadPage();
+
+</script>
+
+</body>
+</html>
