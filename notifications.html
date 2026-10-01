@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications — VDC</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --orange:#f97316;
+    --bg:#faf9fc;
+    --card:#ffffff;
+    --text:#171717;
+    --muted:#737373;
+    --border:#ece8f3;
+    --green:#008751;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding-bottom:82px;
+}
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    height:64px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.back{
+    width:38px;
+    height:38px;
+    border:0;
+    background:#f5f3fa;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.back svg{
+    width:20px;
+    height:20px;
+    stroke:var(--purple-dark);
+}
+
+.logo{
+    text-decoration:none;
+    font-size:22px;
+    font-weight:800;
+    color:var(--purple-dark);
+}
+
+.mark{
+    width:10px;
+    height:10px;
+    background:var(--orange);
+    display:inline-block;
+    border-radius:50%;
+    margin-left:2px;
+}
+
+.header-title{
+    font-size:15px;
+    font-weight:700;
+    color:#333;
+}
+
+.container{
+    width:min(100%,760px);
+    margin:auto;
+    padding:20px 16px;
+}
+
+.page-title{
+    font-size:25px;
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.page-subtitle{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:18px;
+}
+
+.actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:12px;
+}
+
+.mark-all{
+    border:0;
+    background:transparent;
+    color:var(--purple);
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+}
+
+.notification-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.notification{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:15px;
+    display:flex;
+    gap:13px;
+    position:relative;
+}
+
+.notification.unread{
+    border-color:#ddd0f7;
+    background:#fcfaff;
+}
+
+.icon{
+    width:42px;
+    height:42px;
+    min-width:42px;
+    border-radius:13px;
+    background:#f1ebff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.icon svg{
+    width:21px;
+    height:21px;
+    stroke:var(--purple);
+}
+
+.content{
+    min-width:0;
+    flex:1;
+}
+
+.notification-title{
+    font-size:14px;
+    font-weight:800;
+    margin-bottom:5px;
+    padding-right:12px;
+}
+
+.notification-message{
+    color:#606060;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.time{
+    margin-top:8px;
+    color:#999;
+    font-size:11px;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+    background:var(--orange);
+    border-radius:50%;
+    position:absolute;
+    top:18px;
+    right:16px;
+}
+
+.empty{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:45px 20px;
+    text-align:center;
+}
+
+.empty-icon{
+    width:58px;
+    height:58px;
+    margin:0 auto 14px;
+    border-radius:18px;
+    background:#f2edff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.empty-icon svg{
+    width:28px;
+    height:28px;
+    stroke:var(--purple);
+}
+
+.empty h3{
+    font-size:16px;
+    margin-bottom:7px;
+}
+
+.empty p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.loading{
+    text-align:center;
+    padding:40px 10px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:30;
+    height:68px;
+    background:#fff;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:center;
+}
+
+.nav-inner{
+    width:min(100%,760px);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+}
+
+.nav-item{
+    text-decoration:none;
+    color:#888;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    font-size:10px;
+}
+
+.nav-item svg{
+    width:21px;
+    height:21px;
+    stroke:currentColor;
+}
+
+.nav-item.active{
+    color:var(--purple);
+    font-weight:700;
+}
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:82px;
+    transform:translateX(-50%) translateY(20px);
+    background:#222;
+    color:#fff;
+    padding:11px 15px;
+    border-radius:10px;
+    font-size:12px;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+    z-index:50;
+    max-width:90%;
+    text-align:center;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-left">
+        <button class="back" onclick="goBack()" aria-label="Back">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </button>
+
+        <a href="dashboard.html" class="logo">
+            VDC<span class="mark"></span>
+        </a>
+
+        <span class="header-title">Notifications</span>
+    </div>
+</header>
+
+<main class="container">
+
+    <h1 class="page-title">Notifications</h1>
+    <p class="page-subtitle">
+        Stay updated with your VDC account activity.
+    </p>
+
+    <div class="actions">
+        <button class="mark-all" id="markAllBtn" onclick="markAllRead()" style="display:none;">
+            Mark all as read
+        </button>
+    </div>
+
+    <section id="notificationArea">
+        <div class="loading">Loading notifications...</div>
+    </section>
+
+</main>
+
+<nav class="bottom-nav">
+    <div class="nav-inner">
+
+        <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M3 11l9-8 9 8"/>
+                <path d="M5 10v10h14V10"/>
+            </svg>
+            <span>Home</span>
+        </a>
+
+        <a href="tasks.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <rect x="4" y="4" width="16" height="16" rx="3"/>
+                <path d="M8 9h8M8 13h8M8 17h5"/>
+            </svg>
+            <span>Tasks</span>
+        </a>
+
+        <a href="vip.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M12 3l2.7 5.5L21 9.4l-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.3-.9L12 3z"/>
+            </svg>
+            <span>VIP</span>
+        </a>
+
+        <a href="earn.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M12 19V5"/>
+                <path d="M6 11l6-6 6 6"/>
+                <path d="M5 21h14"/>
+            </svg>
+            <span>Earn</span>
+        </a>
+
+        <a href="profile.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21c.8-4 3.4-6 8-6s7.2 2 8 6"/>
+            </svg>
+            <span>My</span>
+        </a>
+
+    </div>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const SUPABASE_URL = "https://wiorfxlodrcawxdeowbg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const area = document.getElementById("notificationArea");
+const markAllBtn = document.getElementById("markAllBtn");
+
+let notifications = [];
+
+function goBack(){
+    if(document.referrer){
+        history.back();
+    }else{
+        window.location.href = "dashboard.html";
+    }
+}
+
+function escapeHtml(value){
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+function showToast(message){
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
+}
+
+function formatTime(dateString){
+    const date = new Date(dateString);
+
+    if(Number.isNaN(date.getTime())){
+        return "";
+    }
+
+    return date.toLocaleString("en-NG", {
+        day:"numeric",
+        month:"short",
+        year:"numeric",
+        hour:"numeric",
+        minute:"2-digit"
+    });
+}
+
+function iconForType(type){
+    const icons = {
+        welcome: `
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7"/>
+                <path d="M12 21V5"/>
+                <path d="M12 5H8.5a2.5 2.5 0 1 1 2.5-2.5V5"/>
+                <path d="M12 5h3.5A2.5 2.5 0 1 0 13 2.5V5"/>
+            </svg>`,
+
+        task: `
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <rect x="4" y="4" width="16" height="16" rx="3"/>
+                <path d="M8 9h8M8 13h8M8 17h5"/>
+            </svg>`,
+
+        referral: `
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <circle cx="9" cy="8" r="3"/>
+                <circle cx="17" cy="9" r="2.5"/>
+                <path d="M3 20c.5-3.5 2.5-5 6-5s5.5 1.5 6 5"/>
+                <path d="M15 15c2.8.2 4.4 1.6 5 4"/>
+            </svg>`,
+
+        withdrawal: `
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M12 3v13"/>
+                <path d="M7 11l5 5 5-5"/>
+                <path d="M5 21h14"/>
+            </svg>`,
+
+        vip: `
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M12 3l2.7 5.5L21 9.4l-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.3-.9L12 3z"/>
+            </svg>`,
+
+        system: `
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                <path d="M10 21h4"/>
+            </svg>`
+    };
+
+    return icons[type] || icons.system;
+}
+
+function renderNotifications(){
+
+    if(!notifications.length){
+
+        area.innerHTML = `
+            <div class="empty">
+
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                        <path d="M10 21h4"/>
+                    </svg>
+                </div>
+
+                <h3>No notifications yet</h3>
+
+                <p>
+                    Important updates about your VDC account,
+                    tasks, referrals and withdrawals will appear here.
+                </p>
+
+            </div>
+        `;
+
+        markAllBtn.style.display = "none";
+        return;
+    }
+
+    const unreadCount = notifications.filter(n => !n.is_read).length;
+
+    markAllBtn.style.display = unreadCount ? "block" : "none";
+
+    area.innerHTML = `
+        <div class="notification-list">
+
+            ${notifications.map(n => `
+                <article
+                    class="notification ${n.is_read ? "" : "unread"}"
+                    data-id="${escapeHtml(n.id)}"
+                    onclick="openNotification('${escapeHtml(n.id)}')"
+                >
+
+                    <div class="icon">
+                        ${iconForType(n.type)}
+                    </div>
+
+                    <div class="content">
+
+                        <div class="notification-title">
+                            ${escapeHtml(n.title)}
+                        </div>
+
+                        <div class="notification-message">
+                            ${escapeHtml(n.message)}
+                        </div>
+
+                        <div class="time">
+                            ${formatTime(n.created_at)}
+                        </div>
+
+                    </div>
+
+                    ${n.is_read ? "" : `<span class="dot"></span>`}
+
+                </article>
+            `).join("")}
+
+        </div>
+    `;
+}
+
+async function loadNotifications(){
+
+    const { data: { session }, error: sessionError } =
+        await supabaseClient.auth.getSession();
+
+    if(sessionError || !session){
+
+        window.location.href = "auth.html";
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("notifications")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .order("created_at", { ascending:false });
+
+    if(error){
+
+        console.error(error);
+
+        area.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                        <path d="M10 21h4"/>
+                    </svg>
+                </div>
+
+                <h3>Notifications are not ready</h3>
+
+                <p>
+                    Your notification system is being connected.
+                    Please check again after the notification database
+                    has been enabled.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    notifications = data || [];
+    renderNotifications();
+}
+
+async function openNotification(id){
+
+    const item = notifications.find(n => String(n.id) === String(id));
+
+    if(!item || item.is_read){
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("notifications")
+        .update({
+            is_read:true,
+            read_at:new Date().toISOString()
+        })
+        .eq("id", id)
+        .eq("user_id", item.user_id);
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    item.is_read = true;
+    item.read_at = new Date().toISOString();
+
+    renderNotifications();
+}
+
+async function markAllRead(){
+
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
+
+    if(!session){
+        window.location.href = "auth.html";
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("notifications")
+        .update({
+            is_read:true,
+            read_at:new Date().toISOString()
+        })
+        .eq("user_id", session.user.id)
+        .eq("is_read", false);
+
+    if(error){
+
+        console.error(error);
+        showToast("Unable to mark notifications as read.");
+        return;
+    }
+
+    notifications.forEach(n => {
+        n.is_read = true;
+        n.read_at = new Date().toISOString();
+    });
+
+    renderNotifications();
+    showToast("All notifications marked as read.");
+}
+
+loadNotifications();
+</script>
+
+</body>
+</html>
