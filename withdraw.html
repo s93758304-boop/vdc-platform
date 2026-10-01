@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VDC — Withdraw</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --purple-light:#f3eefe;
+    --orange:#f97316;
+    --green:#008751;
+    --bg:#faf9fc;
+    --card:#ffffff;
+    --text:#17131f;
+    --muted:#746f7c;
+    --border:#ece8f2;
+    --danger:#dc2626;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.app{
+    width:100%;
+    max-width:760px;
+    margin:auto;
+    min-height:100vh;
+    padding-bottom:90px;
+}
+
+/* HEADER */
+
+.header{
+    height:64px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.back{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--purple-light);
+    color:var(--purple);
+}
+
+.back svg{
+    width:20px;
+    height:20px;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:800;
+    color:var(--purple-dark);
+}
+
+.logo span{
+    color:var(--orange);
+}
+
+.header-title{
+    font-size:15px;
+    font-weight:700;
+    color:#3d3747;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.page-title{
+    font-size:25px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.page-subtitle{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:18px;
+}
+
+/* BALANCE */
+
+.balance-card{
+    background:linear-gradient(135deg,var(--purple-dark),var(--purple));
+    color:#fff;
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:16px;
+    box-shadow:0 10px 28px rgba(76,29,149,.18);
+}
+
+.balance-label{
+    font-size:13px;
+    opacity:.85;
+}
+
+.balance{
+    font-size:32px;
+    font-weight:800;
+    margin-top:7px;
+}
+
+.balance-note{
+    margin-top:8px;
+    font-size:12px;
+    opacity:.82;
+}
+
+/* STATUS */
+
+.status-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:17px;
+    margin-bottom:16px;
+}
+
+.status-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.status-title{
+    font-size:15px;
+    font-weight:800;
+}
+
+.status-badge{
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:800;
+    background:#fef2f2;
+    color:var(--danger);
+}
+
+.status-badge.open{
+    background:#ecfdf5;
+    color:#047857;
+}
+
+.status-text{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    margin-top:10px;
+}
+
+/* CARDS */
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+}
+
+.card-title{
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.field{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    color:#5d5667;
+    margin-bottom:7px;
+}
+
+input,
+select{
+    width:100%;
+    height:48px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#fff;
+    padding:0 13px;
+    font-size:14px;
+    color:var(--text);
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:var(--purple);
+    box-shadow:0 0 0 3px rgba(109,40,217,.08);
+}
+
+.bank-note{
+    background:#f8f6fb;
+    border-radius:12px;
+    padding:11px;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-bottom:15px;
+}
+
+/* CALCULATION */
+
+.calculation{
+    background:var(--purple-light);
+    border-radius:14px;
+    padding:14px;
+    margin-top:5px;
+    margin-bottom:15px;
+}
+
+.calc-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:6px 0;
+    font-size:13px;
+}
+
+.calc-row span:first-child{
+    color:var(--muted);
+}
+
+.calc-row strong{
+    color:#30263c;
+}
+
+.calc-total{
+    border-top:1px solid rgba(109,40,217,.15);
+    margin-top:6px;
+    padding-top:11px;
+    font-size:15px;
+}
+
+.calc-total strong{
+    color:var(--purple-dark);
+}
+
+/* BUTTON */
+
+.btn{
+    width:100%;
+    height:50px;
+    border:0;
+    border-radius:13px;
+    background:var(--purple);
+    color:#fff;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.message{
+    display:none;
+    padding:12px;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:14px;
+}
+
+.message.error{
+    display:block;
+    background:#fef2f2;
+    color:#991b1b;
+}
+
+.message.success{
+    display:block;
+    background:#ecfdf5;
+    color:#047857;
+}
+
+/* HISTORY */
+
+.history-item{
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.history-item:last-child{
+    border-bottom:0;
+}
+
+.history-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.history-amount{
+    font-weight:800;
+}
+
+.history-status{
+    font-size:11px;
+    font-weight:800;
+    padding:5px 8px;
+    border-radius:999px;
+    background:#f3f4f6;
+    color:#4b5563;
+}
+
+.history-status.pending{
+    background:#fff7ed;
+    color:#c2410c;
+}
+
+.history-status.paid{
+    background:#ecfdf5;
+    color:#047857;
+}
+
+.history-status.cancelled,
+.history-status.failed{
+    background:#fef2f2;
+    color:#b91c1c;
+}
+
+.history-meta{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.empty{
+    text-align:center;
+    padding:22px 5px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:0;
+    width:100%;
+    max-width:760px;
+    height:72px;
+    background:rgba(255,255,255,.97);
+    border-top:1px solid var(--border);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    z-index:30;
+}
+
+.nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    color:#817a89;
+    font-size:10px;
+    font-weight:700;
+}
+
+.nav-item svg{
+    width:20px;
+    height:20px;
+}
+
+.nav-item.active{
+    color:var(--purple);
+}
+
+@media(min-width:761px){
+    body{
+        background:#f3f1f6;
+    }
+
+    .app{
+        background:var(--bg);
+        box-shadow:0 0 35px rgba(0,0,0,.06);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+        <div class="header-left">
+            <a href="dashboard.html" class="back" aria-label="Back">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </a>
+
+            <a href="index.html" class="logo">
+                VDC<span>.</span>
+            </a>
+        </div>
+
+        <div class="header-title">Withdraw</div>
+    </header>
+
+    <main class="content">
+
+        <h1 class="page-title">Withdraw Funds</h1>
+
+        <p class="page-subtitle">
+            Withdraw your available VDC balance to your Nigerian bank account
+            during the scheduled withdrawal period.
+        </p>
+
+        <!-- BALANCE -->
+
+        <section class="balance-card">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance" id="balance">₦—</div>
+            <div class="balance-note">
+                Your actual wallet balance is loaded from your VDC account.
+            </div>
+        </section>
+
+        <!-- WITHDRAWAL WINDOW -->
+
+        <section class="status-card">
+
+            <div class="status-top">
+                <div class="status-title">Withdrawal Schedule</div>
+                <div class="status-badge" id="windowBadge">
+                    Checking
+                </div>
+            </div>
+
+            <div class="status-text" id="windowText">
+                Checking the current withdrawal schedule...
+            </div>
+
+        </section>
+
+        <!-- BANK DETAILS -->
+
+        <section class="card">
+
+            <div class="card-title">Bank Account</div>
+
+            <div class="bank-note">
+                Withdrawals are available to Nigerian bank accounts only.
+                Enter the account details carefully.
+            </div>
+
+            <div class="field">
+                <label for="bankName">Bank Name</label>
+                <input
+                    id="bankName"
+                    type="text"
+                    placeholder="Enter bank name"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="field">
+                <label for="accountName">Account Name</label>
+                <input
+                    id="accountName"
+                    type="text"
+                    placeholder="Account holder name"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="field">
+                <label for="accountNumber">Account Number</label>
+                <input
+                    id="accountNumber"
+                    type="text"
+                    inputmode="numeric"
+                    maxlength="10"
+                    placeholder="10-digit account number"
+                    autocomplete="off"
+                >
+            </div>
+
+        </section>
+
+        <!-- WITHDRAWAL -->
+
+        <section class="card">
+
+            <div class="card-title">Withdrawal Amount</div>
+
+            <div id="message" class="message"></div>
+
+            <div class="field">
+                <label for="amount">Amount to Withdraw</label>
+                <input
+                    id="amount"
+                    type="number"
+                    min="10000"
+                    step="100"
+                    placeholder="Minimum ₦10,000"
+                >
+            </div>
+
+            <div class="calculation">
+
+                <div class="calc-row">
+                    <span>Withdrawal amount</span>
+                    <strong id="calcAmount">₦0.00</strong>
+                </div>
+
+                <div class="calc-row">
+                    <span>Withdrawal fee</span>
+                    <strong id="calcFee">₦1,000.00</strong>
+                </div>
+
+                <div class="calc-row calc-total">
+                    <span>You receive</span>
+                    <strong id="calcNet">₦0.00</strong>
+                </div>
+
+            </div>
+
+            <button
+                class="btn"
+                id="withdrawBtn"
+                disabled
+            >
+                Withdraw
+            </button>
+
+        </section>
+
+        <!-- HISTORY -->
+
+        <section class="card">
+
+            <div class="card-title">Withdrawal History</div>
+
+            <div id="history">
+                <div class="empty">
+                    Loading withdrawal history...
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- BOTTOM NAV -->
+
+    <nav class="bottom-nav">
+
+        <a href="dashboard.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 11.5L12 4l9 7.5"/>
+                <path d="M5 10.5V20h14v-9.5"/>
+            </svg>
+            Home
+        </a>
+
+        <a href="tasks.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11l2 2 4-4"/>
+                <rect x="4" y="4" width="16" height="16" rx="3"/>
+            </svg>
+            Tasks
+        </a>
+
+        <a href="vip.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3l2.5 5.5L20 10l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-1.5L12 3z"/>
+            </svg>
+            VIP
+        </a>
+
+        <a href="earn.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 19V5"/>
+                <path d="M6 11l6-6 6 6"/>
+                <path d="M5 20h14"/>
+            </svg>
+            Earn
+        </a>
+
+        <a href="profile.html" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21c.8-4 3.3-6 8-6s7.2 2 8 6"/>
+            </svg>
+            My
+        </a>
+
+    </nav>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+    "https://wiorfxlodrcawxdeowbg.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+let currentUser = null;
+let walletBalance = 0;
+
+let withdrawalFee = 1000;
+let minimumWithdrawal = 10000;
+
+let withdrawalsEnabled = false;
+let openDate = null;
+let closeDate = null;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function money(value){
+
+    return "₦" + Number(value || 0).toLocaleString(
+        "en-NG",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+
+
+function showMessage(text,type){
+
+    const box = document.getElementById("message");
+
+    box.textContent = text;
+
+    box.className = "message " + type;
+
+}
+
+
+function clearMessage(){
+
+    const box = document.getElementById("message");
+
+    box.textContent = "";
+
+    box.className = "message";
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function checkAuth(){
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getSession();
+
+    if(
+        error ||
+        !data ||
+        !data.session
+    ){
+
+        window.location.href = "auth.html";
+
+        return false;
+    }
+
+    currentUser = data.session.user;
+
+    return true;
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+async function loadSettings(){
+
+    try{
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("settings")
+            .select("*");
+
+        if(error){
+
+            console.error(error);
+
+            return;
+        }
+
+        if(!data || !data.length){
+
+            return;
+        }
+
+
+        /*
+          Settings are stored as key/value records.
+          The code supports common VDC setting column names.
+        */
+
+        data.forEach(row => {
+
+            const key =
+                row.key ??
+                row.setting_key ??
+                row.name;
+
+            const value =
+                row.value ??
+                row.setting_value;
+
+            if(!key) return;
+
+
+            if(key === "withdrawals_enabled"){
+
+                withdrawalsEnabled =
+                    value === true ||
+                    value === "true";
+            }
+
+
+            if(key === "withdrawal_fee"){
+
+                withdrawalFee =
+                    Number(value || 1000);
+            }
+
+
+            if(key === "minimum_withdrawal"){
+
+                minimumWithdrawal =
+                    Number(value || 10000);
+            }
+
+
+            if(key === "withdrawal_open_date"){
+
+                if(value){
+
+                    openDate = new Date(value);
+                }
+            }
+
+
+            if(key === "withdrawal_close_date"){
+
+                if(value){
+
+                    closeDate = new Date(value);
+                }
+            }
+
+        });
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   WITHDRAWAL WINDOW
+========================================================= */
+
+function updateWithdrawalWindow(){
+
+    const badge =
+        document.getElementById("windowBadge");
+
+    const text =
+        document.getElementById("windowText");
+
+    const button =
+        document.getElementById("withdrawBtn");
+
+
+    const now = new Date();
+
+
+    let open = withdrawalsEnabled;
+
+
+    if(
+        open &&
+        openDate &&
+        now < openDate
+    ){
+
+        open = false;
+
+        badge.textContent = "Scheduled";
+
+        text.textContent =
+            "Withdrawals are currently closed. " +
+            "The next withdrawal window opens on " +
+            openDate.toLocaleString(
+                "en-NG",
+                {
+                    dateStyle:"medium",
+                    timeStyle:"short"
+                }
+            ) + ".";
+
+    }
+
+
+    else if(
+        open &&
+        closeDate &&
+        now > closeDate
+    ){
+
+        open = false;
+
+        badge.textContent = "Closed";
+
+        text.textContent =
+            "The current withdrawal window has closed. " +
+            "Please wait for the next scheduled withdrawal period.";
+
+    }
+
+
+    else if(open){
+
+        badge.textContent = "Open";
+
+        badge.classList.add("open");
+
+        text.textContent =
+            "Withdrawals are currently open. " +
+            "You may submit a withdrawal request.";
+
+    }
+
+
+    else{
+
+        badge.textContent = "Closed";
+
+        badge.classList.remove("open");
+
+        if(openDate){
+
+            text.textContent =
+                "Withdrawals are currently closed. " +
+                "The next scheduled window opens on " +
+                openDate.toLocaleString(
+                    "en-NG",
+                    {
+                        dateStyle:"medium",
+                        timeStyle:"short"
+                    }
+                ) + ".";
+
+        }else{
+
+            text.textContent =
+                "Withdrawals are currently closed. " +
+                "Please wait for the next scheduled withdrawal period.";
+
+        }
+
+    }
+
+
+    button.disabled = !open;
+
+}
+
+
+/* =========================================================
+   WALLET
+========================================================= */
+
+async function loadWallet(){
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq("user_id",currentUser.id)
+        .maybeSingle();
+
+
+    if(error){
+
+        console.error(error);
+
+        return;
+    }
+
+
+    walletBalance =
+        Number(data?.balance || 0);
+
+
+    document.getElementById("balance")
+        .textContent = money(walletBalance);
+
+}
+
+
+/* =========================================================
+   SAVED BANK ACCOUNT
+========================================================= */
+
+async function loadBankAccount(){
+
+    try{
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("bank_accounts")
+            .select("*")
+            .eq("user_id",currentUser.id)
+            .order("created_at",{ascending:false})
+            .limit(1)
+            .maybeSingle();
+
+
+        if(error){
+
+            console.error(error);
+
+            return;
+        }
+
+
+        if(!data){
+
+            return;
+        }
+
+
+        const bankName =
+            data.bank_name ??
+            data.bank ??
+            "";
+
+
+        const accountName =
+            data.account_name ??
+            "";
+
+
+        const accountNumber =
+            data.account_number ??
+            "";
+
+
+        document.getElementById("bankName")
+            .value = bankName;
+
+
+        document.getElementById("accountName")
+            .value = accountName;
+
+
+        document.getElementById("accountNumber")
+            .value = accountNumber;
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   CALCULATE
+========================================================= */
+
+function updateCalculation(){
+
+    const amount =
+        Number(
+            document.getElementById("amount").value || 0
+        );
+
+
+    document.getElementById("calcAmount")
+        .textContent = money(amount);
+
+
+    document.getElementById("calcFee")
+        .textContent = money(
+            amount > 0 ? withdrawalFee : 0
+        );
+
+
+    const net =
+        Math.max(
+            0,
+            amount - withdrawalFee
+        );
+
+
+    document.getElementById("calcNet")
+        .textContent = money(net);
+
+}
+
+
+document.getElementById("amount")
+    .addEventListener(
+        "input",
+        updateCalculation
+    );
+
+
+/* =========================================================
+   SAVE BANK ACCOUNT
+========================================================= */
+
+async function saveBankAccount(
+    bankName,
+    accountName,
+    accountNumber
+){
+
+    const {
+        data:existing,
+        error:findError
+    } = await supabaseClient
+        .from("bank_accounts")
+        .select("id")
+        .eq("user_id",currentUser.id)
+        .limit(1)
+        .maybeSingle();
+
+
+    if(findError){
+
+        throw findError;
+    }
+
+
+    const payload = {
+
+        user_id:currentUser.id,
+
+        bank_name:bankName,
+
+        account_name:accountName,
+
+        account_number:accountNumber
+
+    };
+
+
+    if(existing){
+
+        const {
+            error
+        } = await supabaseClient
+            .from("bank_accounts")
+            .update(payload)
+            .eq("id",existing.id);
+
+
+        if(error){
+
+            throw error;
+        }
+
+    }else{
+
+        const {
+            error
+        } = await supabaseClient
+            .from("bank_accounts")
+            .insert(payload);
+
+
+        if(error){
+
+            throw error;
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   WITHDRAW
+========================================================= */
+
+async function submitWithdrawal(){
+
+    clearMessage();
+
+
+    const button =
+        document.getElementById("withdrawBtn");
+
+
+    if(button.disabled){
+
+        return;
+    }
+
+
+    const bankName =
+        document.getElementById("bankName")
+            .value.trim();
+
+
+    const accountName =
+        document.getElementById("accountName")
+            .value.trim();
+
+
+    const accountNumber =
+        document.getElementById("accountNumber")
+            .value.trim();
+
+
+    const amount =
+        Number(
+            document.getElementById("amount").value || 0
+        );
+
+
+    if(!bankName){
+
+        showMessage(
+            "Please enter your bank name.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(!accountName){
+
+        showMessage(
+            "Please enter the account name.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(!/^\d{10}$/.test(accountNumber)){
+
+        showMessage(
+            "Please enter a valid 10-digit Nigerian bank account number.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(amount < minimumWithdrawal){
+
+        showMessage(
+            "Minimum withdrawal is " +
+            money(minimumWithdrawal) + ".",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(amount > walletBalance){
+
+        showMessage(
+            "The withdrawal amount is greater than your available balance.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(amount <= withdrawalFee){
+
+        showMessage(
+            "The withdrawal amount must be greater than the withdrawal fee.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent = "Submitting...";
+
+
+    try{
+
+        await saveBankAccount(
+            bankName,
+            accountName,
+            accountNumber
+        );
+
+
+        /*
+          IMPORTANT:
+          The final withdrawal operation must be protected
+          by a database RPC so users cannot bypass balance,
+          schedule, fee, or duplicate-request checks.
+        */
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .rpc(
+                "request_withdrawal",
+                {
+                    p_amount:amount
+                }
+            );
+
+
+        if(error){
+
+            throw error;
+        }
+
+
+        showMessage(
+            "Withdrawal request submitted successfully.",
+            "success"
+        );
+
+
+        document.getElementById("amount")
+            .value = "";
+
+
+        updateCalculation();
+
+
+        await loadWallet();
+
+        await loadHistory();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Unable to submit withdrawal request.",
+            "error"
+        );
+
+    }
+
+
+    button.disabled = false;
+
+    updateWithdrawalWindow();
+
+    button.textContent = "Withdraw";
+
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+async function loadHistory(){
+
+    const history =
+        document.getElementById("history");
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("withdrawals")
+        .select("*")
+        .eq("user_id",currentUser.id)
+        .order("created_at",{ascending:false})
+        .limit(20);
+
+
+    if(error){
+
+        console.error(error);
+
+        history.innerHTML =
+            `<div class="empty">
+                Unable to load withdrawal history.
+            </div>`;
+
+        return;
+    }
+
+
+    if(!data || !data.length){
+
+        history.innerHTML =
+            `<div class="empty">
+                No withdrawal requests yet.
+            </div>`;
+
+        return;
+    }
+
+
+    history.innerHTML = data.map(item => {
+
+        const amount =
+            Number(
+                item.amount ??
+                item.withdrawal_amount ??
+                0
+            );
+
+
+        const status =
+            String(
+                item.status || "pending"
+            ).toLowerCase();
+
+
+        const created =
+            item.created_at
+            ? new Date(item.created_at)
+                .toLocaleString(
+                    "en-NG",
+                    {
+                        dateStyle:"medium",
+                        timeStyle:"short"
+                    }
+                )
+            : "";
+
+
+        return `
+            <div class="history-item">
+
+                <div class="history-top">
+
+                    <div class="history-amount">
+                        ${money(amount)}
+                    </div>
+
+                    <div class="history-status ${status}">
+                        ${status}
+                    </div>
+
+                </div>
+
+                <div class="history-meta">
+                    ${created}
+                </div>
+
+            </div>
+        `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function init(){
+
+    const authenticated =
+        await checkAuth();
+
+
+    if(!authenticated){
+
+        return;
+    }
+
+
+    await loadSettings();
+
+    await loadWallet();
+
+    await loadBankAccount();
+
+    await loadHistory();
+
+    updateCalculation();
+
+    updateWithdrawalWindow();
+
+}
+
+
+document.getElementById("withdrawBtn")
+    .addEventListener(
+        "click",
+        submitWithdrawal
+    );
+
+
+init();
+
+</script>
+
+</body>
+</html>
