@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VDC — Lucky Draw</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --purple:#6d28d9;
+  --purple-dark:#4c1d95;
+  --orange:#f97316;
+  --bg:#faf9fc;
+  --card:#ffffff;
+  --text:#171717;
+  --muted:#737373;
+  --border:#eeeef2;
+  --green:#008751;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button{
+  font-family:inherit;
+}
+
+.topbar{
+  height:64px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.topbar-inner{
+  width:100%;
+  max-width:760px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.back-btn{
+  width:40px;
+  height:40px;
+  border:0;
+  background:#f5f3ff;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--purple);
+  cursor:pointer;
+}
+
+.logo{
+  text-decoration:none;
+  font-size:22px;
+  font-weight:800;
+  color:var(--purple);
+}
+
+.logo span{
+  color:var(--orange);
+}
+
+.page{
+  max-width:760px;
+  margin:auto;
+  padding:22px 16px 95px;
+}
+
+.title{
+  font-size:27px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.draw-card{
+  background:linear-gradient(135deg,#4c1d95,#6d28d9);
+  color:#fff;
+  border-radius:22px;
+  padding:24px 20px;
+  text-align:center;
+  box-shadow:0 12px 30px rgba(76,29,149,.18);
+  margin-bottom:18px;
+}
+
+.draw-icon{
+  width:68px;
+  height:68px;
+  border-radius:50%;
+  margin:0 auto 14px;
+  background:rgba(255,255,255,.14);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.draw-card h2{
+  font-size:23px;
+  margin-bottom:8px;
+}
+
+.draw-card p{
+  color:rgba(255,255,255,.84);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.balance-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:17px;
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.balance-label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+.balance-value{
+  font-size:24px;
+  font-weight:800;
+  color:var(--purple-dark);
+}
+
+.vip-badge{
+  background:#fff4ed;
+  color:var(--orange);
+  font-size:12px;
+  font-weight:700;
+  padding:8px 11px;
+  border-radius:10px;
+}
+
+.info-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.info-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.info-icon{
+  width:36px;
+  height:36px;
+  background:#f5f3ff;
+  color:var(--purple);
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.info-card p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+.prizes{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+
+.prize{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  text-align:center;
+  background:#fcfcfd;
+}
+
+.prize strong{
+  display:block;
+  font-size:18px;
+  color:var(--purple-dark);
+  margin-bottom:4px;
+}
+
+.prize span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.draw-action{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.draw-action h3{
+  font-size:17px;
+  margin-bottom:7px;
+}
+
+.draw-action p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:16px;
+}
+
+.draw-btn{
+  width:100%;
+  border:0;
+  background:var(--purple);
+  color:#fff;
+  padding:14px;
+  border-radius:13px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.draw-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.result{
+  display:none;
+  margin-top:16px;
+  border-radius:14px;
+  padding:15px;
+  background:#f5f3ff;
+  color:var(--purple-dark);
+  font-weight:700;
+}
+
+.notice{
+  background:#fff8f2;
+  border:1px solid #ffe4d1;
+  color:#9a4d18;
+  border-radius:15px;
+  padding:14px;
+  font-size:12px;
+  line-height:1.55;
+  margin-bottom:18px;
+}
+
+.loading{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  padding:20px;
+}
+
+.error{
+  display:none;
+  background:#fff1f2;
+  border:1px solid #fecdd3;
+  color:#be123c;
+  border-radius:13px;
+  padding:13px;
+  font-size:13px;
+  margin-bottom:15px;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#fff;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:center;
+  z-index:30;
+}
+
+.nav-inner{
+  width:100%;
+  max-width:760px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.nav-item{
+  border:0;
+  background:none;
+  text-decoration:none;
+  color:#888;
+  font-size:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+
+.nav-item.active{
+  color:var(--purple);
+  font-weight:700;
+}
+
+svg{
+  display:block;
+}
+
+@media(max-width:380px){
+  .title{
+    font-size:24px;
+  }
+
+  .prizes{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+    <button class="back-btn" onclick="goBack()" aria-label="Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5"></path>
+        <path d="M12 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+
+    <a class="logo" href="dashboard.html">
+      VDC<span>.</span>
+    </a>
+
+    <div style="width:40px"></div>
+
+  </div>
+</header>
+
+<main class="page">
+
+  <h1 class="title">Lucky Draw</h1>
+
+  <p class="subtitle">
+    Try your luck for a chance to receive a random VDC reward.
+  </p>
+
+  <div id="errorBox" class="error"></div>
+
+  <section class="draw-card">
+
+    <div class="draw-icon">
+      <svg width="34" height="34" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="8"></circle>
+        <path d="M12 8v8"></path>
+        <path d="M8 12h8"></path>
+      </svg>
+    </div>
+
+    <h2>Lucky Draw</h2>
+
+    <p>
+      Eligible members can participate according to the current
+      VDC Lucky Draw rules.
+    </p>
+
+  </section>
+
+  <section class="balance-card">
+
+    <div>
+      <div class="balance-label">Available Balance</div>
+      <div class="balance-value" id="balance">₦—</div>
+    </div>
+
+    <div class="vip-badge" id="vipBadge">
+      Checking VIP...
+    </div>
+
+  </section>
+
+  <section class="info-card">
+
+    <div class="info-title">
+
+      <div class="info-icon">
+        <svg width="19" height="19" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 8v4l3 2"></path>
+        </svg>
+      </div>
+
+      <span>Possible Rewards</span>
+
+    </div>
+
+    <p>
+      Lucky Draw prizes are determined by the active VDC draw configuration.
+      No reward is guaranteed.
+    </p>
+
+    <div class="prizes">
+
+      <div class="prize">
+        <strong>₦0</strong>
+        <span>No reward</span>
+      </div>
+
+      <div class="prize">
+        <strong>₦500</strong>
+        <span>Possible prize</span>
+      </div>
+
+      <div class="prize">
+        <strong>₦1,000</strong>
+        <span>Possible prize</span>
+      </div>
+
+      <div class="prize">
+        <strong>₦10,000</strong>
+        <span>VIP 6+ possible maximum</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="draw-action">
+
+    <h3>Enter Lucky Draw</h3>
+
+    <p id="drawMessage">
+      Checking your eligibility...
+    </p>
+
+    <button
+      id="drawBtn"
+      class="draw-btn"
+      disabled
+      onclick="enterLuckyDraw()">
+      Enter Lucky Draw
+    </button>
+
+    <div id="result" class="result"></div>
+
+  </section>
+
+  <div class="notice">
+    Lucky Draw participation and rewards must follow the active VDC
+    rules. Rewards should only be credited after a valid draw result
+    is recorded.
+  </div>
+
+</main>
+
+<nav class="bottom-nav">
+
+  <div class="nav-inner">
+
+    <a class="nav-item" href="dashboard.html">
+      <svg width="20" height="20" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 11.5L12 4l9 7.5"></path>
+        <path d="M5 10.5V20h14v-9.5"></path>
+      </svg>
+      <span>Home</span>
+    </a>
+
+    <a class="nav-item" href="tasks.html">
+      <svg width="20" height="20" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+        <path d="M9 7h6"></path>
+        <path d="M9 11h6"></path>
+        <path d="M9 15h4"></path>
+      </svg>
+      <span>Tasks</span>
+    </a>
+
+    <a class="nav-item" href="vip.html">
+      <svg width="20" height="20" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 3l2.4 5 5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8L12 3z"></path>
+      </svg>
+      <span>VIP</span>
+    </a>
+
+    <a class="nav-item active" href="earn.html">
+      <svg width="20" height="20" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 19V5"></path>
+        <path d="M6 11l6-6 6 6"></path>
+      </svg>
+      <span>Earn</span>
+    </a>
+
+    <a class="nav-item" href="profile.html">
+      <svg width="20" height="20" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="8" r="3"></circle>
+        <path d="M5 20c.8-3.5 3-5 7-5s6.2 1.5 7 5"></path>
+      </svg>
+      <span>My</span>
+    </a>
+
+  </div>
+
+</nav>
+
+<script>
+
+const SUPABASE_URL =
+  "https://wiorfxlodrcawxdeowbg.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+let currentUser = null;
+let currentVip = 0;
+let drawAvailable = false;
+
+
+/* ==============================
+   HELPERS
+============================== */
+
+function showError(message){
+
+  const box = document.getElementById("errorBox");
+
+  box.textContent = message;
+  box.style.display = "block";
+}
+
+function formatNaira(value){
+
+  return "₦" + Number(value || 0).toLocaleString("en-NG",{
+    minimumFractionDigits:0,
+    maximumFractionDigits:2
+  });
+
+}
+
+function goBack(){
+
+  if(document.referrer){
+    history.back();
+  }else{
+    window.location.href = "earn.html";
+  }
+
+}
+
+
+/* ==============================
+   LOAD USER
+============================== */
+
+async function loadUser(){
+
+  const {
+    data:{
+      session
+    }
+  } = await supabaseClient.auth.getSession();
+
+  if(!session){
+
+    window.location.href = "auth.html";
+    return;
+
+  }
+
+  currentUser = session.user;
+
+  await loadBalance();
+  await loadVip();
+  await checkDrawEligibility();
+
+}
+
+
+/* ==============================
+   BALANCE
+============================== */
+
+async function loadBalance(){
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("wallets")
+    .select("balance")
+    .eq("user_id",currentUser.id)
+    .maybeSingle();
+
+  if(error){
+
+    console.error(error);
+    return;
+
+  }
+
+  if(data){
+
+    document.getElementById("balance").textContent =
+      formatNaira(data.balance);
+
+  }
+
+}
+
+
+/* ==============================
+   VIP
+============================== */
+
+async function loadVip(){
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("user_vips")
+    .select("vip_level_id")
+    .eq("user_id",currentUser.id)
+    .eq("status","active")
+    .order("vip_level_id",{ascending:false})
+    .limit(1)
+    .maybeSingle();
+
+  if(error){
+
+    console.error(error);
+
+    document.getElementById("vipBadge").textContent =
+      "VIP unavailable";
+
+    return;
+
+  }
+
+  if(data){
+
+    currentVip = Number(data.vip_level_id || 0);
+
+    document.getElementById("vipBadge").textContent =
+      "VIP " + currentVip;
+
+  }else{
+
+    currentVip = 0;
+
+    document.getElementById("vipBadge").textContent =
+      "No VIP";
+
+  }
+
+}
+
+
+/* ==============================
+   CHECK DRAW
+============================== */
+
+async function checkDrawEligibility(){
+
+  const button = document.getElementById("drawBtn");
+  const message = document.getElementById("drawMessage");
+
+  /*
+    The draw should only become active after
+    the backend has a valid draw configuration.
+
+    For now we keep the button disabled until
+    the Lucky Draw backend rules are connected.
+  */
+
+  drawAvailable = false;
+
+  button.disabled = true;
+
+  if(currentVip < 1){
+
+    message.textContent =
+      "You need an active VIP level before participating.";
+
+    return;
+
+  }
+
+  message.textContent =
+    "Lucky Draw is not currently open.";
+
+}
+
+
+/* ==============================
+   ENTER DRAW
+============================== */
+
+async function enterLuckyDraw(){
+
+  if(!currentUser){
+
+    window.location.href = "auth.html";
+    return;
+
+  }
+
+  if(!drawAvailable){
+
+    showError("Lucky Draw is not currently available.");
+    return;
+
+  }
+
+}
+
+
+/* ==============================
+   START
+============================== */
+
+loadUser();
+
+</script>
+
+</body>
+</html>
