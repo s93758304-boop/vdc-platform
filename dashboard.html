@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VDC — Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --purple-light:#f3e8ff;
+    --orange:#f97316;
+    --green:#008751;
+    --bg:#faf9fc;
+    --card:#ffffff;
+    --text:#171321;
+    --muted:#77727f;
+    --border:#eeeaf3;
+    --shadow:0 8px 25px rgba(76,29,149,.07);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button{
+    font-family:inherit;
+    border:0;
+    cursor:pointer;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.app{
+    max-width:760px;
+    margin:auto;
+    padding-bottom:90px;
+}
+
+/* HEADER */
+
+.header{
+    height:68px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    color:var(--purple);
+}
+
+.logo span{
+    color:var(--orange);
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:#f7f3fb;
+    color:var(--purple);
+    font-size:19px;
+    position:relative;
+}
+
+.notification-dot{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--orange);
+    display:none;
+}
+
+/* CONTENT */
+
+.content{
+    padding:18px;
+}
+
+.welcome{
+    margin-bottom:18px;
+}
+
+.welcome small{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.welcome h1{
+    margin-top:5px;
+    font-size:24px;
+}
+
+/* BALANCE */
+
+.balance-card{
+    background:linear-gradient(135deg,var(--purple-dark),var(--purple));
+    color:#fff;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    margin-bottom:16px;
+}
+
+.balance-label{
+    font-size:13px;
+    opacity:.8;
+}
+
+.balance{
+    font-size:34px;
+    font-weight:800;
+    margin:7px 0 14px;
+}
+
+.balance-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.vip-badge{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.2);
+    padding:8px 12px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.balance-link{
+    background:#fff;
+    color:var(--purple);
+    padding:9px 13px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* QUICK ACTIONS */
+
+.quick-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.quick-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:17px;
+    box-shadow:var(--shadow);
+}
+
+.quick-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--purple-light);
+    color:var(--purple);
+    font-size:19px;
+    margin-bottom:12px;
+}
+
+.quick-card:nth-child(2) .quick-icon{
+    background:#fff1e8;
+    color:var(--orange);
+}
+
+.quick-card:nth-child(3) .quick-icon{
+    background:#edf9f3;
+    color:var(--green);
+}
+
+.quick-card:nth-child(4) .quick-icon{
+    background:#f3e8ff;
+    color:var(--purple-dark);
+}
+
+.quick-card h3{
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.quick-card p{
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* SECTION */
+
+.section{
+    margin-top:22px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:11px;
+}
+
+.section-title h2{
+    font-size:17px;
+}
+
+.section-title a{
+    color:var(--purple);
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* VIP */
+
+.vip-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.vip-info{
+    min-width:0;
+}
+
+.vip-info small{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.vip-info h3{
+    margin:4px 0;
+    font-size:19px;
+}
+
+.vip-info p{
+    font-size:12px;
+    color:var(--muted);
+}
+
+.vip-button{
+    background:var(--purple);
+    color:#fff;
+    padding:11px 14px;
+    border-radius:11px;
+    font-size:12px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+/* STATS */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:11px;
+}
+
+.stat{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.stat-value{
+    font-size:18px;
+    font-weight:800;
+}
+
+.stat-value.purple{
+    color:var(--purple);
+}
+
+.stat-value.orange{
+    color:var(--orange);
+}
+
+.stat-value.green{
+    color:var(--green);
+}
+
+/* EARN BANNER */
+
+.earn-banner{
+    background:linear-gradient(135deg,#fff,#f7efff);
+    border:1px solid #eadcfb;
+    border-radius:18px;
+    padding:18px;
+    margin-top:22px;
+}
+
+.earn-banner h3{
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.earn-banner p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+.earn-btn{
+    display:inline-block;
+    margin-top:13px;
+    background:var(--orange);
+    color:#fff;
+    padding:11px 15px;
+    border-radius:11px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* EMPTY ACTIVITY */
+
+.activity-empty{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:25px 15px;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:0;
+    width:min(760px,100%);
+    height:70px;
+    background:#fff;
+    border-top:1px solid var(--border);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    z-index:30;
+}
+
+.nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    color:#8b8691;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.nav-item .nav-icon{
+    font-size:18px;
+}
+
+.nav-item.active{
+    color:var(--purple);
+}
+
+/* LOADING */
+
+.loading{
+    position:fixed;
+    inset:0;
+    background:var(--bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+}
+
+.loading-box{
+    text-align:center;
+}
+
+.loading-logo{
+    font-size:32px;
+    font-weight:900;
+    color:var(--purple);
+}
+
+.loading-logo span{
+    color:var(--orange);
+}
+
+.loading-text{
+    margin-top:8px;
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:400px){
+    .content{
+        padding:14px;
+    }
+
+    .balance{
+        font-size:30px;
+    }
+
+    .quick-card{
+        padding:14px;
+    }
+
+    .vip-card{
+        padding:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="loading" id="loading">
+    <div class="loading-box">
+        <div class="loading-logo">VDC<span>.</span></div>
+        <div class="loading-text">Loading your dashboard...</div>
+    </div>
+</div>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+        <a href="dashboard.html" class="logo">VDC<span>.</span></a>
+
+        <div class="header-right">
+            <button class="icon-btn" onclick="openNotifications()" aria-label="Notifications">
+                &#128276;
+                <span class="notification-dot" id="notificationDot"></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="content">
+
+        <!-- WELCOME -->
+        <div class="welcome">
+            <small>Welcome back</small>
+            <h1 id="userName">VDC Member</h1>
+        </div>
+
+        <!-- BALANCE -->
+        <section class="balance-card">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance" id="balance">₦—</div>
+
+            <div class="balance-bottom">
+                <div class="vip-badge" id="vipBadge">VIP 0</div>
+
+                <a href="withdraw.html" class="balance-link">
+                    Withdraw
+                </a>
+            </div>
+        </section>
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-grid">
+
+            <a href="vip.html" class="quick-card">
+                <div class="quick-icon">&#9733;</div>
+                <h3>VIP Upgrade</h3>
+                <p>View VIP levels</p>
+            </a>
+
+            <a href="withdraw.html" class="quick-card">
+                <div class="quick-icon">&#8599;</div>
+                <h3>Withdraw</h3>
+                <p>Bank withdrawal</p>
+            </a>
+
+            <a href="tasks.html" class="quick-card">
+                <div class="quick-icon">&#10003;</div>
+                <h3>Earn Tasks</h3>
+                <p>Complete available tasks</p>
+            </a>
+
+            <a href="referral.html" class="quick-card">
+                <div class="quick-icon">&#9829;</div>
+                <h3>Refer & Earn</h3>
+                <p>Invite other members</p>
+            </a>
+
+        </div>
+
+        <!-- VIP STATUS -->
+        <section class="section">
+            <div class="section-title">
+                <h2>My VIP Status</h2>
+                <a href="vip.html">View all</a>
+            </div>
+
+            <div class="vip-card">
+
+                <div class="vip-info">
+                    <small>Current level</small>
+                    <h3 id="vipLevel">VIP 0</h3>
+                    <p id="vipDescription">
+                        Upgrade to unlock available earning features.
+                    </p>
+                </div>
+
+                <a href="vip.html" class="vip-button">
+                    Upgrade
+                </a>
+
+            </div>
+        </section>
+
+        <!-- EARNINGS -->
+        <section class="section">
+            <div class="section-title">
+                <h2>Earnings Overview</h2>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat">
+                    <div class="stat-label">Total Earned</div>
+                    <div class="stat-value purple" id="totalEarned">₦—</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">Today's Earnings</div>
+                    <div class="stat-value orange" id="todayEarned">₦—</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">Task Earnings</div>
+                    <div class="stat-value green" id="taskEarned">₦—</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">Referral Earnings</div>
+                    <div class="stat-value purple" id="referralEarned">₦—</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">Lucky Draw</div>
+                    <div class="stat-value orange" id="luckyEarned">₦—</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-label">Total Withdrawn</div>
+                    <div class="stat-value green" id="totalWithdrawn">₦—</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- EARN -->
+        <section class="earn-banner">
+            <h3>Ways to Earn</h3>
+            <p>
+                Complete available tasks, referrals and other eligible VDC earning activities.
+                Your actual earnings will be displayed from your account data.
+            </p>
+
+            <a href="ways.html" class="earn-btn">
+                Explore Ways to Earn
+            </a>
+        </section>
+
+        <!-- ACTIVITY -->
+        <section class="section">
+            <div class="section-title">
+                <h2>Recent Activity</h2>
+                <a href="transactions.html">History</a>
+            </div>
+
+            <div class="activity-empty" id="activity">
+                Your account activity will appear here.
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+    <a href="dashboard.html" class="nav-item active">
+        <span class="nav-icon">&#8962;</span>
+        <span>Home</span>
+    </a>
+
+    <a href="tasks.html" class="nav-item">
+        <span class="nav-icon">&#10003;</span>
+        <span>Tasks</span>
+    </a>
+
+    <a href="vip.html" class="nav-item">
+        <span class="nav-icon">&#9733;</span>
+        <span>VIP</span>
+    </a>
+
+    <a href="ways.html" class="nav-item">
+        <span class="nav-icon">&#9889;</span>
+        <span>Earn</span>
+    </a>
+
+    <a href="profile.html" class="nav-item">
+        <span class="nav-icon">&#9679;</span>
+        <span>My</span>
+    </a>
+
+</nav>
+
+<script>
+const SUPABASE_URL = "https://wiorfxlodrcawxdeowbg.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+function naira(value){
+    if(value === null || value === undefined){
+        return "₦—";
+    }
+
+    return "₦" + Number(value).toLocaleString("en-NG",{
+        minimumFractionDigits:0,
+        maximumFractionDigits:2
+    });
+}
+
+async function loadDashboard(){
+
+    try{
+
+        const { data:{ session } } = await db.auth.getSession();
+
+        if(!session){
+            window.location.href = "auth.html";
+            return;
+        }
+
+        const user = session.user;
+
+        /* PROFILE */
+
+        const { data:profile } = await db
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .maybeSingle();
+
+        if(profile){
+
+            document.getElementById("userName").textContent =
+                profile.full_name || "VDC Member";
+
+        }
+
+        /* WALLET */
+
+        const { data:wallet } = await db
+            .from("wallets")
+            .select("*")
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+        if(wallet){
+
+            const balance =
+                wallet.balance ??
+                wallet.available_balance ??
+                0;
+
+            const totalEarned =
+                wallet.total_earned ??
+                0;
+
+            document.getElementById("balance").textContent =
+                naira(balance);
+
+            document.getElementById("totalEarned").textContent =
+                naira(totalEarned);
+        }
+
+        /* VIP */
+
+        const { data:userVip } = await db
+            .from("user_vips")
+            .select(`
+                id,
+                vip_level_id,
+                status,
+                vip_levels (
+                    level,
+                    name,
+                    reward_per_task,
+                    daily_task_limit
+                )
+            `)
+            .eq("user_id", user.id)
+            .eq("status","active")
+            .order("vip_level_id",{ascending:false})
+            .limit(1)
+            .maybeSingle();
+
+        if(userVip && userVip.vip_levels){
+
+            const level = userVip.vip_levels.level;
+
+            document.getElementById("vipBadge").textContent =
+                "VIP " + level;
+
+            document.getElementById("vipLevel").textContent =
+                "VIP " + level;
+
+            document.getElementById("vipDescription").textContent =
+                naira(userVip.vip_levels.reward_per_task) +
+                " per task • " +
+                userVip.vip_levels.daily_task_limit +
+                " tasks/day";
+        }
+
+        /* WITHDRAWALS */
+
+        const { data:withdrawals } = await db
+            .from("withdrawals")
+            .select("amount,status")
+            .eq("user_id",user.id)
+            .eq("status","paid");
+
+        if(withdrawals){
+
+            const withdrawn = withdrawals.reduce(
+                (sum,row) => sum + Number(row.amount || 0),
+                0
+            );
+
+            document.getElementById("totalWithdrawn").textContent =
+                naira(withdrawn);
+        }
+
+        document.getElementById("loading").style.display = "none";
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById("loading").style.display = "none";
+    }
+}
+
+function openNotifications(){
+
+    window.location.href = "notifications.html";
+
+}
+
+loadDashboard();
+</script>
+
+</body>
+</html>
