@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>VDC — Login / Register</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -118,28 +119,25 @@ input:focus{
     box-shadow:0 0 0 3px rgba(109,40,217,.08);
 }
 
-.phone-row{
-    display:flex;
-    gap:8px;
+.password-wrap{
+    position:relative;
 }
 
-.country-code{
-    width:78px;
-    height:52px;
-    flex-shrink:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid #ddd7e6;
-    border-radius:11px;
-    background:#fff;
-    color:#333;
+.password-wrap input{
+    padding-right:60px;
+}
+
+.password-toggle{
+    position:absolute;
+    right:13px;
+    top:50%;
+    transform:translateY(-50%);
+    border:0;
+    background:transparent;
+    color:#6d28d9;
+    font-size:13px;
     font-weight:700;
-    font-size:15px;
-}
-
-.phone-input{
-    flex:1;
+    cursor:pointer;
 }
 
 .terms{
@@ -182,19 +180,6 @@ input:focus{
     cursor:not-allowed;
 }
 
-.secondary-btn{
-    width:100%;
-    height:50px;
-    margin-top:10px;
-    border:1px solid #6d28d9;
-    border-radius:12px;
-    background:#fff;
-    color:#6d28d9;
-    font-size:15px;
-    font-weight:700;
-    cursor:pointer;
-}
-
 .forgot{
     display:block;
     text-align:right;
@@ -229,29 +214,29 @@ input:focus{
     color:#b42318;
 }
 
-.auth-form.hidden{
-    display:none;
+.hidden{
+    display:none !important;
 }
 
-.otp-box{
-    display:none;
-}
-
-.otp-box.show{
-    display:block;
-}
-
-.otp-title{
-    font-size:20px;
-    font-weight:800;
-    margin-bottom:7px;
-}
-
-.otp-text{
-    color:#77717f;
-    font-size:14px;
-    line-height:1.5;
+.info-box{
+    background:#f5f0ff;
+    border:1px solid #e4d8fa;
+    border-radius:12px;
+    padding:13px 14px;
     margin-bottom:20px;
+    color:#5a4c6b;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.back-link{
+    display:block;
+    text-align:center;
+    margin-top:16px;
+    color:#6d28d9;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
 }
 
 .footer{
@@ -260,88 +245,144 @@ input:focus{
     color:#999;
     font-size:12px;
 }
+
 </style>
 </head>
 
 <body>
 
 <header class="header">
-    <a href="index.html" class="logo">VDC<span>.</span></a>
+    <a href="index.html" class="logo">
+        VDC<span>.</span>
+    </a>
 </header>
+
 
 <main class="container">
 
-    <h1 class="title">Welcome to VDC</h1>
+    <h1 class="title" id="pageTitle">
+        Welcome to VDC
+    </h1>
 
-    <p class="subtitle">
-        Login or create your VDC account using your Nigerian phone number.
+    <p class="subtitle" id="pageSubtitle">
+        Login or create your VDC account using your email address.
     </p>
 
-    <div class="tabs">
-        <button class="tab active" id="loginTab" type="button">
+
+    <!-- =====================================================
+         LOGIN / REGISTER TABS
+    ====================================================== -->
+
+    <div class="tabs" id="tabs">
+
+        <button
+            class="tab active"
+            id="loginTab"
+            type="button"
+        >
             Login
         </button>
 
-        <button class="tab" id="registerTab" type="button">
+        <button
+            class="tab"
+            id="registerTab"
+            type="button"
+        >
             Register
         </button>
+
     </div>
 
-    <div id="message" class="message"></div>
+
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message"
+    ></div>
 
 
-    <!-- LOGIN -->
+    <!-- =====================================================
+         LOGIN FORM
+    ====================================================== -->
 
-    <form id="loginForm" class="auth-form">
+    <form
+        id="loginForm"
+    >
 
         <div class="form-group">
 
-            <label for="loginPhone">
-                Phone Number
+            <label for="loginEmail">
+                Email Address
             </label>
 
-            <div class="phone-row">
+            <input
+                id="loginEmail"
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
 
-                <div class="country-code">
-                    +234
-                </div>
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="loginPassword">
+                Password
+            </label>
+
+            <div class="password-wrap">
 
                 <input
-                    id="loginPhone"
-                    class="phone-input"
-                    type="tel"
-                    inputmode="numeric"
-                    placeholder="8012345678"
-                    maxlength="10"
-                    autocomplete="tel"
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
                     required
                 >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="loginPassword"
+                >
+                    Show
+                </button>
 
             </div>
 
         </div>
+
 
         <button
             type="submit"
             class="main-btn"
             id="loginBtn"
         >
-            Send Login OTP
+            Login to VDC
         </button>
+
 
         <a
             class="forgot"
-            id="recoveryBtn"
+            id="forgotBtn"
         >
-            Recover account
+            Forgot password?
         </a>
 
     </form>
 
 
-    <!-- REGISTER -->
+    <!-- =====================================================
+         REGISTER FORM
+    ====================================================== -->
 
-    <form id="registerForm" class="auth-form hidden">
+    <form
+        id="registerForm"
+        class="hidden"
+    >
 
         <div class="form-group">
 
@@ -362,26 +403,75 @@ input:focus{
 
         <div class="form-group">
 
-            <label for="registerPhone">
-                Phone Number
+            <label for="registerEmail">
+                Email Address
             </label>
 
-            <div class="phone-row">
+            <input
+                id="registerEmail"
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
 
-                <div class="country-code">
-                    +234
-                </div>
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="registerPassword">
+                Password
+            </label>
+
+            <div class="password-wrap">
 
                 <input
-                    id="registerPhone"
-                    class="phone-input"
-                    type="tel"
-                    inputmode="numeric"
-                    placeholder="8012345678"
-                    maxlength="10"
-                    autocomplete="tel"
+                    id="registerPassword"
+                    type="password"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                    minlength="6"
                     required
                 >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="registerPassword"
+                >
+                    Show
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="confirmPassword">
+                Confirm Password
+            </label>
+
+            <div class="password-wrap">
+
+                <input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Enter password again"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="confirmPassword"
+                >
+                    Show
+                </button>
 
             </div>
 
@@ -401,6 +491,7 @@ input:focus{
                 id="referralCode"
                 type="text"
                 placeholder="Enter referral code"
+                autocomplete="off"
             >
 
         </div>
@@ -436,54 +527,145 @@ input:focus{
     </form>
 
 
-    <!-- OTP -->
+    <!-- =====================================================
+         RECOVER ACCOUNT
+    ====================================================== -->
 
-    <div id="otpBox" class="otp-box">
+    <form
+        id="recoveryForm"
+        class="hidden"
+    >
 
-        <div class="otp-title">
-            Verify your phone
+        <div class="info-box">
+
+            Enter the email address connected to your
+            VDC account. We will send you a secure
+            password reset link.
+
         </div>
 
-        <div class="otp-text">
-            Enter the 6-digit verification code sent to your phone number.
-        </div>
 
         <div class="form-group">
 
-            <label for="otp">
-                Verification Code
+            <label for="recoveryEmail">
+                Email Address
             </label>
 
             <input
-                id="otp"
-                type="text"
-                inputmode="numeric"
-                maxlength="6"
-                placeholder="Enter 6-digit OTP"
-                autocomplete="one-time-code"
+                id="recoveryEmail"
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
             >
 
         </div>
 
 
         <button
+            type="submit"
             class="main-btn"
-            id="verifyBtn"
-            type="button"
+            id="recoveryBtn"
         >
-            Verify OTP
+            Send Reset Link
         </button>
+
+
+        <div
+            class="back-link"
+            id="backToLogin"
+        >
+            Back to Login
+        </div>
+
+    </form>
+
+
+    <!-- =====================================================
+         RESET PASSWORD
+    ====================================================== -->
+
+    <form
+        id="resetForm"
+        class="hidden"
+    >
+
+        <div class="info-box">
+
+            Create a new password for your VDC account.
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="newPassword">
+                New Password
+            </label>
+
+            <div class="password-wrap">
+
+                <input
+                    id="newPassword"
+                    type="password"
+                    placeholder="Enter new password"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="newPassword"
+                >
+                    Show
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="newPasswordConfirm">
+                Confirm New Password
+            </label>
+
+            <div class="password-wrap">
+
+                <input
+                    id="newPasswordConfirm"
+                    type="password"
+                    placeholder="Enter new password again"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="newPasswordConfirm"
+                >
+                    Show
+                </button>
+
+            </div>
+
+        </div>
 
 
         <button
-            class="secondary-btn"
-            id="backBtn"
-            type="button"
+            type="submit"
+            class="main-btn"
+            id="resetBtn"
         >
-            Change Phone Number
+            Update Password
         </button>
 
-    </div>
+    </form>
 
 
     <div class="footer">
@@ -523,20 +705,38 @@ const loginTab =
 const registerTab =
     document.getElementById("registerTab");
 
+const tabs =
+    document.getElementById("tabs");
+
 const loginForm =
     document.getElementById("loginForm");
 
 const registerForm =
     document.getElementById("registerForm");
 
-const loginPhone =
-    document.getElementById("loginPhone");
+const recoveryForm =
+    document.getElementById("recoveryForm");
 
-const registerPhone =
-    document.getElementById("registerPhone");
+const resetForm =
+    document.getElementById("resetForm");
+
+const loginEmail =
+    document.getElementById("loginEmail");
+
+const loginPassword =
+    document.getElementById("loginPassword");
 
 const fullName =
     document.getElementById("fullName");
+
+const registerEmail =
+    document.getElementById("registerEmail");
+
+const registerPassword =
+    document.getElementById("registerPassword");
+
+const confirmPassword =
+    document.getElementById("confirmPassword");
 
 const referralCode =
     document.getElementById("referralCode");
@@ -544,45 +744,54 @@ const referralCode =
 const terms =
     document.getElementById("terms");
 
+const recoveryEmail =
+    document.getElementById("recoveryEmail");
+
+const newPassword =
+    document.getElementById("newPassword");
+
+const newPasswordConfirm =
+    document.getElementById("newPasswordConfirm");
+
 const loginBtn =
     document.getElementById("loginBtn");
 
 const registerBtn =
     document.getElementById("registerBtn");
 
-const message =
-    document.getElementById("message");
-
-const otpBox =
-    document.getElementById("otpBox");
-
-const otpInput =
-    document.getElementById("otp");
-
-const verifyBtn =
-    document.getElementById("verifyBtn");
-
-const backBtn =
-    document.getElementById("backBtn");
-
 const recoveryBtn =
     document.getElementById("recoveryBtn");
 
+const resetBtn =
+    document.getElementById("resetBtn");
 
-let currentPhone = "";
-let currentMode = "login";
+const forgotBtn =
+    document.getElementById("forgotBtn");
 
-let pendingName = "";
-let pendingReferral = "";
+const backToLogin =
+    document.getElementById("backToLogin");
+
+const message =
+    document.getElementById("message");
+
+const pageTitle =
+    document.getElementById("pageTitle");
+
+const pageSubtitle =
+    document.getElementById("pageSubtitle");
 
 
 /* =========================================================
    MESSAGE
 ========================================================= */
 
-function showMessage(text, type = "error") {
+function showMessage(
+    text,
+    type = "error"
+){
 
-    message.textContent = text;
+    message.textContent =
+        text;
 
     message.className =
         "message " + type;
@@ -591,369 +800,291 @@ function showMessage(text, type = "error") {
         top:0,
         behavior:"smooth"
     });
+
 }
 
 
-function clearMessage() {
+function clearMessage(){
 
-    message.textContent = "";
+    message.textContent =
+        "";
 
     message.className =
         "message";
+
 }
 
 
 /* =========================================================
-   NIGERIAN PHONE FORMAT
+   HIDE ALL
 ========================================================= */
 
-function formatNigeriaPhone(value) {
+function hideAll(){
 
-    let phone =
-        value.replace(/\D/g,"");
+    loginForm.classList.add(
+        "hidden"
+    );
 
-    if(phone.startsWith("234")){
+    registerForm.classList.add(
+        "hidden"
+    );
 
-        phone =
-            phone.substring(3);
+    recoveryForm.classList.add(
+        "hidden"
+    );
 
-    }
+    resetForm.classList.add(
+        "hidden"
+    );
 
-    if(phone.startsWith("0")){
-
-        phone =
-            phone.substring(1);
-
-    }
-
-    if(phone.length !== 10){
-
-        return null;
-
-    }
-
-    return "+234" + phone;
 }
 
 
 /* =========================================================
-   LOGIN TAB
+   SHOW LOGIN
+========================================================= */
+
+function showLogin(){
+
+    hideAll();
+
+    loginForm.classList.remove(
+        "hidden"
+    );
+
+    tabs.style.display =
+        "flex";
+
+    loginTab.classList.add(
+        "active"
+    );
+
+    registerTab.classList.remove(
+        "active"
+    );
+
+    pageTitle.textContent =
+        "Welcome to VDC";
+
+    pageSubtitle.textContent =
+        "Login to your VDC account using your email address.";
+
+    clearMessage();
+
+}
+
+
+/* =========================================================
+   SHOW REGISTER
+========================================================= */
+
+function showRegister(){
+
+    hideAll();
+
+    registerForm.classList.remove(
+        "hidden"
+    );
+
+    tabs.style.display =
+        "flex";
+
+    registerTab.classList.add(
+        "active"
+    );
+
+    loginTab.classList.remove(
+        "active"
+    );
+
+    pageTitle.textContent =
+        "Create your VDC account";
+
+    pageSubtitle.textContent =
+        "Join VDC and start accessing eligible reward activities.";
+
+    clearMessage();
+
+}
+
+
+/* =========================================================
+   SHOW RECOVERY
+========================================================= */
+
+function showRecovery(){
+
+    hideAll();
+
+    recoveryForm.classList.remove(
+        "hidden"
+    );
+
+    tabs.style.display =
+        "none";
+
+    pageTitle.textContent =
+        "Recover your account";
+
+    pageSubtitle.textContent =
+        "We'll send a secure password reset link to your email.";
+
+    clearMessage();
+
+}
+
+
+/* =========================================================
+   SHOW RESET
+========================================================= */
+
+function showReset(){
+
+    hideAll();
+
+    resetForm.classList.remove(
+        "hidden"
+    );
+
+    tabs.style.display =
+        "none";
+
+    pageTitle.textContent =
+        "Create a new password";
+
+    pageSubtitle.textContent =
+        "Choose a new password for your VDC account.";
+
+    clearMessage();
+
+}
+
+
+/* =========================================================
+   TABS
 ========================================================= */
 
 loginTab.addEventListener(
     "click",
-    () => {
-
-        loginTab.classList.add("active");
-
-        registerTab.classList.remove("active");
-
-        loginForm.classList.remove("hidden");
-
-        registerForm.classList.add("hidden");
-
-        otpBox.classList.remove("show");
-
-        currentMode = "login";
-
-        clearMessage();
-
-    }
+    showLogin
 );
-
-
-/* =========================================================
-   REGISTER TAB
-========================================================= */
 
 registerTab.addEventListener(
     "click",
-    () => {
+    showRegister
+);
 
-        registerTab.classList.add("active");
 
-        loginTab.classList.remove("active");
+/* =========================================================
+   PASSWORD SHOW/HIDE
+========================================================= */
 
-        registerForm.classList.remove("hidden");
+document
+.querySelectorAll(".password-toggle")
+.forEach(
+    button => {
 
-        loginForm.classList.add("hidden");
+        button.addEventListener(
+            "click",
+            () => {
 
-        otpBox.classList.remove("show");
+                const input =
+                    document.getElementById(
+                        button.dataset.target
+                    );
 
-        currentMode = "register";
+                if(
+                    input.type ===
+                    "password"
+                ){
 
-        clearMessage();
+                    input.type =
+                        "text";
+
+                    button.textContent =
+                        "Hide";
+
+                }else{
+
+                    input.type =
+                        "password";
+
+                    button.textContent =
+                        "Show";
+
+                }
+
+            }
+        );
 
     }
 );
 
 
 /* =========================================================
-   LOGIN OTP
+   LOGIN
 ========================================================= */
 
 loginForm.addEventListener(
     "submit",
-    async (event) => {
+    async event => {
 
         event.preventDefault();
 
         clearMessage();
 
-        const phone =
-            formatNigeriaPhone(
-                loginPhone.value
-            );
 
-        if(!phone){
+        const email =
+            loginEmail.value
+            .trim()
+            .toLowerCase();
+
+        const password =
+            loginPassword.value;
+
+
+        if(!email){
 
             showMessage(
-                "Please enter a valid Nigerian phone number."
+                "Please enter your email address."
             );
 
             return;
+
         }
 
-        currentPhone = phone;
 
-        currentMode = "login";
+        if(!password){
 
-        loginBtn.disabled = true;
+            showMessage(
+                "Please enter your password."
+            );
+
+            return;
+
+        }
+
+
+        loginBtn.disabled =
+            true;
 
         loginBtn.textContent =
-            "Sending OTP...";
+            "Logging in...";
 
 
         try{
 
-            const { error } =
-                await db.auth.signInWithOtp({
+            const {
+                data,
+                error
+            } =
+            await db.auth.signInWithPassword({
 
-                    phone: phone
+                email:email,
 
-                });
+                password:password
 
-
-            if(error){
-
-                throw error;
-
-            }
-
-
-            loginForm.classList.add("hidden");
-
-            registerForm.classList.add("hidden");
-
-            otpBox.classList.add("show");
-
-
-            showMessage(
-                "Verification code requested successfully.",
-                "success"
-            );
-
-
-        }catch(error){
-
-            showMessage(
-                error.message ||
-                "Unable to send OTP."
-            );
-
-        }finally{
-
-            loginBtn.disabled = false;
-
-            loginBtn.textContent =
-                "Send Login OTP";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   REGISTER OTP
-========================================================= */
-
-registerForm.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-        clearMessage();
-
-
-        const name =
-            fullName.value.trim();
-
-        const phone =
-            formatNigeriaPhone(
-                registerPhone.value
-            );
-
-        const referral =
-            referralCode.value.trim();
-
-
-        if(name.length < 2){
-
-            showMessage(
-                "Please enter your full name."
-            );
-
-            return;
-        }
-
-
-        if(!phone){
-
-            showMessage(
-                "Please enter a valid Nigerian phone number."
-            );
-
-            return;
-        }
-
-
-        if(!terms.checked){
-
-            showMessage(
-                "Please accept the VDC terms before creating your account."
-            );
-
-            return;
-        }
-
-
-        currentPhone = phone;
-
-        currentMode = "register";
-
-        pendingName = name;
-
-        pendingReferral = referral;
-
-
-        registerBtn.disabled = true;
-
-        registerBtn.textContent =
-            "Sending OTP...";
-
-
-        try{
-
-            const { error } =
-                await db.auth.signInWithOtp({
-
-                    phone: phone,
-
-                    options:{
-
-                        shouldCreateUser:true,
-
-                        data:{
-
-                            full_name:name,
-
-                            referral_code:
-                                referral || null,
-
-                            country:"Nigeria"
-
-                        }
-
-                    }
-
-                });
-
-
-            if(error){
-
-                throw error;
-
-            }
-
-
-            registerForm.classList.add("hidden");
-
-            loginForm.classList.add("hidden");
-
-            otpBox.classList.add("show");
-
-
-            showMessage(
-                "Verification code requested successfully.",
-                "success"
-            );
-
-
-        }catch(error){
-
-            showMessage(
-                error.message ||
-                "Unable to send OTP."
-            );
-
-        }finally{
-
-            registerBtn.disabled = false;
-
-            registerBtn.textContent =
-                "Create VDC Account";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   VERIFY OTP
-========================================================= */
-
-verifyBtn.addEventListener(
-    "click",
-    async () => {
-
-        clearMessage();
-
-
-        const token =
-            otpInput.value.trim();
-
-
-        if(!/^\d{6}$/.test(token)){
-
-            showMessage(
-                "Please enter the 6-digit verification code."
-            );
-
-            return;
-        }
-
-
-        verifyBtn.disabled = true;
-
-        verifyBtn.textContent =
-            "Verifying...";
-
-
-        try{
-
-            const { data, error } =
-                await db.auth.verifyOtp({
-
-                    phone:currentPhone,
-
-                    token:token,
-
-                    type:"sms"
-
-                });
+            });
 
 
             if(error){
@@ -966,50 +1097,14 @@ verifyBtn.addEventListener(
             if(!data.user){
 
                 throw new Error(
-                    "Verification completed, but no user was returned."
+                    "Login completed but no user account was returned."
                 );
 
             }
 
 
-            /* ---------------------------------------------
-               UPDATE PROFILE AFTER REGISTRATION
-            --------------------------------------------- */
-
-            if(currentMode === "register"){
-
-                const { error:profileError } =
-                    await db
-                    .from("profiles")
-                    .update({
-
-                        full_name:
-                            pendingName,
-
-                        referral_code:
-                            pendingReferral || null
-
-                    })
-                    .eq(
-                        "id",
-                        data.user.id
-                    );
-
-
-                if(profileError){
-
-                    console.warn(
-                        "Profile update:",
-                        profileError.message
-                    );
-
-                }
-
-            }
-
-
             showMessage(
-                "Verification successful. Opening VDC...",
+                "Login successful. Opening VDC...",
                 "success"
             );
 
@@ -1021,7 +1116,508 @@ verifyBtn.addEventListener(
                         "dashboard.html";
 
                 },
-                1000
+                700
+            );
+
+
+        }catch(error){
+
+            let msg =
+                error.message ||
+                "Unable to login.";
+
+
+            if(
+                msg
+                .toLowerCase()
+                .includes(
+                    "email not confirmed"
+                )
+            ){
+
+                msg =
+                    "Please confirm your email address before logging in.";
+
+            }
+
+
+            showMessage(
+                msg
+            );
+
+        }finally{
+
+            loginBtn.disabled =
+                false;
+
+            loginBtn.textContent =
+                "Login to VDC";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+registerForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        clearMessage();
+
+
+        const name =
+            fullName.value.trim();
+
+        const email =
+            registerEmail.value
+            .trim()
+            .toLowerCase();
+
+        const password =
+            registerPassword.value;
+
+        const confirm =
+            confirmPassword.value;
+
+        const referral =
+            referralCode.value.trim();
+
+
+        if(name.length < 2){
+
+            showMessage(
+                "Please enter your full name."
+            );
+
+            return;
+
+        }
+
+
+        if(!email){
+
+            showMessage(
+                "Please enter your email address."
+            );
+
+            return;
+
+        }
+
+
+        if(password.length < 6){
+
+            showMessage(
+                "Your password must contain at least 6 characters."
+            );
+
+            return;
+
+        }
+
+
+        if(password !== confirm){
+
+            showMessage(
+                "The passwords do not match."
+            );
+
+            return;
+
+        }
+
+
+        if(!terms.checked){
+
+            showMessage(
+                "Please accept the VDC terms before creating your account."
+            );
+
+            return;
+
+        }
+
+
+        registerBtn.disabled =
+            true;
+
+        registerBtn.textContent =
+            "Creating account...";
+
+
+        try{
+
+            const {
+                data,
+                error
+            } =
+            await db.auth.signUp({
+
+                email:email,
+
+                password:password,
+
+                options:{
+
+                    emailRedirectTo:
+                        window.location.origin +
+                        "/auth.html",
+
+                    data:{
+
+                        full_name:
+                            name,
+
+                        referral_code:
+                            referral ||
+                            null,
+
+                        country:
+                            "Nigeria",
+
+                        vip_level:
+                            0
+
+                    }
+
+                }
+
+            });
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            /*
+             If email confirmation is required,
+             Supabase returns a user without a session.
+            */
+
+            if(
+                data.user &&
+                !data.session
+            ){
+
+                showMessage(
+                    "Account created successfully. Please check your email and click the confirmation link before logging in.",
+                    "success"
+                );
+
+                registerForm.reset();
+
+                return;
+
+            }
+
+
+            /*
+             If email confirmation is disabled,
+             create/update the profile immediately.
+            */
+
+            if(
+                data.user &&
+                data.session
+            ){
+
+                const {
+                    error:
+                    profileError
+                } =
+                await db
+                .from("profiles")
+                .update({
+
+                    full_name:
+                        name,
+
+                    referral_code:
+                        referral ||
+                        null
+
+                })
+                .eq(
+                    "id",
+                    data.user.id
+                );
+
+
+                if(profileError){
+
+                    console.warn(
+                        "Profile update warning:",
+                        profileError.message
+                    );
+
+                }
+
+
+                showMessage(
+                    "Account created successfully. Opening VDC...",
+                    "success"
+                );
+
+
+                setTimeout(
+                    () => {
+
+                        window.location.href =
+                            "dashboard.html";
+
+                    },
+                    800
+                );
+
+            }
+
+        }catch(error){
+
+            let msg =
+                error.message ||
+                "Unable to create your account.";
+
+
+            if(
+                msg
+                .toLowerCase()
+                .includes(
+                    "already registered"
+                )
+            ){
+
+                msg =
+                    "An account with this email already exists. Please login instead.";
+
+            }
+
+
+            showMessage(
+                msg
+            );
+
+        }finally{
+
+            registerBtn.disabled =
+                false;
+
+            registerBtn.textContent =
+                "Create VDC Account";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+
+forgotBtn.addEventListener(
+    "click",
+    showRecovery
+);
+
+
+/* =========================================================
+   SEND RESET EMAIL
+========================================================= */
+
+recoveryForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        clearMessage();
+
+
+        const email =
+            recoveryEmail.value
+            .trim()
+            .toLowerCase();
+
+
+        if(!email){
+
+            showMessage(
+                "Please enter your email address."
+            );
+
+            return;
+
+        }
+
+
+        recoveryBtn.disabled =
+            true;
+
+        recoveryBtn.textContent =
+            "Sending...";
+
+
+        try{
+
+            const {
+                error
+            } =
+            await db.auth
+            .resetPasswordForEmail(
+                email,
+                {
+
+                    redirectTo:
+                        window.location.origin +
+                        "/auth.html?mode=reset"
+
+                }
+            );
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            showMessage(
+                "If an account exists with that email, a password reset link has been sent. Please check your inbox.",
+                "success"
+            );
+
+
+            recoveryEmail.value =
+                "";
+
+
+        }catch(error){
+
+            showMessage(
+                error.message ||
+                "Unable to send the password reset email."
+            );
+
+        }finally{
+
+            recoveryBtn.disabled =
+                false;
+
+            recoveryBtn.textContent =
+                "Send Reset Link";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   BACK TO LOGIN
+========================================================= */
+
+backToLogin.addEventListener(
+    "click",
+    showLogin
+);
+
+
+/* =========================================================
+   UPDATE PASSWORD
+========================================================= */
+
+resetForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        clearMessage();
+
+
+        const password =
+            newPassword.value;
+
+        const confirm =
+            newPasswordConfirm.value;
+
+
+        if(password.length < 6){
+
+            showMessage(
+                "Your new password must contain at least 6 characters."
+            );
+
+            return;
+
+        }
+
+
+        if(password !== confirm){
+
+            showMessage(
+                "The new passwords do not match."
+            );
+
+            return;
+
+        }
+
+
+        resetBtn.disabled =
+            true;
+
+        resetBtn.textContent =
+            "Updating...";
+
+
+        try{
+
+            const {
+                error
+            } =
+            await db.auth.updateUser({
+
+                password:
+                    password
+
+            });
+
+
+            if(error){
+
+                throw error;
+
+            }
+
+
+            showMessage(
+                "Password updated successfully. Redirecting to login...",
+                "success"
+            );
+
+
+            setTimeout(
+                async () => {
+
+                    await db.auth.signOut();
+
+                    window.location.href =
+                        "auth.html";
+
+                },
+                1200
             );
 
 
@@ -1029,44 +1625,16 @@ verifyBtn.addEventListener(
 
             showMessage(
                 error.message ||
-                "Verification failed. Please check the OTP."
+                "Unable to update your password."
             );
 
         }finally{
 
-            verifyBtn.disabled = false;
+            resetBtn.disabled =
+                false;
 
-            verifyBtn.textContent =
-                "Verify OTP";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   CHANGE PHONE
-========================================================= */
-
-backBtn.addEventListener(
-    "click",
-    () => {
-
-        otpBox.classList.remove("show");
-
-        otpInput.value = "";
-
-        clearMessage();
-
-
-        if(currentMode === "register"){
-
-            registerForm.classList.remove("hidden");
-
-        }else{
-
-            loginForm.classList.remove("hidden");
+            resetBtn.textContent =
+                "Update Password";
 
         }
 
@@ -1075,20 +1643,27 @@ backBtn.addEventListener(
 
 
 /* =========================================================
-   ACCOUNT RECOVERY
+   AUTH STATE
 ========================================================= */
 
-recoveryBtn.addEventListener(
-    "click",
-    () => {
+db.auth.onAuthStateChange(
+    (event, session) => {
 
-        loginTab.click();
+        if(
+            event ===
+            "PASSWORD_RECOVERY"
+        ){
 
-        showMessage(
-            "Enter your registered phone number to receive a new verification code."
-        );
+            setTimeout(
+                () => {
 
-        loginPhone.focus();
+                    showReset();
+
+                },
+                0
+            );
+
+        }
 
     }
 );
@@ -1100,17 +1675,51 @@ recoveryBtn.addEventListener(
 
 async function checkExistingSession(){
 
-    const { data } =
+    try{
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const mode =
+            params.get("mode");
+
+
+        /*
+         Don't redirect while handling
+         a password reset.
+        */
+
+        if(mode === "reset"){
+
+            return;
+
+        }
+
+
+        const {
+            data
+        } =
         await db.auth.getSession();
 
 
-    if(
-        data &&
-        data.session
-    ){
+        if(
+            data &&
+            data.session
+        ){
 
-        window.location.href =
-            "dashboard.html";
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Session check:",
+            error.message
+        );
 
     }
 
