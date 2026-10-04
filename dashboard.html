@@ -37,8 +37,7 @@ body{
     min-height:100vh;
 }
 
-button,
-a{
+button,a{
     font:inherit;
 }
 
@@ -323,6 +322,210 @@ a{
     font-size:17px;
 }
 
+/* =========================================
+   SPORTY LUCKY WHEEL
+========================================= */
+
+.lucky-card{
+    background:
+        radial-gradient(circle at 50% 20%,rgba(255,255,255,.13),transparent 34%),
+        linear-gradient(145deg,#24104e,#4c1d95 55%,#6d28d9);
+    color:white;
+    border-radius:24px;
+    padding:20px 16px 24px;
+    box-shadow:
+        0 18px 45px rgba(76,29,149,.25),
+        inset 0 1px rgba(255,255,255,.12);
+    overflow:hidden;
+}
+
+.lucky-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:12px;
+}
+
+.lucky-top h3{
+    font-size:20px;
+    margin-bottom:5px;
+}
+
+.lucky-top p{
+    font-size:12px;
+    line-height:1.5;
+    opacity:.78;
+}
+
+.spin-count{
+    flex-shrink:0;
+    padding:8px 11px;
+    border-radius:10px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.15);
+    font-size:11px;
+    font-weight:700;
+}
+
+/* WHEEL */
+
+.wheel-stage{
+    position:relative;
+    width:min(330px,82vw);
+    aspect-ratio:1;
+    margin:14px auto 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.wheel-pointer{
+    position:absolute;
+    top:-3px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:10;
+    width:0;
+    height:0;
+    border-left:14px solid transparent;
+    border-right:14px solid transparent;
+    border-top:30px solid #ffffff;
+    filter:drop-shadow(0 3px 4px rgba(0,0,0,.4));
+}
+
+.wheel-ring{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    padding:7px;
+    background:linear-gradient(
+        145deg,
+        #ffffff,
+        #d7c7ef,
+        #ffffff,
+        #a98bd3
+    );
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.35),
+        inset 0 0 0 2px rgba(255,255,255,.8);
+}
+
+.wheel{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    position:relative;
+    overflow:hidden;
+    transform:rotate(0deg);
+    transition:transform 5s cubic-bezier(.12,.72,.16,1);
+    background:#6d28d9;
+    border:4px solid #35136d;
+}
+
+.wheel-center{
+    position:absolute;
+    width:70px;
+    height:70px;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    z-index:5;
+    background:
+        radial-gradient(circle at 35% 30%,#ffffff,#ddd3ed 55%,#a990c6);
+    border:5px solid #3b176f;
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.35),
+        inset 0 2px 5px rgba(255,255,255,.8);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.wheel-center span{
+    color:var(--purple-dark);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.wheel-labels{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:2;
+}
+
+.wheel-label{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:76px;
+    margin-left:-38px;
+    margin-top:-12px;
+    text-align:center;
+    color:white;
+    font-size:11px;
+    font-weight:900;
+    text-shadow:0 2px 4px rgba(0,0,0,.45);
+}
+
+/* RESULT */
+
+.lucky-result{
+    min-height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    margin:5px 0 14px;
+    padding:10px 14px;
+    border-radius:14px;
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.1);
+    font-size:13px;
+    font-weight:700;
+}
+
+/* SPIN */
+
+.spin-button{
+    width:100%;
+    border:0;
+    border-radius:15px;
+    padding:15px;
+    background:linear-gradient(180deg,#ffffff,#eee7f8);
+    color:var(--purple-dark);
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.5px;
+    box-shadow:
+        0 6px 0 #c8b9dc,
+        0 12px 22px rgba(0,0,0,.22);
+    transition:.15s;
+}
+
+.spin-button:active{
+    transform:translateY(4px);
+    box-shadow:
+        0 2px 0 #c8b9dc,
+        0 7px 13px rgba(0,0,0,.2);
+}
+
+.spin-button:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.wheel-status{
+    text-align:center;
+    margin-top:11px;
+    font-size:10px;
+    opacity:.6;
+}
+
 /* WAYS */
 
 .ways-card{
@@ -354,72 +557,6 @@ a{
     border-radius:11px;
     font-size:12px;
     font-weight:700;
-}
-
-/* LUCKY DRAW */
-
-.lucky-card{
-    background:linear-gradient(135deg,#4c1d95,#6d28d9);
-    color:white;
-    border-radius:21px;
-    padding:20px;
-    box-shadow:0 15px 35px rgba(76,29,149,.20);
-}
-
-.lucky-header{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-}
-
-.lucky-header h3{
-    font-size:19px;
-    margin-bottom:5px;
-}
-
-.lucky-header p{
-    font-size:12px;
-    opacity:.8;
-    line-height:1.5;
-}
-
-.spin-count{
-    background:rgba(255,255,255,.14);
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:11px;
-    padding:8px 10px;
-    font-size:11px;
-    white-space:nowrap;
-}
-
-.lucky-result{
-    min-height:62px;
-    margin:18px 0 14px;
-    border-radius:14px;
-    background:rgba(255,255,255,.1);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:12px;
-    font-size:14px;
-    font-weight:700;
-}
-
-.spin-button{
-    width:100%;
-    border:0;
-    border-radius:13px;
-    padding:13px;
-    background:white;
-    color:var(--purple-dark);
-    font-weight:800;
-}
-
-.spin-button:disabled{
-    opacity:.55;
-    cursor:not-allowed;
 }
 
 /* ACTIVITY */
@@ -467,8 +604,6 @@ a{
     white-space:nowrap;
 }
 
-/* EMPTY */
-
 .empty{
     padding:25px;
     text-align:center;
@@ -514,14 +649,6 @@ a{
     height:20px;
 }
 
-/* LOADING */
-
-.loading{
-    opacity:.55;
-}
-
-/* RESPONSIVE */
-
 @media(max-width:430px){
 
     .quick-grid{
@@ -535,6 +662,15 @@ a{
     .main{
         padding:18px 13px;
     }
+
+    .wheel-stage{
+        width:min(315px,84vw);
+    }
+
+    .wheel-center{
+        width:62px;
+        height:62px;
+    }
 }
 </style>
 </head>
@@ -545,407 +681,402 @@ a{
 
 <header class="header">
 
-    <a href="dashboard.html" class="brand">
-        <div class="brand-mark">V</div>
-        <span>VDC</span>
-    </a>
+<a href="dashboard.html" class="brand">
 
-    <div class="header-actions">
+    <div class="brand-mark">V</div>
 
-        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+    <span>VDC</span>
 
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-                <path d="M10 21h4"/>
-            </svg>
+</a>
 
-        </a>
+<div class="header-actions">
 
-    </div>
+<a href="notifications.html" class="icon-btn">
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+    <path d="M10 21h4"/>
+</svg>
+
+</a>
+
+</div>
 
 </header>
 
 
 <main class="main">
 
-    <div class="welcome">
+<div class="welcome">
 
-        <small>Welcome back</small>
+<small>Welcome back</small>
 
-        <h1 id="welcomeName">
-            VDC Member
-        </h1>
+<h1 id="welcomeName">
+    VDC Member
+</h1>
 
-    </div>
+</div>
 
 
-    <!-- BALANCE -->
+<!-- BALANCE -->
 
-    <section class="balance-card">
+<section class="balance-card">
 
-        <div class="balance-label">
-            Available Balance
-        </div>
+<div class="balance-label">
+    Available Balance
+</div>
 
-        <div class="balance" id="balance">
-            ₦—
-        </div>
+<div class="balance" id="balance">
+    ₦—
+</div>
 
-        <div class="balance-actions">
+<div class="balance-actions">
 
-            <a href="withdraw.html">
-                Withdraw
-            </a>
+<a href="withdraw.html">
+    Withdraw
+</a>
 
-            <a href="vip.html">
-                VIP Upgrade
-            </a>
+<a href="vip.html">
+    VIP Upgrade
+</a>
 
-        </div>
+</div>
 
-    </section>
+</section>
 
 
-    <!-- QUICK ACTIONS -->
+<!-- QUICK ACTIONS -->
 
-    <section class="quick-grid">
+<section class="quick-grid">
 
-        <a href="vip.html" class="quick">
+<a href="vip.html" class="quick">
 
-            <div class="quick-icon">
+<div class="quick-icon">
 
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
-                </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
+</svg>
 
-            </div>
+</div>
 
-            <span>VIP Upgrade</span>
+<span>VIP Upgrade</span>
 
-        </a>
+</a>
 
 
-        <a href="withdraw.html" class="quick">
+<a href="withdraw.html" class="quick">
 
-            <div class="quick-icon">
+<div class="quick-icon">
 
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 6h18v12H3z"/>
-                    <path d="M7 12h10"/>
-                    <path d="M7 9h.01"/>
-                </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M3 6h18v12H3z"/>
+    <path d="M7 12h10"/>
+</svg>
 
-            </div>
+</div>
 
-            <span>Withdraw</span>
+<span>Withdraw</span>
 
-        </a>
+</a>
 
 
-        <a href="tasks.html" class="quick">
+<a href="tasks.html" class="quick">
 
-            <div class="quick-icon">
+<div class="quick-icon">
 
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 11l3 3L21 5"/>
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M9 11l3 3L21 5"/>
+    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+</svg>
 
-            </div>
+</div>
 
-            <span>Earn Tasks</span>
+<span>Earn Tasks</span>
 
-        </a>
+</a>
 
 
-        <a href="referrals.html" class="quick">
+<a href="referrals.html" class="quick">
 
-            <div class="quick-icon">
+<div class="quick-icon">
 
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="9" cy="7" r="3"/>
-                    <circle cx="17" cy="9" r="3"/>
-                    <path d="M3 20c0-3.3 2.7-6 6-6 2.1 0 4 1.1 5 2.8"/>
-                    <path d="M14 20c0-2.2 1.8-4 4-4 1.1 0 2.1.4 3 1.2"/>
-                </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="9" cy="7" r="3"/>
+    <circle cx="17" cy="9" r="3"/>
+    <path d="M3 20c0-3.3 2.7-6 6-6"/>
+    <path d="M14 20c0-2.2 1.8-4 4-4"/>
+</svg>
 
-            </div>
+</div>
 
-            <span>Refer & Earn</span>
+<span>Refer & Earn</span>
 
-        </a>
+</a>
 
 
-        <a href="#luckyDraw" class="quick">
+<a href="#luckyDraw" class="quick">
 
-            <div class="quick-icon">
+<div class="quick-icon">
 
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="9"/>
-                    <path d="M8 8l8 8"/>
-                    <path d="M16 8l-8 8"/>
-                </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M8 8l8 8"/>
+    <path d="M16 8l-8 8"/>
+</svg>
 
-            </div>
+</div>
 
-            <span>Lucky Draw</span>
+<span>Lucky Draw</span>
 
-        </a>
+</a>
 
-    </section>
+</section>
 
 
-    <!-- VIP STATUS -->
+<!-- VIP STATUS -->
 
-    <section class="section">
+<section class="section">
 
-        <div class="section-title">
-            <h2>VIP Status</h2>
+<div class="section-title">
 
-            <a href="vip.html">
-                View levels
-            </a>
-        </div>
+<h2>VIP Status</h2>
 
-        <div class="vip-card">
+<a href="vip.html">
+    View levels
+</a>
 
-            <div class="vip-top">
+</div>
 
-                <div>
-                    <div class="vip-name" id="vipName">
-                        Free VIP
-                    </div>
-                </div>
 
-                <div class="vip-level" id="vipLevel">
-                    VIP 0
-                </div>
+<div class="vip-card">
 
-            </div>
+<div class="vip-top">
 
+<div class="vip-name" id="vipName">
+    Free VIP
+</div>
 
-            <div class="vip-details">
+<div class="vip-level" id="vipLevel">
+    VIP 0
+</div>
 
-                <div class="vip-detail">
+</div>
 
-                    <small>Daily Tasks</small>
 
-                    <strong id="dailyTaskLimit">
-                        —
-                    </strong>
+<div class="vip-details">
 
-                </div>
+<div class="vip-detail">
 
+<small>Daily Tasks</small>
 
-                <div class="vip-detail">
+<strong id="dailyTaskLimit">
+    —
+</strong>
 
-                    <small>Task Reward</small>
+</div>
 
-                    <strong id="taskReward">
-                        ₦—
-                    </strong>
 
-                </div>
+<div class="vip-detail">
 
-            </div>
+<small>Task Reward</small>
 
-        </div>
+<strong id="taskReward">
+    ₦—
+</strong>
 
-    </section>
+</div>
 
+</div>
 
-    <!-- EARNINGS -->
+</div>
 
-    <section class="section">
+</section>
 
-        <div class="section-title">
-            <h2>Earnings Overview</h2>
-        </div>
 
+<!-- EARNINGS -->
 
-        <div class="earnings-grid">
+<section class="section">
 
-            <div class="earning">
+<div class="section-title">
 
-                <small>Total Earned</small>
+<h2>Earnings Overview</h2>
 
-                <strong id="totalEarned">
-                    ₦—
-                </strong>
+</div>
 
-            </div>
 
+<div class="earnings-grid">
 
-            <div class="earning">
+<div class="earning">
+    <small>Total Earned</small>
+    <strong id="totalEarned">₦—</strong>
+</div>
 
-                <small>Today's Earnings</small>
+<div class="earning">
+    <small>Today's Earnings</small>
+    <strong id="todayEarned">₦—</strong>
+</div>
 
-                <strong id="todayEarned">
-                    ₦—
-                </strong>
+<div class="earning">
+    <small>Task Earnings</small>
+    <strong id="taskEarned">₦—</strong>
+</div>
 
-            </div>
+<div class="earning">
+    <small>Referral Earnings</small>
+    <strong id="referralEarned">₦—</strong>
+</div>
 
+<div class="earning">
+    <small>Lucky Draw</small>
+    <strong id="luckyEarned">₦—</strong>
+</div>
 
-            <div class="earning">
+<div class="earning">
+    <small>Total Withdrawn</small>
+    <strong id="withdrawn">₦—</strong>
+</div>
 
-                <small>Task Earnings</small>
+</div>
 
-                <strong id="taskEarned">
-                    ₦—
-                </strong>
+</section>
 
-            </div>
 
+<!-- LUCKY DRAW -->
 
-            <div class="earning">
+<section class="section" id="luckyDraw">
 
-                <small>Referral Earnings</small>
+<div class="section-title">
 
-                <strong id="referralEarned">
-                    ₦—
-                </strong>
+<h2>Lucky Draw</h2>
 
-            </div>
+</div>
 
 
-            <div class="earning">
+<div class="lucky-card">
 
-                <small>Lucky Draw</small>
+<div class="lucky-top">
 
-                <strong id="luckyEarned">
-                    ₦—
-                </strong>
+<div>
 
-            </div>
+<h3>Daily Lucky Draw</h3>
 
+<p>
+    Spin the wheel for a chance to receive a VDC reward.
+</p>
 
-            <div class="earning">
+</div>
 
-                <small>Total Withdrawn</small>
+<div class="spin-count" id="spinCount">
+    Spins: —
+</div>
 
-                <strong id="withdrawn">
-                    ₦—
-                </strong>
+</div>
 
-            </div>
 
-        </div>
+<div class="wheel-stage">
 
-    </section>
+<div class="wheel-pointer"></div>
 
+<div class="wheel-ring">
 
-    <!-- LUCKY DRAW -->
+<div class="wheel" id="luckyWheel">
 
-    <section class="section" id="luckyDraw">
+<div class="wheel-labels" id="wheelLabels"></div>
 
-        <div class="section-title">
+<div class="wheel-center">
+    <span>VDC</span>
+</div>
 
-            <h2>Lucky Draw</h2>
+</div>
 
-        </div>
+</div>
 
+</div>
 
-        <div class="lucky-card">
 
-            <div class="lucky-header">
+<div class="lucky-result" id="luckyResult">
+    Spin the wheel to play.
+</div>
 
-                <div>
 
-                    <h3>Daily Lucky Draw</h3>
+<button
+    type="button"
+    class="spin-button"
+    id="spinButton"
+    onclick="spinLuckyDraw()"
+>
+    SPIN
+</button>
 
-                    <p>
-                        Use your available daily spins for a chance to receive a VDC reward.
-                    </p>
 
-                </div>
+<div class="wheel-status" id="wheelStatus">
+    Loading wheel...
+</div>
 
-                <div class="spin-count" id="spinCount">
-                    Spins: —
-                </div>
+</div>
 
-            </div>
+</section>
 
 
-            <div class="lucky-result" id="luckyResult">
-                Select Spin to play.
-            </div>
+<!-- WAYS TO EARN -->
 
+<section class="section">
 
-            <button
-                type="button"
-                class="spin-button"
-                id="spinButton"
-                onclick="spinLuckyDraw()"
-            >
-                Spin Lucky Draw
-            </button>
+<div class="section-title">
 
-        </div>
+<h2>Ways to Earn</h2>
 
-    </section>
+<a href="earn.html">
+    View all
+</a>
 
+</div>
 
-    <!-- WAYS TO EARN -->
 
-    <section class="section">
+<div class="ways-card">
 
-        <div class="section-title">
+<h3>
+    More ways to earn VDC rewards
+</h3>
 
-            <h2>Ways to Earn</h2>
+<p>
+    Complete eligible tasks, participate in available activities,
+    refer new users and use other earning features available to your account.
+</p>
 
-            <a href="earn.html">
-                View all
-            </a>
+<a href="earn.html" class="ways-btn">
+    Explore Ways to Earn
+</a>
 
-        </div>
+</div>
 
+</section>
 
-        <div class="ways-card">
 
-            <h3>
-                More ways to earn VDC rewards
-            </h3>
+<!-- RECENT ACTIVITY -->
 
-            <p>
-                Complete eligible tasks, participate in available activities,
-                refer new users and use other earning features available to your
-                account.
-            </p>
+<section class="section">
 
-            <a href="earn.html" class="ways-btn">
-                Explore Ways to Earn
-            </a>
+<div class="section-title">
 
-        </div>
+<h2>Recent Activity</h2>
 
-    </section>
+<a href="history.html">
+    View history
+</a>
 
+</div>
 
-    <!-- RECENT ACTIVITY -->
 
-    <section class="section">
+<div class="activity" id="activityList">
 
-        <div class="section-title">
+<div class="empty">
+    Loading activity...
+</div>
 
-            <h2>Recent Activity</h2>
+</div>
 
-            <a href="history.html">
-                View history
-            </a>
-
-        </div>
-
-
-        <div class="activity" id="activityList">
-
-            <div class="empty">
-                Loading activity...
-            </div>
-
-        </div>
-
-    </section>
+</section>
 
 </main>
 
@@ -956,63 +1087,63 @@ a{
 
 <nav class="bottom-nav">
 
-    <a href="dashboard.html" class="nav-item active">
+<a href="dashboard.html" class="nav-item active">
 
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 11l9-8 9 8"/>
-            <path d="M5 10v10h14V10"/>
-        </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M3 11l9-8 9 8"/>
+    <path d="M5 10v10h14V10"/>
+</svg>
 
-        <span>Home</span>
+<span>Home</span>
 
-    </a>
-
-
-    <a href="tasks.html" class="nav-item">
-
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 11l3 3L21 5"/>
-            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-        </svg>
-
-        <span>Tasks</span>
-
-    </a>
+</a>
 
 
-    <a href="vip.html" class="nav-item">
+<a href="tasks.html" class="nav-item">
 
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
-        </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M9 11l3 3L21 5"/>
+    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+</svg>
 
-        <span>VIP</span>
+<span>Tasks</span>
 
-    </a>
-
-
-    <a href="earn.html" class="nav-item">
-
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 3v18"/>
-            <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>
-        </svg>
-
-        <span>Earn</span>
-
-    </a>
+</a>
 
 
-    <a href="profile.html" class="nav-item">
+<a href="vip.html" class="nav-item">
 
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-        </svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
+</svg>
 
-        <span>My</span>
+<span>VIP</span>
 
-    </a>
+</a>
+
+
+<a href="earn.html" class="nav-item">
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M12 3v18"/>
+    <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>
+</svg>
+
+<span>Earn</span>
+
+</a>
+
+
+<a href="profile.html" class="nav-item">
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+</svg>
+
+<span>My</span>
+
+</a>
 
 </nav>
 
@@ -1027,12 +1158,13 @@ const SUPABASE_URL =
     "https://wiorfxlodrcawxdeowbg.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_b3FIKdf_PUKP0Ii8ZbMREw_CVqOQv9g";
+    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
 
-const db = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+const db =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
 /* =========================================================
@@ -1040,9 +1172,18 @@ const db = window.supabase.createClient(
 ========================================================= */
 
 let currentUser = null;
+
 let currentVip = 0;
+
 let dailySpinLimit = 0;
+
 let spinsToday = 0;
+
+let wheelPrizes = [];
+
+let wheelRotation = 0;
+
+let wheelBusy = false;
 
 
 /* =========================================================
@@ -1051,15 +1192,17 @@ let spinsToday = 0;
 
 function money(value){
 
-    const number = Number(value || 0);
+    const number =
+        Number(value || 0);
 
-    return "₦" + number.toLocaleString(
-        "en-NG",
-        {
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
-        }
-    );
+    return "₦" +
+        number.toLocaleString(
+            "en-NG",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
 }
 
 
@@ -1096,28 +1239,57 @@ function formatDate(date){
 
 async function loadDashboard(){
 
-    const {
-        data:{
-            user
-        },
-        error
-    } = await db.auth.getUser();
+    try{
 
-    if(error || !user){
+        const {
+            data:{
+                user
+            },
+            error
+        } = await db.auth.getUser();
 
-        window.location.href = "auth.html";
 
-        return;
+        if(error){
+
+            console.error(error);
+
+            document.getElementById("wheelStatus")
+                .textContent =
+                "Unable to connect to VDC.";
+
+            return;
+        }
+
+
+        if(!user){
+
+            window.location.href =
+                "auth.html";
+
+            return;
+        }
+
+
+        currentUser = user;
+
+
+        await loadProfile();
+
+        await loadWallet();
+
+        await loadVip();
+
+        await loadLuckyDraw();
+
+        await loadEarnings();
+
+        await loadActivity();
+
+    }catch(error){
+
+        console.error(error);
+
     }
-
-    currentUser = user;
-
-    await loadProfile();
-    await loadWallet();
-    await loadVip();
-    await loadLuckyDraw();
-    await loadEarnings();
-    await loadActivity();
 }
 
 
@@ -1133,8 +1305,9 @@ async function loadProfile(){
     } = await db
         .from("profiles")
         .select("*")
-        .eq("id", currentUser.id)
+        .eq("id",currentUser.id)
         .maybeSingle();
+
 
     if(error){
 
@@ -1143,14 +1316,13 @@ async function loadProfile(){
         return;
     }
 
+
     if(data){
 
-        const name =
+        document.getElementById("welcomeName")
+            .textContent =
             data.full_name ||
             "VDC Member";
-
-        document.getElementById("welcomeName")
-            .textContent = name;
     }
 }
 
@@ -1167,8 +1339,9 @@ async function loadWallet(){
     } = await db
         .from("wallets")
         .select("balance,total_earned")
-        .eq("user_id", currentUser.id)
+        .eq("user_id",currentUser.id)
         .maybeSingle();
+
 
     if(error){
 
@@ -1177,11 +1350,15 @@ async function loadWallet(){
         return;
     }
 
+
     document.getElementById("balance")
-        .textContent = money(data?.balance);
+        .textContent =
+        money(data?.balance);
+
 
     document.getElementById("totalEarned")
-        .textContent = money(data?.total_earned);
+        .textContent =
+        money(data?.total_earned);
 }
 
 
@@ -1206,9 +1383,10 @@ async function loadVip(){
                 daily_task_limit
             )
         `)
-        .eq("user_id", currentUser.id)
+        .eq("user_id",currentUser.id)
         .eq("status","active")
         .maybeSingle();
+
 
     if(error){
 
@@ -1227,39 +1405,215 @@ async function loadVip(){
                 data.vip_levels.level_number
             );
 
+
         document.getElementById("vipName")
             .textContent =
             data.vip_levels.name ||
             `VIP ${currentVip}`;
 
+
         document.getElementById("vipLevel")
             .textContent =
             `VIP ${currentVip}`;
+
 
         document.getElementById("dailyTaskLimit")
             .textContent =
             data.vip_levels.daily_task_limit;
 
+
         document.getElementById("taskReward")
             .textContent =
-            money(data.vip_levels.task_reward);
+            money(
+                data.vip_levels.task_reward
+            );
 
     }else{
 
         currentVip = 0;
 
+
         document.getElementById("vipName")
-            .textContent = "Free VIP";
+            .textContent =
+            "Free VIP";
+
 
         document.getElementById("vipLevel")
-            .textContent = "VIP 0";
+            .textContent =
+            "VIP 0";
+
 
         document.getElementById("dailyTaskLimit")
-            .textContent = "5";
+            .textContent =
+            "5";
+
 
         document.getElementById("taskReward")
-            .textContent = money(150);
+            .textContent =
+            money(150);
     }
+}
+
+
+/* =========================================================
+   LOAD WHEEL PRIZES
+========================================================= */
+
+async function loadWheelPrizes(){
+
+    const {
+        data,
+        error
+    } = await db
+        .from("lucky_draw_prizes")
+        .select("prize,weight")
+        .eq("vip_level",currentVip)
+        .eq("active",true)
+        .order("prize",{ascending:true});
+
+
+    if(error){
+
+        console.error(error);
+
+        document.getElementById("wheelStatus")
+            .textContent =
+            "Unable to load wheel prizes.";
+
+        return;
+    }
+
+
+    wheelPrizes =
+        (data || []).map(item => ({
+            prize:Number(item.prize || 0),
+            weight:Number(item.weight || 1)
+        }));
+
+
+    if(!wheelPrizes.length){
+
+        document.getElementById("wheelStatus")
+            .textContent =
+            "No Lucky Draw prizes are configured.";
+
+        return;
+    }
+
+
+    drawWheel();
+}
+
+
+/* =========================================================
+   DRAW WHEEL
+========================================================= */
+
+function drawWheel(){
+
+    const wheel =
+        document.getElementById("luckyWheel");
+
+    const labels =
+        document.getElementById("wheelLabels");
+
+
+    if(!wheel || !wheelPrizes.length)
+        return;
+
+
+    const count =
+        wheelPrizes.length;
+
+
+    const slice =
+        360 / count;
+
+
+    const colors = [
+        "#5b21b6",
+        "#7c3aed",
+        "#9333ea",
+        "#c026d3",
+        "#db2777",
+        "#e11d48",
+        "#ea580c",
+        "#f97316",
+        "#ca8a04",
+        "#65a30d",
+        "#059669",
+        "#0891b2"
+    ];
+
+
+    let gradientParts = [];
+
+
+    for(let i=0;i<count;i++){
+
+        const start =
+            i * slice;
+
+        const end =
+            (i + 1) * slice;
+
+
+        gradientParts.push(
+            `${colors[i % colors.length]} ${start}deg ${end}deg`
+        );
+    }
+
+
+    wheel.style.background =
+        `conic-gradient(${gradientParts.join(",")})`;
+
+
+    labels.innerHTML = "";
+
+
+    wheelPrizes.forEach((item,index)=>{
+
+        const label =
+            document.createElement("div");
+
+
+        label.className =
+            "wheel-label";
+
+
+        const angle =
+            index * slice +
+            slice / 2;
+
+
+        const radius = 34;
+
+
+        const x =
+            Math.sin(
+                angle * Math.PI / 180
+            ) * radius;
+
+
+        const y =
+            -Math.cos(
+                angle * Math.PI / 180
+            ) * radius;
+
+
+        label.style.transform =
+            `translate(${x}px,${y}px) rotate(${angle}deg)`;
+
+
+        label.textContent =
+            item.prize > 0
+                ? `₦${Number(item.prize).toLocaleString("en-NG")}`
+                : "TRY AGAIN";
+
+
+        labels.appendChild(label);
+
+    });
 }
 
 
@@ -1283,6 +1637,13 @@ async function loadLuckyDraw(){
 
         console.error(settingsError);
 
+        document.getElementById("wheelStatus")
+            .textContent =
+            "Unable to load Lucky Draw.";
+
+        document.getElementById("spinButton")
+            .disabled = true;
+
         return;
     }
 
@@ -1291,13 +1652,17 @@ async function loadLuckyDraw(){
 
         dailySpinLimit = 0;
 
+
         document.getElementById("spinCount")
-            .textContent = "Unavailable";
+            .textContent =
+            "Unavailable";
+
 
         document.getElementById("spinButton")
             .disabled = true;
 
-        document.getElementById("luckyResult")
+
+        document.getElementById("wheelStatus")
             .textContent =
             "Lucky Draw is currently unavailable.";
 
@@ -1312,7 +1677,9 @@ async function loadLuckyDraw(){
 
 
     dailySpinLimit =
-        Number(settings[limitField] || 0);
+        Number(
+            settings[limitField] || 0
+        );
 
 
     const start =
@@ -1326,9 +1693,18 @@ async function loadLuckyDraw(){
         error:countError
     } = await db
         .from("lucky_draw_results")
-        .select("*",{count:"exact",head:true})
+        .select(
+            "*",
+            {
+                count:"exact",
+                head:true
+            }
+        )
         .eq("user_id",currentUser.id)
-        .gte("created_at",start.toISOString());
+        .gte(
+            "created_at",
+            start.toISOString()
+        );
 
 
     if(countError){
@@ -1339,13 +1715,20 @@ async function loadLuckyDraw(){
 
     }else{
 
-        spinsToday = Number(count || 0);
+        spinsToday =
+            Number(count || 0);
     }
 
+
+    await loadWheelPrizes();
 
     updateLuckyDrawUI();
 }
 
+
+/* =========================================================
+   UPDATE LUCKY DRAW UI
+========================================================= */
 
 function updateLuckyDrawUI(){
 
@@ -1370,37 +1753,83 @@ function updateLuckyDrawUI(){
         button.disabled = true;
 
         button.textContent =
-            "Daily Spins Used";
+            "DAILY SPINS USED";
+
+
+        document.getElementById("wheelStatus")
+            .textContent =
+            "Come back tomorrow for new spins.";
 
     }else{
 
         button.disabled = false;
 
         button.textContent =
-            "Spin Lucky Draw";
+            "SPIN";
+
+
+        document.getElementById("wheelStatus")
+            .textContent =
+            "Your available daily spins are shown above.";
     }
 }
 
 
 /* =========================================================
-   SPIN LUCKY DRAW
+   FIND PRIZE POSITION
+========================================================= */
+
+function findPrizeIndex(prize){
+
+    if(!wheelPrizes.length)
+        return 0;
+
+
+    const exact =
+        wheelPrizes.findIndex(
+            item =>
+                Number(item.prize) ===
+                Number(prize)
+        );
+
+
+    if(exact >= 0)
+        return exact;
+
+
+    return 0;
+}
+
+
+/* =========================================================
+   SPIN
 ========================================================= */
 
 async function spinLuckyDraw(){
 
+    if(wheelBusy)
+        return;
+
+
     const button =
         document.getElementById("spinButton");
 
-    if(button.disabled) return;
 
+    if(button.disabled)
+        return;
+
+
+    wheelBusy = true;
 
     button.disabled = true;
 
-    button.textContent = "Spinning...";
+    button.textContent =
+        "SPINNING...";
 
 
     document.getElementById("luckyResult")
-        .textContent = "Processing your spin...";
+        .textContent =
+        "The wheel is spinning...";
 
 
     const {
@@ -1415,10 +1844,14 @@ async function spinLuckyDraw(){
 
         console.error(error);
 
+
         document.getElementById("luckyResult")
             .textContent =
             error.message ||
-            "Unable to process the spin.";
+            "Unable to process your spin.";
+
+
+        wheelBusy = false;
 
         updateLuckyDrawUI();
 
@@ -1430,28 +1863,69 @@ async function spinLuckyDraw(){
         Number(data || 0);
 
 
-    spinsToday++;
+    const prizeIndex =
+        findPrizeIndex(prize);
 
 
-    if(prize > 0){
-
-        document.getElementById("luckyResult")
-            .textContent =
-            `You received ${money(prize)}.`;
-
-    }else{
-
-        document.getElementById("luckyResult")
-            .textContent =
-            "No reward this time. Try again when you have another spin.";
-    }
+    const slice =
+        360 / wheelPrizes.length;
 
 
-    updateLuckyDrawUI();
+    const targetCenter =
+        prizeIndex * slice +
+        slice / 2;
 
 
-    await loadWallet();
-    await loadEarnings();
+    const targetRotation =
+        360 -
+        targetCenter;
+
+
+    wheelRotation +=
+        360 * 7 +
+        targetRotation;
+
+
+    const wheel =
+        document.getElementById("luckyWheel");
+
+
+    wheel.style.transform =
+        `rotate(${wheelRotation}deg)`;
+
+
+    setTimeout(async()=>{
+
+        spinsToday++;
+
+
+        if(prize > 0){
+
+            document.getElementById("luckyResult")
+                .textContent =
+                `Congratulations! You received ${money(prize)}.`;
+
+        }else{
+
+            document.getElementById("luckyResult")
+                .textContent =
+                "No reward this time. Try again when you have another spin.";
+        }
+
+
+        wheelBusy = false;
+
+
+        updateLuckyDrawUI();
+
+
+        await loadWallet();
+
+        await loadEarnings();
+
+        await loadActivity();
+
+    },5100);
 }
 
 
@@ -1466,9 +1940,16 @@ async function loadEarnings(){
         error
     } = await db
         .from("transactions")
-        .select("type,amount,created_at")
+        .select(
+            "type,amount,created_at"
+        )
         .eq("user_id",currentUser.id)
-        .order("created_at",{ascending:false});
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
 
 
     if(error){
@@ -1492,7 +1973,7 @@ async function loadEarnings(){
     start.setHours(0,0,0,0);
 
 
-    (data || []).forEach(transaction => {
+    (data || []).forEach(transaction=>{
 
         const amount =
             Number(transaction.amount || 0);
@@ -1513,44 +1994,52 @@ async function loadEarnings(){
                 .toLowerCase();
 
 
-        if(type === "task"){
+        if(type === "task")
             task += amount;
-        }
 
-        if(type === "referral"){
+
+        if(type === "referral")
             referral += amount;
-        }
 
-        if(type === "lucky_draw"){
+
+        if(type === "lucky_draw")
             lucky += amount;
-        }
 
-        if(type === "withdrawal"){
+
+        if(type === "withdrawal")
             withdrawn += Math.abs(amount);
-        }
 
     });
 
 
     document.getElementById("todayEarned")
-        .textContent = money(today);
+        .textContent =
+        money(today);
+
 
     document.getElementById("taskEarned")
-        .textContent = money(task);
+        .textContent =
+        money(task);
+
 
     document.getElementById("referralEarned")
-        .textContent = money(referral);
+        .textContent =
+        money(referral);
+
 
     document.getElementById("luckyEarned")
-        .textContent = money(lucky);
+        .textContent =
+        money(lucky);
+
 
     document.getElementById("withdrawn")
-        .textContent = money(withdrawn);
+        .textContent =
+        money(withdrawn);
 }
 
 
 /* =========================================================
-   RECENT ACTIVITY
+   ACTIVITY
 ========================================================= */
 
 async function loadActivity(){
@@ -1560,9 +2049,16 @@ async function loadActivity(){
         error
     } = await db
         .from("transactions")
-        .select("type,amount,description,created_at")
+        .select(
+            "type,amount,description,created_at"
+        )
         .eq("user_id",currentUser.id)
-        .order("created_at",{ascending:false})
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        )
         .limit(8);
 
 
@@ -1580,7 +2076,7 @@ async function loadActivity(){
     }
 
 
-    if(!data || data.length === 0){
+    if(!data || !data.length){
 
         document.getElementById("activityList")
             .innerHTML =
@@ -1594,10 +2090,11 @@ async function loadActivity(){
 
     document.getElementById("activityList")
         .innerHTML =
-        data.map(item => {
+        data.map(item=>{
 
             const amount =
                 Number(item.amount || 0);
+
 
             const type =
                 String(item.type || "activity")
@@ -1617,7 +2114,9 @@ async function loadActivity(){
                         </strong>
 
                         <small>
-                            ${formatDate(item.created_at)}
+                            ${formatDate(
+                                item.created_at
+                            )}
                         </small>
 
                     </div>
