@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>VDC — Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,13 +14,14 @@
     --purple-dark:#4c1d95;
     --purple-light:#f3e8ff;
     --orange:#f97316;
+    --orange-light:#fff7ed;
     --green:#008751;
     --bg:#faf9fc;
     --card:#ffffff;
-    --text:#171321;
-    --muted:#77727f;
-    --border:#eeeaf3;
-    --shadow:0 8px 25px rgba(76,29,149,.07);
+    --text:#17121f;
+    --muted:#6b6474;
+    --border:#eee8f4;
+    --shadow:0 8px 28px rgba(40,20,70,.07);
 }
 
 *{
@@ -29,15 +31,18 @@
 }
 
 body{
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:Inter,Arial,sans-serif;
     background:var(--bg);
     color:var(--text);
     min-height:100vh;
 }
 
+button,
+a{
+    font:inherit;
+}
+
 button{
-    font-family:inherit;
-    border:0;
     cursor:pointer;
 }
 
@@ -47,37 +52,51 @@ a{
 }
 
 .app{
+    width:100%;
     max-width:760px;
     margin:auto;
+    min-height:100vh;
     padding-bottom:90px;
 }
 
 /* HEADER */
 
 .header{
-    height:68px;
-    background:#fff;
+    position:sticky;
+    top:0;
+    z-index:100;
+    height:64px;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(14px);
     border-bottom:1px solid var(--border);
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:0 18px;
-    position:sticky;
-    top:0;
-    z-index:20;
 }
 
-.logo{
-    font-size:25px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    color:var(--purple-dark);
+    font-size:21px;
+}
+
+.brand-mark{
+    width:34px;
+    height:34px;
+    border-radius:11px;
+    background:linear-gradient(135deg,var(--purple),var(--orange));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
     font-weight:900;
-    color:var(--purple);
 }
 
-.logo span{
-    color:var(--orange);
-}
-
-.header-right{
+.header-actions{
     display:flex;
     align-items:center;
     gap:10px;
@@ -86,28 +105,24 @@ a{
 .icon-btn{
     width:40px;
     height:40px;
+    border:1px solid var(--border);
+    background:white;
     border-radius:12px;
-    background:#f7f3fb;
-    color:var(--purple);
-    font-size:19px;
-    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--purple-dark);
 }
 
-.notification-dot{
-    position:absolute;
-    top:8px;
-    right:8px;
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:var(--orange);
-    display:none;
+.icon-btn svg{
+    width:20px;
+    height:20px;
 }
 
-/* CONTENT */
+/* MAIN */
 
-.content{
-    padding:18px;
+.main{
+    padding:20px 16px;
 }
 
 .welcome{
@@ -121,120 +136,93 @@ a{
 
 .welcome h1{
     margin-top:5px;
-    font-size:24px;
+    font-size:25px;
+    line-height:1.2;
 }
 
 /* BALANCE */
 
 .balance-card{
     background:linear-gradient(135deg,var(--purple-dark),var(--purple));
-    color:#fff;
+    color:white;
     border-radius:22px;
     padding:22px;
-    box-shadow:var(--shadow);
+    box-shadow:0 15px 35px rgba(76,29,149,.22);
     margin-bottom:16px;
 }
 
 .balance-label{
+    opacity:.82;
     font-size:13px;
-    opacity:.8;
 }
 
 .balance{
     font-size:34px;
     font-weight:800;
-    margin:7px 0 14px;
+    margin:8px 0 18px;
 }
 
-.balance-bottom{
+.balance-actions{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
     gap:10px;
 }
 
-.vip-badge{
-    background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.2);
-    padding:8px 12px;
-    border-radius:10px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-.balance-link{
-    background:#fff;
-    color:var(--purple);
-    padding:9px 13px;
-    border-radius:10px;
-    font-size:12px;
-    font-weight:bold;
+.balance-actions a{
+    flex:1;
+    text-align:center;
+    background:white;
+    color:var(--purple-dark);
+    padding:11px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:13px;
 }
 
 /* QUICK ACTIONS */
 
 .quick-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    margin-bottom:20px;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:18px;
 }
 
-.quick-card{
+.quick{
     background:var(--card);
     border:1px solid var(--border);
     border-radius:17px;
-    padding:17px;
+    padding:14px 8px;
+    text-align:center;
     box-shadow:var(--shadow);
 }
 
 .quick-icon{
-    width:42px;
-    height:42px;
+    width:38px;
+    height:38px;
+    margin:auto auto 8px;
     border-radius:12px;
     display:flex;
     align-items:center;
     justify-content:center;
     background:var(--purple-light);
     color:var(--purple);
-    font-size:19px;
-    margin-bottom:12px;
 }
 
-.quick-card:nth-child(2) .quick-icon{
-    background:#fff1e8;
-    color:var(--orange);
+.quick-icon svg{
+    width:19px;
+    height:19px;
 }
 
-.quick-card:nth-child(3) .quick-icon{
-    background:#edf9f3;
-    color:var(--green);
-}
-
-.quick-card:nth-child(4) .quick-icon{
-    background:#f3e8ff;
-    color:var(--purple-dark);
-}
-
-.quick-card:nth-child(5) .quick-icon{
-    background:#fff1e8;
-    color:var(--orange);
-}
-
-.quick-card h3{
-    font-size:14px;
-    margin-bottom:5px;
-}
-
-.quick-card p{
-    color:var(--muted);
+.quick span{
+    display:block;
     font-size:11px;
+    font-weight:700;
 }
 
 /* SECTION */
 
 .section{
-    margin-top:22px;
+    margin-top:20px;
 }
 
 .section-title{
@@ -251,215 +239,238 @@ a{
 .section-title a{
     color:var(--purple);
     font-size:12px;
-    font-weight:bold;
+    font-weight:700;
 }
 
 /* VIP */
 
 .vip-card{
-    background:#fff;
+    background:white;
     border:1px solid var(--border);
     border-radius:18px;
-    padding:18px;
+    padding:17px;
     box-shadow:var(--shadow);
+}
+
+.vip-top{
     display:flex;
-    align-items:center;
     justify-content:space-between;
-    gap:15px;
+    align-items:center;
 }
 
-.vip-info{
-    min-width:0;
+.vip-name{
+    font-weight:800;
+    color:var(--purple-dark);
 }
 
-.vip-info small{
+.vip-level{
+    background:var(--purple-light);
+    color:var(--purple-dark);
+    padding:6px 10px;
+    border-radius:9px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.vip-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+.vip-detail{
+    background:#faf8fd;
+    border-radius:12px;
+    padding:11px;
+}
+
+.vip-detail small{
+    display:block;
     color:var(--muted);
     font-size:11px;
+    margin-bottom:4px;
 }
 
-.vip-info h3{
-    margin:4px 0;
-    font-size:19px;
+.vip-detail strong{
+    font-size:14px;
 }
 
-.vip-info p{
-    font-size:12px;
+/* EARNINGS */
+
+.earnings-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.earning{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:15px;
+    box-shadow:var(--shadow);
+}
+
+.earning small{
+    display:block;
     color:var(--muted);
+    font-size:11px;
+    margin-bottom:7px;
 }
 
-.vip-button{
-    background:var(--purple);
-    color:#fff;
-    padding:11px 14px;
+.earning strong{
+    font-size:17px;
+}
+
+/* WAYS */
+
+.ways-card{
+    background:linear-gradient(135deg,#fff7ed,#fff);
+    border:1px solid #fed7aa;
+    border-radius:18px;
+    padding:17px;
+}
+
+.ways-card h3{
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.ways-card p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+    margin-bottom:13px;
+}
+
+.ways-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background:var(--orange);
+    color:white;
+    padding:10px 14px;
     border-radius:11px;
     font-size:12px;
-    font-weight:bold;
-    white-space:nowrap;
+    font-weight:700;
 }
 
 /* LUCKY DRAW */
 
 .lucky-card{
-    background:linear-gradient(135deg,#fff,#fff7ed);
-    border:1px solid #f5dfce;
-    border-radius:20px;
-    padding:18px;
-    box-shadow:var(--shadow);
+    background:linear-gradient(135deg,#4c1d95,#6d28d9);
+    color:white;
+    border-radius:21px;
+    padding:20px;
+    box-shadow:0 15px 35px rgba(76,29,149,.20);
 }
 
-.lucky-top{
+.lucky-header{
     display:flex;
     align-items:flex-start;
     justify-content:space-between;
     gap:12px;
 }
 
-.lucky-title{
-    font-size:18px;
-    font-weight:800;
+.lucky-header h3{
+    font-size:19px;
+    margin-bottom:5px;
 }
 
-.lucky-subtitle{
-    color:var(--muted);
+.lucky-header p{
     font-size:12px;
+    opacity:.8;
     line-height:1.5;
-    margin-top:5px;
 }
 
 .spin-count{
-    background:var(--purple-light);
-    color:var(--purple);
-    border-radius:12px;
-    padding:9px 11px;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:11px;
+    padding:8px 10px;
     font-size:11px;
-    font-weight:800;
     white-space:nowrap;
 }
 
 .lucky-result{
-    margin-top:15px;
     min-height:62px;
+    margin:18px 0 14px;
     border-radius:14px;
-    background:#fff;
-    border:1px solid var(--border);
+    background:rgba(255,255,255,.1);
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
     padding:12px;
-    color:var(--muted);
-    font-size:13px;
+    font-size:14px;
+    font-weight:700;
 }
 
-.lucky-result.win{
-    color:var(--green);
-    font-weight:800;
-}
-
-.lucky-result.empty{
-    color:var(--muted);
-}
-
-.spin-btn{
+.spin-button{
     width:100%;
-    margin-top:12px;
-    background:var(--orange);
-    color:#fff;
+    border:0;
+    border-radius:13px;
     padding:13px;
-    border-radius:12px;
-    font-size:13px;
+    background:white;
+    color:var(--purple-dark);
     font-weight:800;
 }
 
-.spin-btn:disabled{
+.spin-button:disabled{
     opacity:.55;
     cursor:not-allowed;
 }
 
-.lucky-note{
-    margin-top:9px;
+/* ACTIVITY */
+
+.activity{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.activity-item{
+    padding:14px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.activity-item:last-child{
+    border-bottom:0;
+}
+
+.activity-left{
+    min-width:0;
+}
+
+.activity-left strong{
+    display:block;
+    font-size:13px;
+    margin-bottom:3px;
+}
+
+.activity-left small{
     color:var(--muted);
     font-size:10px;
-    text-align:center;
 }
 
-/* STATS */
-
-.stats-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:11px;
-}
-
-.stat{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:16px;
-}
-
-.stat-label{
-    color:var(--muted);
-    font-size:11px;
-    margin-bottom:7px;
-}
-
-.stat-value{
-    font-size:18px;
+.activity-amount{
+    font-size:13px;
     font-weight:800;
-}
-
-.stat-value.purple{
-    color:var(--purple);
-}
-
-.stat-value.orange{
-    color:var(--orange);
-}
-
-.stat-value.green{
     color:var(--green);
+    white-space:nowrap;
 }
 
-/* EARN BANNER */
+/* EMPTY */
 
-.earn-banner{
-    background:linear-gradient(135deg,#fff,#f7efff);
-    border:1px solid #eadcfb;
-    border-radius:18px;
-    padding:18px;
-    margin-top:22px;
-}
-
-.earn-banner h3{
-    font-size:16px;
-    margin-bottom:6px;
-}
-
-.earn-banner p{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.5;
-}
-
-.earn-btn{
-    display:inline-block;
-    margin-top:13px;
-    background:var(--orange);
-    color:#fff;
-    padding:11px 15px;
-    border-radius:11px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-/* EMPTY ACTIVITY */
-
-.activity-empty{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:25px 15px;
+.empty{
+    padding:25px;
     text-align:center;
     color:var(--muted);
     font-size:12px;
@@ -469,16 +480,18 @@ a{
 
 .bottom-nav{
     position:fixed;
+    bottom:0;
     left:50%;
     transform:translateX(-50%);
-    bottom:0;
-    width:min(760px,100%);
+    width:100%;
+    max-width:760px;
     height:70px;
-    background:#fff;
+    background:rgba(255,255,255,.97);
+    backdrop-filter:blur(14px);
     border-top:1px solid var(--border);
     display:grid;
     grid-template-columns:repeat(5,1fr);
-    z-index:30;
+    z-index:100;
 }
 
 .nav-item{
@@ -486,78 +499,41 @@ a{
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:5px;
-    color:#8b8691;
+    gap:4px;
+    color:#8a8392;
     font-size:10px;
-    font-weight:bold;
-}
-
-.nav-item .nav-icon{
-    font-size:18px;
+    font-weight:700;
 }
 
 .nav-item.active{
     color:var(--purple);
 }
 
+.nav-item svg{
+    width:20px;
+    height:20px;
+}
+
 /* LOADING */
 
 .loading{
-    position:fixed;
-    inset:0;
-    background:var(--bg);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:100;
-}
-
-.loading-box{
-    text-align:center;
-}
-
-.loading-logo{
-    font-size:32px;
-    font-weight:900;
-    color:var(--purple);
-}
-
-.loading-logo span{
-    color:var(--orange);
-}
-
-.loading-text{
-    margin-top:8px;
-    color:var(--muted);
-    font-size:12px;
+    opacity:.55;
 }
 
 /* RESPONSIVE */
 
-@media(max-width:400px){
+@media(max-width:430px){
 
-    .content{
-        padding:14px;
+    .quick-grid{
+        grid-template-columns:repeat(2,1fr);
     }
 
     .balance{
         font-size:30px;
     }
 
-    .quick-card{
-        padding:14px;
-    }
-
-    .vip-card{
-        padding:15px;
-    }
-
-    .lucky-top{
-        flex-direction:column;
-    }
-
-    .spin-count{
-        align-self:flex-start;
+    .main{
+        padding:18px 13px;
     }
 }
 </style>
@@ -565,480 +541,413 @@ a{
 
 <body>
 
-<div class="loading" id="loading">
-    <div class="loading-box">
-        <div class="loading-logo">VDC<span>.</span></div>
-        <div class="loading-text">Loading your dashboard...</div>
-    </div>
-</div>
-
 <div class="app">
 
-    <!-- HEADER -->
-    <header class="header">
+<header class="header">
 
-        <a href="dashboard.html" class="logo">
-            VDC<span>.</span>
+    <a href="dashboard.html" class="brand">
+        <div class="brand-mark">V</div>
+        <span>VDC</span>
+    </a>
+
+    <div class="header-actions">
+
+        <a href="notifications.html" class="icon-btn" aria-label="Notifications">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+                <path d="M10 21h4"/>
+            </svg>
+
         </a>
 
-        <div class="header-right">
+    </div>
 
-            <button
-                class="icon-btn"
-                onclick="openNotifications()"
-                aria-label="Notifications"
-            >
-                &#128276;
-                <span
-                    class="notification-dot"
-                    id="notificationDot"
-                ></span>
-            </button>
+</header>
+
+
+<main class="main">
+
+    <div class="welcome">
+
+        <small>Welcome back</small>
+
+        <h1 id="welcomeName">
+            VDC Member
+        </h1>
+
+    </div>
+
+
+    <!-- BALANCE -->
+
+    <section class="balance-card">
+
+        <div class="balance-label">
+            Available Balance
+        </div>
+
+        <div class="balance" id="balance">
+            ₦—
+        </div>
+
+        <div class="balance-actions">
+
+            <a href="withdraw.html">
+                Withdraw
+            </a>
+
+            <a href="vip.html">
+                VIP Upgrade
+            </a>
 
         </div>
 
-    </header>
+    </section>
 
-    <main class="content">
 
-        <!-- WELCOME -->
+    <!-- QUICK ACTIONS -->
 
-        <div class="welcome">
+    <section class="quick-grid">
 
-            <small>Welcome back</small>
+        <a href="vip.html" class="quick">
 
-            <h1 id="userName">
-                VDC Member
-            </h1>
+            <div class="quick-icon">
 
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
+                </svg>
+
+            </div>
+
+            <span>VIP Upgrade</span>
+
+        </a>
+
+
+        <a href="withdraw.html" class="quick">
+
+            <div class="quick-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18v12H3z"/>
+                    <path d="M7 12h10"/>
+                    <path d="M7 9h.01"/>
+                </svg>
+
+            </div>
+
+            <span>Withdraw</span>
+
+        </a>
+
+
+        <a href="tasks.html" class="quick">
+
+            <div class="quick-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L21 5"/>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+
+            </div>
+
+            <span>Earn Tasks</span>
+
+        </a>
+
+
+        <a href="referrals.html" class="quick">
+
+            <div class="quick-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="7" r="3"/>
+                    <circle cx="17" cy="9" r="3"/>
+                    <path d="M3 20c0-3.3 2.7-6 6-6 2.1 0 4 1.1 5 2.8"/>
+                    <path d="M14 20c0-2.2 1.8-4 4-4 1.1 0 2.1.4 3 1.2"/>
+                </svg>
+
+            </div>
+
+            <span>Refer & Earn</span>
+
+        </a>
+
+
+        <a href="#luckyDraw" class="quick">
+
+            <div class="quick-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M8 8l8 8"/>
+                    <path d="M16 8l-8 8"/>
+                </svg>
+
+            </div>
+
+            <span>Lucky Draw</span>
+
+        </a>
+
+    </section>
+
+
+    <!-- VIP STATUS -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>VIP Status</h2>
+
+            <a href="vip.html">
+                View levels
+            </a>
         </div>
 
+        <div class="vip-card">
 
-        <!-- BALANCE -->
+            <div class="vip-top">
 
-        <section class="balance-card">
+                <div>
+                    <div class="vip-name" id="vipName">
+                        Free VIP
+                    </div>
+                </div>
 
-            <div class="balance-label">
-                Available Balance
-            </div>
-
-            <div
-                class="balance"
-                id="balance"
-            >
-                ₦—
-            </div>
-
-            <div class="balance-bottom">
-
-                <div
-                    class="vip-badge"
-                    id="vipBadge"
-                >
+                <div class="vip-level" id="vipLevel">
                     VIP 0
                 </div>
 
-                <a
-                    href="withdraw.html"
-                    class="balance-link"
-                >
-                    Withdraw
-                </a>
+            </div>
+
+
+            <div class="vip-details">
+
+                <div class="vip-detail">
+
+                    <small>Daily Tasks</small>
+
+                    <strong id="dailyTaskLimit">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="vip-detail">
+
+                    <small>Task Reward</small>
+
+                    <strong id="taskReward">
+                        ₦—
+                    </strong>
+
+                </div>
 
             </div>
 
-        </section>
+        </div>
+
+    </section>
 
 
-        <!-- QUICK ACTIONS -->
+    <!-- EARNINGS -->
 
-        <div class="quick-grid">
+    <section class="section">
 
-            <a
-                href="vip.html"
-                class="quick-card"
-            >
-
-                <div class="quick-icon">
-                    &#9733;
-                </div>
-
-                <h3>
-                    VIP Upgrade
-                </h3>
-
-                <p>
-                    View VIP levels
-                </p>
-
-            </a>
+        <div class="section-title">
+            <h2>Earnings Overview</h2>
+        </div>
 
 
-            <a
-                href="withdraw.html"
-                class="quick-card"
-            >
+        <div class="earnings-grid">
 
-                <div class="quick-icon">
-                    &#8599;
-                </div>
+            <div class="earning">
 
-                <h3>
-                    Withdraw
-                </h3>
+                <small>Total Earned</small>
 
-                <p>
-                    Bank withdrawal
-                </p>
+                <strong id="totalEarned">
+                    ₦—
+                </strong>
 
-            </a>
+            </div>
 
 
-            <a
-                href="tasks.html"
-                class="quick-card"
-            >
+            <div class="earning">
 
-                <div class="quick-icon">
-                    &#10003;
-                </div>
+                <small>Today's Earnings</small>
 
-                <h3>
-                    Earn Tasks
-                </h3>
+                <strong id="todayEarned">
+                    ₦—
+                </strong>
 
-                <p>
-                    Complete available tasks
-                </p>
-
-            </a>
+            </div>
 
 
-            <a
-                href="referral.html"
-                class="quick-card"
-            >
+            <div class="earning">
 
-                <div class="quick-icon">
-                    &#9829;
-                </div>
+                <small>Task Earnings</small>
 
-                <h3>
-                    Refer & Earn
-                </h3>
+                <strong id="taskEarned">
+                    ₦—
+                </strong>
 
-                <p>
-                    Invite other members
-                </p>
-
-            </a>
+            </div>
 
 
-            <a
-                href="#luckyDraw"
-                class="quick-card"
-            >
+            <div class="earning">
 
-                <div class="quick-icon">
-                    &#9733;
-                </div>
+                <small>Referral Earnings</small>
 
-                <h3>
-                    Lucky Draw
-                </h3>
+                <strong id="referralEarned">
+                    ₦—
+                </strong>
 
-                <p>
-                    Use your daily spins
-                </p>
+            </div>
 
-            </a>
+
+            <div class="earning">
+
+                <small>Lucky Draw</small>
+
+                <strong id="luckyEarned">
+                    ₦—
+                </strong>
+
+            </div>
+
+
+            <div class="earning">
+
+                <small>Total Withdrawn</small>
+
+                <strong id="withdrawn">
+                    ₦—
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LUCKY DRAW -->
+
+    <section class="section" id="luckyDraw">
+
+        <div class="section-title">
+
+            <h2>Lucky Draw</h2>
 
         </div>
 
 
-        <!-- VIP STATUS -->
+        <div class="lucky-card">
 
-        <section class="section">
+            <div class="lucky-header">
 
-            <div class="section-title">
+                <div>
 
-                <h2>
-                    My VIP Status
-                </h2>
+                    <h3>Daily Lucky Draw</h3>
 
-                <a href="vip.html">
-                    View all
-                </a>
-
-            </div>
-
-
-            <div class="vip-card">
-
-                <div class="vip-info">
-
-                    <small>
-                        Current level
-                    </small>
-
-                    <h3 id="vipLevel">
-                        VIP 0
-                    </h3>
-
-                    <p id="vipDescription">
-                        Upgrade to unlock available earning features.
+                    <p>
+                        Use your available daily spins for a chance to receive a VDC reward.
                     </p>
 
                 </div>
 
-
-                <a
-                    href="vip.html"
-                    class="vip-button"
-                >
-                    Upgrade
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- LUCKY DRAW -->
-
-        <section
-            class="section"
-            id="luckyDraw"
-        >
-
-            <div class="section-title">
-
-                <h2>
-                    Lucky Draw
-                </h2>
-
-            </div>
-
-
-            <div class="lucky-card">
-
-                <div class="lucky-top">
-
-                    <div>
-
-                        <div class="lucky-title">
-                            Daily Lucky Draw
-                        </div>
-
-                        <div class="lucky-subtitle">
-                            Use your available free daily spins for a chance to receive a VDC reward.
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="spin-count"
-                        id="spinCount"
-                    >
-                        Loading spins...
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="lucky-result empty"
-                    id="luckyResult"
-                >
-                    Your Lucky Draw result will appear here.
-                </div>
-
-
-                <button
-                    class="spin-btn"
-                    id="spinButton"
-                    onclick="spinLuckyDraw()"
-                    disabled
-                >
-                    Loading...
-                </button>
-
-
-                <div class="lucky-note">
-                    Rewards are determined securely by the VDC server.
+                <div class="spin-count" id="spinCount">
+                    Spins: —
                 </div>
 
             </div>
 
-        </section>
 
-
-        <!-- EARNINGS -->
-
-        <section class="section">
-
-            <div class="section-title">
-
-                <h2>
-                    Earnings Overview
-                </h2>
-
+            <div class="lucky-result" id="luckyResult">
+                Select Spin to play.
             </div>
 
 
-            <div class="stats-grid">
+            <button
+                type="button"
+                class="spin-button"
+                id="spinButton"
+                onclick="spinLuckyDraw()"
+            >
+                Spin Lucky Draw
+            </button>
 
-                <div class="stat">
+        </div>
 
-                    <div class="stat-label">
-                        Total Earned
-                    </div>
-
-                    <div
-                        class="stat-value purple"
-                        id="totalEarned"
-                    >
-                        ₦—
-                    </div>
-
-                </div>
+    </section>
 
 
-                <div class="stat">
+    <!-- WAYS TO EARN -->
 
-                    <div class="stat-label">
-                        Today's Earnings
-                    </div>
+    <section class="section">
 
-                    <div
-                        class="stat-value orange"
-                        id="todayEarned"
-                    >
-                        ₦—
-                    </div>
+        <div class="section-title">
 
-                </div>
+            <h2>Ways to Earn</h2>
 
+            <a href="earn.html">
+                View all
+            </a>
 
-                <div class="stat">
-
-                    <div class="stat-label">
-                        Task Earnings
-                    </div>
-
-                    <div
-                        class="stat-value green"
-                        id="taskEarned"
-                    >
-                        ₦—
-                    </div>
-
-                </div>
+        </div>
 
 
-                <div class="stat">
-
-                    <div class="stat-label">
-                        Referral Earnings
-                    </div>
-
-                    <div
-                        class="stat-value purple"
-                        id="referralEarned"
-                    >
-                        ₦—
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-label">
-                        Lucky Draw
-                    </div>
-
-                    <div
-                        class="stat-value orange"
-                        id="luckyEarned"
-                    >
-                        ₦—
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div class="stat-label">
-                        Total Withdrawn
-                    </div>
-
-                    <div
-                        class="stat-value green"
-                        id="totalWithdrawn"
-                    >
-                        ₦—
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- EARN -->
-
-        <section class="earn-banner">
+        <div class="ways-card">
 
             <h3>
-                Ways to Earn
+                More ways to earn VDC rewards
             </h3>
 
             <p>
-                Complete available tasks, referrals and other eligible VDC earning activities.
-                Your actual earnings will be displayed from your account data.
+                Complete eligible tasks, participate in available activities,
+                refer new users and use other earning features available to your
+                account.
             </p>
 
-            <a
-                href="ways.html"
-                class="earn-btn"
-            >
+            <a href="earn.html" class="ways-btn">
                 Explore Ways to Earn
             </a>
 
-        </section>
+        </div>
+
+    </section>
 
 
-        <!-- ACTIVITY -->
+    <!-- RECENT ACTIVITY -->
 
-        <section class="section">
+    <section class="section">
 
-            <div class="section-title">
+        <div class="section-title">
 
-                <h2>
-                    Recent Activity
-                </h2>
+            <h2>Recent Activity</h2>
 
-                <a href="transactions.html">
-                    History
-                </a>
+            <a href="history.html">
+                View history
+            </a>
 
+        </div>
+
+
+        <div class="activity" id="activityList">
+
+            <div class="empty">
+                Loading activity...
             </div>
 
+        </div>
 
-            <div
-                class="activity-empty"
-                id="activity"
-            >
-                Your account activity will appear here.
-            </div>
+    </section>
 
-        </section>
-
-    </main>
+</main>
 
 </div>
 
@@ -1047,73 +956,62 @@ a{
 
 <nav class="bottom-nav">
 
-    <a
-        href="dashboard.html"
-        class="nav-item active"
-    >
-        <span class="nav-icon">
-            &#8962;
-        </span>
+    <a href="dashboard.html" class="nav-item active">
 
-        <span>
-            Home
-        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 11l9-8 9 8"/>
+            <path d="M5 10v10h14V10"/>
+        </svg>
+
+        <span>Home</span>
+
     </a>
 
 
-    <a
-        href="tasks.html"
-        class="nav-item"
-    >
-        <span class="nav-icon">
-            &#10003;
-        </span>
+    <a href="tasks.html" class="nav-item">
 
-        <span>
-            Tasks
-        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L21 5"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+
+        <span>Tasks</span>
+
     </a>
 
 
-    <a
-        href="vip.html"
-        class="nav-item"
-    >
-        <span class="nav-icon">
-            &#9733;
-        </span>
+    <a href="vip.html" class="nav-item">
 
-        <span>
-            VIP
-        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
+        </svg>
+
+        <span>VIP</span>
+
     </a>
 
 
-    <a
-        href="ways.html"
-        class="nav-item"
-    >
-        <span class="nav-icon">
-            &#9889;
-        </span>
+    <a href="earn.html" class="nav-item">
 
-        <span>
-            Earn
-        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v18"/>
+            <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+
+        <span>Earn</span>
+
     </a>
 
 
-    <a
-        href="profile.html"
-        class="nav-item"
-    >
-        <span class="nav-icon">
-            &#9679;
-        </span>
+    <a href="profile.html" class="nav-item">
 
-        <span>
-            My
-        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+
+        <span>My</span>
+
     </a>
 
 </nav>
@@ -1121,19 +1019,25 @@ a{
 
 <script>
 
+/* =========================================================
+   SUPABASE
+========================================================= */
+
 const SUPABASE_URL =
     "https://wiorfxlodrcawxdeowbg.supabase.co";
 
 const SUPABASE_KEY =
     "sb_publishable_b3FIKdf_PUKP0Ii8ZbMREw_CVqOQv9g";
 
-const { createClient } = supabase;
-
-const db = createClient(
+const db = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
 
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let currentUser = null;
 let currentVip = 0;
@@ -1142,301 +1046,319 @@ let spinsToday = 0;
 
 
 /* =========================================================
-   NAIRA FORMAT
+   HELPERS
 ========================================================= */
 
-function naira(value){
+function money(value){
 
-    if(
-        value === null ||
-        value === undefined ||
-        Number.isNaN(Number(value))
-    ){
-        return "₦—";
-    }
+    const number = Number(value || 0);
 
-    return "₦" + Number(value).toLocaleString(
+    return "₦" + number.toLocaleString(
         "en-NG",
         {
-            minimumFractionDigits:0,
+            minimumFractionDigits:2,
             maximumFractionDigits:2
         }
     );
+}
 
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+function formatDate(date){
+
+    if(!date) return "";
+
+    return new Date(date).toLocaleString(
+        "en-NG",
+        {
+            day:"numeric",
+            month:"short",
+            hour:"numeric",
+            minute:"2-digit"
+        }
+    );
 }
 
 
 /* =========================================================
-   TODAY START
+   AUTH
 ========================================================= */
 
-function todayStart(){
+async function loadDashboard(){
 
-    const now = new Date();
+    const {
+        data:{
+            user
+        },
+        error
+    } = await db.auth.getUser();
 
-    return new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-    ).toISOString();
+    if(error || !user){
 
+        window.location.href = "auth.html";
+
+        return;
+    }
+
+    currentUser = user;
+
+    await loadProfile();
+    await loadWallet();
+    await loadVip();
+    await loadLuckyDraw();
+    await loadEarnings();
+    await loadActivity();
 }
 
 
 /* =========================================================
-   LOAD PROFILE
+   PROFILE
 ========================================================= */
 
 async function loadProfile(){
 
-    const { data:profile } = await db
+    const {
+        data,
+        error
+    } = await db
         .from("profiles")
-        .select("full_name")
-        .eq("id",currentUser.id)
+        .select("*")
+        .eq("id", currentUser.id)
         .maybeSingle();
 
-    if(profile){
+    if(error){
 
-        document.getElementById("userName").textContent =
-            profile.full_name || "VDC Member";
+        console.error(error);
 
+        return;
     }
 
+    if(data){
+
+        const name =
+            data.full_name ||
+            "VDC Member";
+
+        document.getElementById("welcomeName")
+            .textContent = name;
+    }
 }
 
 
 /* =========================================================
-   LOAD WALLET
+   WALLET
 ========================================================= */
 
 async function loadWallet(){
 
-    const { data:wallet } = await db
+    const {
+        data,
+        error
+    } = await db
         .from("wallets")
         .select("balance,total_earned")
-        .eq("user_id",currentUser.id)
+        .eq("user_id", currentUser.id)
         .maybeSingle();
 
-    if(!wallet){
+    if(error){
+
+        console.error(error);
+
         return;
     }
 
-    document.getElementById("balance").textContent =
-        naira(wallet.balance);
+    document.getElementById("balance")
+        .textContent = money(data?.balance);
 
-    document.getElementById("totalEarned").textContent =
-        naira(wallet.total_earned);
-
+    document.getElementById("totalEarned")
+        .textContent = money(data?.total_earned);
 }
 
 
 /* =========================================================
-   LOAD VIP
+   VIP
 ========================================================= */
 
 async function loadVip(){
 
-    const { data:userVip,error } = await db
+    const {
+        data,
+        error
+    } = await db
         .from("user_vips")
         .select(`
-            id,
             vip_level_id,
             status,
-            vip_levels (
+            vip_levels(
                 level_number,
                 name,
                 task_reward,
                 daily_task_limit
             )
         `)
-        .eq("user_id",currentUser.id)
+        .eq("user_id", currentUser.id)
         .eq("status","active")
-        .order("vip_level_id",{ascending:false})
-        .limit(1)
         .maybeSingle();
 
     if(error){
 
-        console.error("VIP error:",error);
-        return;
+        console.error(error);
 
+        currentVip = 0;
+
+        return;
     }
 
 
-    if(userVip && userVip.vip_levels){
+    if(data && data.vip_levels){
 
         currentVip =
-            Number(userVip.vip_levels.level_number || 0);
+            Number(
+                data.vip_levels.level_number
+            );
 
+        document.getElementById("vipName")
+            .textContent =
+            data.vip_levels.name ||
+            `VIP ${currentVip}`;
 
-        document.getElementById("vipBadge").textContent =
-            "VIP " + currentVip;
+        document.getElementById("vipLevel")
+            .textContent =
+            `VIP ${currentVip}`;
 
+        document.getElementById("dailyTaskLimit")
+            .textContent =
+            data.vip_levels.daily_task_limit;
 
-        document.getElementById("vipLevel").textContent =
-            "VIP " + currentVip;
-
-
-        if(currentVip === 0){
-
-            document.getElementById("vipDescription").textContent =
-                "Free VIP access with available daily earning activities.";
-
-        }else{
-
-            document.getElementById("vipDescription").textContent =
-                naira(userVip.vip_levels.task_reward) +
-                " max task reward • " +
-                userVip.vip_levels.daily_task_limit +
-                " tasks/day";
-
-        }
+        document.getElementById("taskReward")
+            .textContent =
+            money(data.vip_levels.task_reward);
 
     }else{
 
         currentVip = 0;
 
-        document.getElementById("vipBadge").textContent =
-            "VIP 0";
+        document.getElementById("vipName")
+            .textContent = "Free VIP";
 
-        document.getElementById("vipLevel").textContent =
-            "VIP 0";
+        document.getElementById("vipLevel")
+            .textContent = "VIP 0";
 
+        document.getElementById("dailyTaskLimit")
+            .textContent = "5";
+
+        document.getElementById("taskReward")
+            .textContent = money(150);
     }
-
 }
 
 
 /* =========================================================
-   LOAD LUCKY DRAW SETTINGS + SPINS
+   LUCKY DRAW
 ========================================================= */
 
 async function loadLuckyDraw(){
 
-    const { data:settings,error:settingsError } = await db
+    const {
+        data:settings,
+        error:settingsError
+    } = await db
         .from("lucky_draw_settings")
         .select("*")
-        .order("id",{ascending:false})
-        .limit(1)
+        .eq("id",1)
         .maybeSingle();
 
 
     if(settingsError){
 
-        console.error(
-            "Lucky Draw settings error:",
-            settingsError
-        );
-
-        setLuckyDrawClosed(
-            "Lucky Draw settings could not be loaded."
-        );
+        console.error(settingsError);
 
         return;
-
     }
 
 
     if(!settings || !settings.enabled){
 
-        setLuckyDrawClosed(
-            "Lucky Draw is currently unavailable."
-        );
+        dailySpinLimit = 0;
+
+        document.getElementById("spinCount")
+            .textContent = "Unavailable";
+
+        document.getElementById("spinButton")
+            .disabled = true;
+
+        document.getElementById("luckyResult")
+            .textContent =
+            "Lucky Draw is currently unavailable.";
 
         return;
-
     }
 
 
+    const limitField =
+        currentVip === 0
+            ? "free_daily_spins"
+            : `daily_spins_vip${currentVip}`;
+
+
     dailySpinLimit =
-        getDailySpinLimit(settings,currentVip);
+        Number(settings[limitField] || 0);
 
 
-    const { count,error:countError } = await db
+    const start =
+        new Date();
+
+    start.setHours(0,0,0,0);
+
+
+    const {
+        count,
+        error:countError
+    } = await db
         .from("lucky_draw_results")
-        .select("id",{count:"exact",head:true})
+        .select("*",{count:"exact",head:true})
         .eq("user_id",currentUser.id)
-        .gte("created_at",todayStart());
+        .gte("created_at",start.toISOString());
 
 
     if(countError){
 
-        console.error(
-            "Lucky Draw count error:",
-            countError
-        );
+        console.error(countError);
 
         spinsToday = 0;
 
     }else{
 
         spinsToday = Number(count || 0);
-
     }
 
 
-    updateSpinUI();
-
+    updateLuckyDrawUI();
 }
 
 
-/* =========================================================
-   GET DAILY SPIN LIMIT
-========================================================= */
-
-function getDailySpinLimit(settings,vip){
-
-    const limits = {
-
-        0:Number(settings.free_daily_spins || 0),
-
-        1:Number(settings.daily_spins_vip1 || 0),
-
-        2:Number(settings.daily_spins_vip2 || 0),
-
-        3:Number(settings.daily_spins_vip3 || 0),
-
-        4:Number(settings.daily_spins_vip4 || 0),
-
-        5:Number(settings.daily_spins_vip5 || 0),
-
-        6:Number(settings.daily_spins_vip6 || 0),
-
-        7:Number(settings.daily_spins_vip7 || 0),
-
-        8:Number(settings.daily_spins_vip8 || 0),
-
-        9:Number(settings.daily_spins_vip9 || 0),
-
-        10:Number(settings.daily_spins_vip10 || 0),
-
-        11:Number(settings.daily_spins_vip11 || 0),
-
-        12:Number(settings.daily_spins_vip12 || 0)
-
-    };
-
-    return limits[vip] || 0;
-
-}
-
-
-/* =========================================================
-   UPDATE SPIN UI
-========================================================= */
-
-function updateSpinUI(){
+function updateLuckyDrawUI(){
 
     const remaining =
         Math.max(
-            dailySpinLimit - spinsToday,
-            0
+            0,
+            dailySpinLimit - spinsToday
         );
 
 
-    document.getElementById("spinCount").textContent =
-        remaining +
-        (remaining === 1 ? " spin left" : " spins left");
+    document.getElementById("spinCount")
+        .textContent =
+        `Spins: ${remaining}`;
 
 
     const button =
@@ -1448,7 +1370,7 @@ function updateSpinUI(){
         button.disabled = true;
 
         button.textContent =
-            "Daily Limit Reached";
+            "Daily Spins Used";
 
     }else{
 
@@ -1456,33 +1378,7 @@ function updateSpinUI(){
 
         button.textContent =
             "Spin Lucky Draw";
-
     }
-
-}
-
-
-/* =========================================================
-   LUCKY DRAW CLOSED UI
-========================================================= */
-
-function setLuckyDrawClosed(message){
-
-    dailySpinLimit = 0;
-    spinsToday = 0;
-
-    document.getElementById("spinCount").textContent =
-        "Unavailable";
-
-    document.getElementById("spinButton").disabled =
-        true;
-
-    document.getElementById("spinButton").textContent =
-        "Lucky Draw Unavailable";
-
-    document.getElementById("luckyResult").textContent =
-        message;
-
 }
 
 
@@ -1492,553 +1388,255 @@ function setLuckyDrawClosed(message){
 
 async function spinLuckyDraw(){
 
-    if(!currentUser){
-        return;
-    }
-
-
-    if(spinsToday >= dailySpinLimit){
-
-        updateSpinUI();
-        return;
-
-    }
-
-
     const button =
         document.getElementById("spinButton");
 
-    const resultBox =
-        document.getElementById("luckyResult");
+    if(button.disabled) return;
 
 
     button.disabled = true;
 
-    button.textContent =
-        "Processing...";
+    button.textContent = "Spinning...";
 
 
-    resultBox.className =
-        "lucky-result";
-
-    resultBox.textContent =
-        "Your Lucky Draw is being processed securely...";
+    document.getElementById("luckyResult")
+        .textContent = "Processing your spin...";
 
 
-    try{
-
-        const { data,error } =
-            await db.rpc("enter_lucky_draw");
-
-
-        if(error){
-
-            console.error(
-                "Lucky Draw error:",
-                error
-            );
-
-            throw error;
-
-        }
+    const {
+        data,
+        error
+    } = await db.rpc(
+        "enter_lucky_draw"
+    );
 
 
-        const prize =
-            Number(data || 0);
+    if(error){
+
+        console.error(error);
+
+        document.getElementById("luckyResult")
+            .textContent =
+            error.message ||
+            "Unable to process the spin.";
+
+        updateLuckyDrawUI();
+
+        return;
+    }
 
 
-        spinsToday += 1;
+    const prize =
+        Number(data || 0);
 
 
-        if(prize > 0){
-
-            resultBox.className =
-                "lucky-result win";
-
-            resultBox.textContent =
-                "Congratulations. You received " +
-                naira(prize) +
-                ".";
-
-        }else{
-
-            resultBox.className =
-                "lucky-result";
-
-            resultBox.textContent =
-                "This spin did not produce a cash reward. Try again when you have another available spin.";
-
-        }
+    spinsToday++;
 
 
-        updateSpinUI();
+    if(prize > 0){
+
+        document.getElementById("luckyResult")
+            .textContent =
+            `You received ${money(prize)}.`;
+
+    }else{
+
+        document.getElementById("luckyResult")
+            .textContent =
+            "No reward this time. Try again when you have another spin.";
+    }
 
 
-        /* Refresh actual wallet from database */
-
-        await loadWallet();
+    updateLuckyDrawUI();
 
 
-        /* Refresh Lucky Draw earnings */
+    await loadWallet();
+    await loadEarnings();
+}
 
-        await loadLuckyDrawEarnings();
+
+/* =========================================================
+   EARNINGS
+========================================================= */
+
+async function loadEarnings(){
+
+    const {
+        data,
+        error
+    } = await db
+        .from("transactions")
+        .select("type,amount,created_at")
+        .eq("user_id",currentUser.id)
+        .order("created_at",{ascending:false});
 
 
-    }catch(error){
+    if(error){
 
-        let message =
-            error?.message ||
-            "Unable to complete Lucky Draw.";
+        console.error(error);
+
+        return;
+    }
+
+
+    let today = 0;
+    let task = 0;
+    let referral = 0;
+    let lucky = 0;
+    let withdrawn = 0;
+
+
+    const start =
+        new Date();
+
+    start.setHours(0,0,0,0);
+
+
+    (data || []).forEach(transaction => {
+
+        const amount =
+            Number(transaction.amount || 0);
+
 
         if(
-            message.toLowerCase().includes(
-                "daily lucky draw limit"
-            )
+            transaction.created_at &&
+            new Date(transaction.created_at) >= start &&
+            amount > 0
         ){
 
-            spinsToday = dailySpinLimit;
-
+            today += amount;
         }
 
 
-        resultBox.className =
-            "lucky-result";
-
-        resultBox.textContent =
-            message;
+        const type =
+            String(transaction.type || "")
+                .toLowerCase();
 
 
-        updateSpinUI();
+        if(type === "task"){
+            task += amount;
+        }
 
-    }
+        if(type === "referral"){
+            referral += amount;
+        }
 
+        if(type === "lucky_draw"){
+            lucky += amount;
+        }
+
+        if(type === "withdrawal"){
+            withdrawn += Math.abs(amount);
+        }
+
+    });
+
+
+    document.getElementById("todayEarned")
+        .textContent = money(today);
+
+    document.getElementById("taskEarned")
+        .textContent = money(task);
+
+    document.getElementById("referralEarned")
+        .textContent = money(referral);
+
+    document.getElementById("luckyEarned")
+        .textContent = money(lucky);
+
+    document.getElementById("withdrawn")
+        .textContent = money(withdrawn);
 }
 
 
 /* =========================================================
-   LUCKY DRAW EARNINGS
-========================================================= */
-
-async function loadLuckyDrawEarnings(){
-
-    const { data,error } = await db
-        .from("lucky_draw_results")
-        .select("prize")
-        .eq("user_id",currentUser.id);
-
-
-    if(error){
-
-        console.error(
-            "Lucky Draw earnings error:",
-            error
-        );
-
-        return;
-
-    }
-
-
-    const total =
-        (data || []).reduce(
-            (sum,row) =>
-                sum + Number(row.prize || 0),
-            0
-        );
-
-
-    document.getElementById("luckyEarned").textContent =
-        naira(total);
-
-}
-
-
-/* =========================================================
-   LOAD TODAY'S EARNINGS
-========================================================= */
-
-async function loadTodayEarnings(){
-
-    const { data,error } = await db
-        .from("transactions")
-        .select("amount,type,created_at")
-        .eq("user_id",currentUser.id)
-        .gte("created_at",todayStart());
-
-
-    if(error){
-
-        console.error(
-            "Today's earnings error:",
-            error
-        );
-
-        return;
-
-    }
-
-
-    const earnings =
-        (data || []).reduce(
-            (sum,row) => {
-
-                const type =
-                    String(row.type || "")
-                        .toLowerCase();
-
-                const amount =
-                    Number(row.amount || 0);
-
-
-                if(
-                    amount > 0 &&
-                    type !== "withdrawal"
-                ){
-
-                    return sum + amount;
-
-                }
-
-                return sum;
-
-            },
-            0
-        );
-
-
-    document.getElementById("todayEarned").textContent =
-        naira(earnings);
-
-}
-
-
-/* =========================================================
-   LOAD TASK EARNINGS
-========================================================= */
-
-async function loadTaskEarnings(){
-
-    const { data,error } = await db
-        .from("transactions")
-        .select("amount,type")
-        .eq("user_id",currentUser.id);
-
-
-    if(error){
-        return;
-    }
-
-
-    const total =
-        (data || []).reduce(
-            (sum,row) => {
-
-                const type =
-                    String(row.type || "")
-                        .toLowerCase();
-
-                if(
-                    type === "task" ||
-                    type === "task_reward"
-                ){
-
-                    return sum +
-                        Number(row.amount || 0);
-
-                }
-
-                return sum;
-
-            },
-            0
-        );
-
-
-    document.getElementById("taskEarned").textContent =
-        naira(total);
-
-}
-
-
-/* =========================================================
-   LOAD REFERRAL EARNINGS
-========================================================= */
-
-async function loadReferralEarnings(){
-
-    const { data,error } = await db
-        .from("referral_rewards")
-        .select("amount,status")
-        .eq("user_id",currentUser.id);
-
-
-    if(error){
-        return;
-    }
-
-
-    const total =
-        (data || []).reduce(
-            (sum,row) =>
-                sum +
-                Number(row.amount || 0),
-            0
-        );
-
-
-    document.getElementById("referralEarned").textContent =
-        naira(total);
-
-}
-
-
-/* =========================================================
-   LOAD WITHDRAWALS
-========================================================= */
-
-async function loadWithdrawals(){
-
-    const { data,error } = await db
-        .from("withdrawals")
-        .select("amount,status")
-        .eq("user_id",currentUser.id)
-        .eq("status","paid");
-
-
-    if(error){
-        return;
-    }
-
-
-    const withdrawn =
-        (data || []).reduce(
-            (sum,row) =>
-                sum +
-                Number(row.amount || 0),
-            0
-        );
-
-
-    document.getElementById("totalWithdrawn").textContent =
-        naira(withdrawn);
-
-}
-
-
-/* =========================================================
-   LOAD RECENT ACTIVITY
+   RECENT ACTIVITY
 ========================================================= */
 
 async function loadActivity(){
 
-    const { data,error } = await db
+    const {
+        data,
+        error
+    } = await db
         .from("transactions")
-        .select(
-            "type,amount,description,created_at"
-        )
+        .select("type,amount,description,created_at")
         .eq("user_id",currentUser.id)
         .order("created_at",{ascending:false})
-        .limit(5);
+        .limit(8);
 
 
     if(error){
+
+        console.error(error);
+
+        document.getElementById("activityList")
+            .innerHTML =
+            `<div class="empty">
+                Unable to load activity.
+            </div>`;
+
         return;
     }
-
-
-    const activity =
-        document.getElementById("activity");
 
 
     if(!data || data.length === 0){
 
-        activity.textContent =
-            "Your account activity will appear here.";
+        document.getElementById("activityList")
+            .innerHTML =
+            `<div class="empty">
+                No activity yet.
+            </div>`;
 
         return;
-
     }
 
 
-    activity.innerHTML =
-        data.map(row => {
+    document.getElementById("activityList")
+        .innerHTML =
+        data.map(item => {
 
             const amount =
-                Number(row.amount || 0);
+                Number(item.amount || 0);
 
-            const sign =
-                amount > 0 ? "+" : "";
-
-            const description =
-                row.description ||
-                row.type ||
-                "Account transaction";
+            const type =
+                String(item.type || "activity")
+                    .replaceAll("_"," ");
 
 
             return `
-                <div style="
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-                    gap:10px;
-                    padding:10px 0;
-                    border-bottom:1px solid var(--border);
-                ">
+                <div class="activity-item">
 
-                    <div style="
-                        text-align:left;
-                        min-width:0;
-                    ">
+                    <div class="activity-left">
 
-                        <div style="
-                            font-size:12px;
-                            font-weight:700;
-                        ">
-                            ${escapeHtml(description)}
-                        </div>
+                        <strong>
+                            ${escapeHtml(
+                                item.description ||
+                                type
+                            )}
+                        </strong>
 
-                        <div style="
-                            font-size:10px;
-                            color:var(--muted);
-                            margin-top:3px;
-                        ">
-                            ${formatDate(row.created_at)}
-                        </div>
+                        <small>
+                            ${formatDate(item.created_at)}
+                        </small>
 
                     </div>
 
-                    <div style="
-                        font-size:12px;
-                        font-weight:800;
-                        color:${amount >= 0 ? "var(--green)" : "var(--orange)"};
-                        white-space:nowrap;
-                    ">
-                        ${sign}${naira(amount)}
+                    <div class="activity-amount">
+                        ${amount >= 0 ? "+" : ""}
+                        ${money(amount)}
                     </div>
 
                 </div>
             `;
 
         }).join("");
-
 }
 
 
 /* =========================================================
-   HELPERS
+   START
 ========================================================= */
-
-function escapeHtml(value){
-
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-function formatDate(value){
-
-    if(!value){
-        return "";
-    }
-
-    return new Date(value).toLocaleString(
-        "en-NG",
-        {
-            day:"numeric",
-            month:"short",
-            hour:"2-digit",
-            minute:"2-digit"
-        }
-    );
-
-}
-
-
-/* =========================================================
-   NOTIFICATIONS
-========================================================= */
-
-function openNotifications(){
-
-    window.location.href =
-        "notifications.html";
-
-}
-
-
-/* =========================================================
-   MAIN DASHBOARD LOADER
-========================================================= */
-
-async function loadDashboard(){
-
-    try{
-
-        const {
-            data:{session}
-        } = await db.auth.getSession();
-
-
-        if(!session){
-
-            window.location.href =
-                "auth.html";
-
-            return;
-
-        }
-
-
-        currentUser =
-            session.user;
-
-
-        await loadProfile();
-
-        await loadWallet();
-
-        await loadVip();
-
-        await loadLuckyDraw();
-
-        await loadLuckyDrawEarnings();
-
-        await loadTodayEarnings();
-
-        await loadTaskEarnings();
-
-        await loadReferralEarnings();
-
-        await loadWithdrawals();
-
-        await loadActivity();
-
-
-        document.getElementById(
-            "loading"
-        ).style.display = "none";
-
-
-    }catch(error){
-
-        console.error(
-            "Dashboard error:",
-            error
-        );
-
-        document.getElementById(
-            "loading"
-        ).style.display = "none";
-
-    }
-
-}
-
 
 loadDashboard();
 
