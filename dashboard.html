@@ -3,1295 +3,894 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>VDC — Dashboard</title>
+<title>VDC Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
-    --purple:#6d28d9;
-    --purple-dark:#4c1d95;
-    --purple-light:#f3e8ff;
-    --orange:#f97316;
-    --orange-light:#fff7ed;
-    --green:#008751;
-    --bg:#faf9fc;
-    --card:#ffffff;
-    --text:#17121f;
-    --muted:#6b6474;
-    --border:#eee8f4;
-    --shadow:0 8px 28px rgba(40,20,70,.07);
+  --purple:#6d28d9;
+  --purple-dark:#4c1d95;
+  --purple-light:#f3e8ff;
+  --orange:#f97316;
+  --orange-light:#fff7ed;
+  --green:#008751;
+  --bg:#faf9fc;
+  --card:#fff;
+  --text:#17121f;
+  --muted:#6b6474;
+  --border:#eee8f4;
+  --shadow:0 10px 30px rgba(50,20,80,.08);
 }
 
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+*{box-sizing:border-box}
 
 body{
-    font-family:Inter,Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-}
-
-button,a{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 a{
-    text-decoration:none;
-    color:inherit;
+  color:inherit;
+  text-decoration:none;
 }
 
-.app{
-    width:100%;
-    max-width:760px;
-    margin:auto;
-    min-height:100vh;
-    padding-bottom:90px;
+button{
+  font:inherit;
 }
-
-/* HEADER */
 
 .header{
-    position:sticky;
-    top:0;
-    z-index:100;
-    height:64px;
-    background:rgba(255,255,255,.96);
-    backdrop-filter:blur(14px);
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 18px;
+  height:64px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  position:sticky;
+  top:0;
+  z-index:50;
 }
 
-.brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight:800;
-    color:var(--purple-dark);
-    font-size:21px;
+.logo{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:20px;
+  font-weight:900;
+  color:var(--purple-dark);
 }
 
-.brand-mark{
-    width:34px;
-    height:34px;
-    border-radius:11px;
-    background:linear-gradient(135deg,var(--purple),var(--orange));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:white;
-    font-weight:900;
+.logo-mark{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--purple),var(--orange));
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
 }
 
-.header-actions{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
 .icon-btn{
-    width:40px;
-    height:40px;
-    border:1px solid var(--border);
-    background:white;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--purple-dark);
+  width:40px;
+  height:40px;
+  border:0;
+  background:var(--purple-light);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:var(--purple-dark);
+  cursor:pointer;
 }
 
-.icon-btn svg{
-    width:20px;
-    height:20px;
-}
-
-/* MAIN */
-
-.main{
-    padding:20px 16px;
+.container{
+  width:min(760px,100%);
+  margin:auto;
+  padding:20px 16px 90px;
 }
 
 .welcome{
-    margin-bottom:18px;
+  margin-bottom:18px;
 }
 
 .welcome small{
-    color:var(--muted);
-    font-size:13px;
+  color:var(--muted);
+  font-size:13px;
 }
 
 .welcome h1{
-    margin-top:5px;
-    font-size:25px;
-    line-height:1.2;
+  margin:3px 0 0;
+  font-size:25px;
 }
 
-/* BALANCE */
-
 .balance-card{
-    background:linear-gradient(135deg,var(--purple-dark),var(--purple));
-    color:white;
-    border-radius:22px;
-    padding:22px;
-    box-shadow:0 15px 35px rgba(76,29,149,.22);
-    margin-bottom:16px;
+  background:linear-gradient(135deg,var(--purple-dark),var(--purple));
+  color:#fff;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  margin-bottom:16px;
 }
 
 .balance-label{
-    opacity:.82;
-    font-size:13px;
+  opacity:.82;
+  font-size:13px;
 }
 
 .balance{
-    font-size:34px;
-    font-weight:800;
-    margin:8px 0 18px;
+  font-size:31px;
+  font-weight:900;
+  margin:5px 0 18px;
 }
 
 .balance-actions{
-    display:flex;
-    gap:10px;
+  display:flex;
+  gap:10px;
 }
 
 .balance-actions a{
-    flex:1;
-    text-align:center;
-    background:white;
-    color:var(--purple-dark);
-    padding:11px;
-    border-radius:12px;
-    font-weight:700;
-    font-size:13px;
+  flex:1;
+  text-align:center;
+  padding:11px;
+  border-radius:12px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.2);
+  font-weight:700;
+  font-size:13px;
 }
 
-/* QUICK ACTIONS */
-
 .quick-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-    margin-bottom:18px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-bottom:18px;
 }
 
 .quick{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:17px;
-    padding:14px 8px;
-    text-align:center;
-    box-shadow:var(--shadow);
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:12px 5px;
+  text-align:center;
+  font-size:11px;
+  font-weight:700;
+  box-shadow:0 5px 18px rgba(30,10,50,.04);
 }
 
 .quick-icon{
-    width:38px;
-    height:38px;
-    margin:auto auto 8px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:var(--purple-light);
-    color:var(--purple);
+  width:34px;
+  height:34px;
+  margin:0 auto 7px;
+  border-radius:10px;
+  background:var(--purple-light);
+  color:var(--purple);
+  display:grid;
+  place-items:center;
 }
 
-.quick-icon svg{
-    width:19px;
-    height:19px;
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 7px 24px rgba(30,10,50,.045);
 }
 
-.quick span{
-    display:block;
-    font-size:11px;
-    font-weight:700;
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
 }
 
-/* SECTION */
-
-.section{
-    margin-top:20px;
+.card-head h2{
+  margin:0;
+  font-size:17px;
 }
 
-.section-title{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:11px;
+.card-head a{
+  color:var(--purple);
+  font-size:12px;
+  font-weight:800;
 }
 
-.section-title h2{
-    font-size:17px;
-}
-
-.section-title a{
-    color:var(--purple);
-    font-size:12px;
-    font-weight:700;
-}
-
-/* VIP */
-
-.vip-card{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:17px;
-    box-shadow:var(--shadow);
-}
-
-.vip-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.vip-box{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  background:var(--purple-light);
+  border-radius:15px;
+  padding:15px;
 }
 
 .vip-name{
-    font-weight:800;
-    color:var(--purple-dark);
+  font-weight:900;
+  color:var(--purple-dark);
 }
 
 .vip-level{
-    background:var(--purple-light);
-    color:var(--purple-dark);
-    padding:6px 10px;
-    border-radius:9px;
-    font-size:12px;
-    font-weight:800;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:3px;
 }
 
-.vip-details{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:15px;
+.vip-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
-.vip-detail{
-    background:#faf8fd;
-    border-radius:12px;
-    padding:11px;
+.stat{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
 }
 
-.vip-detail small{
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-    margin-bottom:4px;
+.stat small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-bottom:3px;
 }
 
-.vip-detail strong{
-    font-size:14px;
+.stat strong{
+  font-size:14px;
 }
 
-/* EARNINGS */
-
-.earnings-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
+.earn-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
 }
 
-.earning{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:15px;
-    box-shadow:var(--shadow);
+.earn-item{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:12px;
 }
 
-.earning small{
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-    margin-bottom:7px;
+.earn-item small{
+  color:var(--muted);
+  display:block;
+  font-size:11px;
 }
 
-.earning strong{
-    font-size:17px;
+.earn-item strong{
+  display:block;
+  margin-top:4px;
+  font-size:15px;
 }
 
-/* =========================================
-   SPORTY LUCKY WHEEL
-========================================= */
+/* =========================
+   LUCKY DRAW
+========================= */
 
 .lucky-card{
-    background:
-        radial-gradient(circle at 50% 20%,rgba(255,255,255,.13),transparent 34%),
-        linear-gradient(145deg,#24104e,#4c1d95 55%,#6d28d9);
-    color:white;
-    border-radius:24px;
-    padding:20px 16px 24px;
-    box-shadow:
-        0 18px 45px rgba(76,29,149,.25),
-        inset 0 1px rgba(255,255,255,.12);
-    overflow:hidden;
+  overflow:hidden;
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(255,255,255,.14),transparent 35%),
+    linear-gradient(145deg,#32106f,#6d28d9 55%,#4c1d95);
+  color:#fff;
+  border:none;
 }
 
-.lucky-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:12px;
-    margin-bottom:12px;
+.lucky-card .card-head h2{
+  color:#fff;
 }
 
-.lucky-top h3{
-    font-size:20px;
-    margin-bottom:5px;
+.lucky-sub{
+  font-size:12px;
+  color:rgba(255,255,255,.72);
+  margin-top:3px;
 }
 
-.lucky-top p{
-    font-size:12px;
-    line-height:1.5;
-    opacity:.78;
+.spin-info{
+  text-align:center;
+  margin:4px 0 14px;
+  font-size:13px;
+  color:rgba(255,255,255,.85);
 }
 
-.spin-count{
-    flex-shrink:0;
-    padding:8px 11px;
-    border-radius:10px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.15);
-    font-size:11px;
-    font-weight:700;
-}
-
-/* WHEEL */
-
-.wheel-stage{
-    position:relative;
-    width:min(330px,82vw);
-    aspect-ratio:1;
-    margin:14px auto 18px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.wheel-area{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 .wheel-pointer{
-    position:absolute;
-    top:-3px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:10;
-    width:0;
-    height:0;
-    border-left:14px solid transparent;
-    border-right:14px solid transparent;
-    border-top:30px solid #ffffff;
-    filter:drop-shadow(0 3px 4px rgba(0,0,0,.4));
+  width:0;
+  height:0;
+  border-left:12px solid transparent;
+  border-right:12px solid transparent;
+  border-top:26px solid var(--orange);
+  position:relative;
+  z-index:10;
+  margin-bottom:-7px;
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.35));
 }
 
-.wheel-ring{
-    position:absolute;
-    inset:0;
-    border-radius:50%;
-    padding:7px;
-    background:linear-gradient(
-        145deg,
-        #ffffff,
-        #d7c7ef,
-        #ffffff,
-        #a98bd3
-    );
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.35),
-        inset 0 0 0 2px rgba(255,255,255,.8);
+.wheel-frame{
+  width:min(310px,82vw);
+  height:min(310px,82vw);
+  border-radius:50%;
+  padding:9px;
+  background:linear-gradient(145deg,#fff,#d7c6f4);
+  box-shadow:
+    0 15px 35px rgba(0,0,0,.3),
+    inset 0 0 0 2px rgba(255,255,255,.7);
 }
 
 .wheel{
-    width:100%;
-    height:100%;
-    border-radius:50%;
-    position:relative;
-    overflow:hidden;
-    transform:rotate(0deg);
-    transition:transform 5s cubic-bezier(.12,.72,.16,1);
-    background:#6d28d9;
-    border:4px solid #35136d;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  position:relative;
+  overflow:hidden;
+  border:5px solid #21102f;
+  transition:transform 5s cubic-bezier(.12,.72,.12,1);
+  background:#6d28d9;
 }
 
 .wheel-center{
-    position:absolute;
-    width:70px;
-    height:70px;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    border-radius:50%;
-    z-index:5;
-    background:
-        radial-gradient(circle at 35% 30%,#ffffff,#ddd3ed 55%,#a990c6);
-    border:5px solid #3b176f;
-    box-shadow:
-        0 4px 12px rgba(0,0,0,.35),
-        inset 0 2px 5px rgba(255,255,255,.8);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.wheel-center span{
-    color:var(--purple-dark);
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:.5px;
-}
-
-.wheel-labels{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    z-index:2;
+  position:absolute;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:5;
+  background:linear-gradient(145deg,#fff,#ece3fa);
+  border:6px solid #32106f;
+  box-shadow:0 5px 15px rgba(0,0,0,.25);
+  display:grid;
+  place-items:center;
+  color:var(--purple-dark);
+  font-weight:1000;
+  font-size:13px;
 }
 
 .wheel-label{
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:76px;
-    margin-left:-38px;
-    margin-top:-12px;
-    text-align:center;
-    color:white;
-    font-size:11px;
-    font-weight:900;
-    text-shadow:0 2px 4px rgba(0,0,0,.45);
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:50%;
+  height:50%;
+  transform-origin:0% 100%;
+  pointer-events:none;
 }
 
-/* RESULT */
-
-.lucky-result{
-    min-height:54px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    margin:5px 0 14px;
-    padding:10px 14px;
-    border-radius:14px;
-    background:rgba(255,255,255,.09);
-    border:1px solid rgba(255,255,255,.1);
-    font-size:13px;
-    font-weight:700;
+.wheel-label span{
+  position:absolute;
+  left:25%;
+  bottom:5px;
+  width:90px;
+  transform:translateX(-50%);
+  text-align:center;
+  font-size:11px;
+  font-weight:900;
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.6);
 }
 
-/* SPIN */
-
-.spin-button{
-    width:100%;
-    border:0;
-    border-radius:15px;
-    padding:15px;
-    background:linear-gradient(180deg,#ffffff,#eee7f8);
-    color:var(--purple-dark);
-    font-size:15px;
-    font-weight:900;
-    letter-spacing:.5px;
-    box-shadow:
-        0 6px 0 #c8b9dc,
-        0 12px 22px rgba(0,0,0,.22);
-    transition:.15s;
+.spin-btn{
+  margin-top:20px;
+  width:min(250px,90%);
+  border:0;
+  border-radius:15px;
+  padding:14px;
+  background:linear-gradient(135deg,#fb923c,#f97316);
+  color:#fff;
+  font-weight:1000;
+  letter-spacing:.7px;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(249,115,22,.3);
 }
 
-.spin-button:active{
-    transform:translateY(4px);
-    box-shadow:
-        0 2px 0 #c8b9dc,
-        0 7px 13px rgba(0,0,0,.2);
+.spin-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
 }
 
-.spin-button:disabled{
-    opacity:.55;
-    cursor:not-allowed;
-    transform:none;
+.spin-result{
+  min-height:22px;
+  margin-top:12px;
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
 }
 
-.wheel-status{
-    text-align:center;
-    margin-top:11px;
-    font-size:10px;
-    opacity:.6;
+.error-box{
+  background:#fff1f2;
+  color:#be123c;
+  border:1px solid #fecdd3;
+  border-radius:12px;
+  padding:11px;
+  margin-top:12px;
+  font-size:12px;
+  display:none;
 }
 
-/* WAYS */
-
-.ways-card{
-    background:linear-gradient(135deg,#fff7ed,#fff);
-    border:1px solid #fed7aa;
-    border-radius:18px;
-    padding:17px;
-}
-
-.ways-card h3{
-    font-size:16px;
-    margin-bottom:6px;
-}
-
-.ways-card p{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.6;
-    margin-bottom:13px;
-}
-
-.ways-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    background:var(--orange);
-    color:white;
-    padding:10px 14px;
-    border-radius:11px;
-    font-size:12px;
-    font-weight:700;
-}
-
-/* ACTIVITY */
+/* activity */
 
 .activity{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:var(--shadow);
+  display:flex;
+  flex-direction:column;
+  gap:9px;
 }
 
-.activity-item{
-    padding:14px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+.activity-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
 }
 
-.activity-item:last-child{
-    border-bottom:0;
+.activity-row:last-child{
+  border-bottom:0;
 }
 
-.activity-left{
-    min-width:0;
+.activity-icon{
+  width:36px;
+  height:36px;
+  border-radius:11px;
+  background:var(--purple-light);
+  color:var(--purple);
+  display:grid;
+  place-items:center;
+  flex:none;
 }
 
-.activity-left strong{
-    display:block;
-    font-size:13px;
-    margin-bottom:3px;
+.activity-main{
+  flex:1;
 }
 
-.activity-left small{
-    color:var(--muted);
-    font-size:10px;
+.activity-main strong{
+  display:block;
+  font-size:13px;
+}
+
+.activity-main small{
+  color:var(--muted);
+  font-size:10px;
 }
 
 .activity-amount{
-    font-size:13px;
-    font-weight:800;
-    color:var(--green);
-    white-space:nowrap;
+  font-size:12px;
+  font-weight:900;
 }
 
 .empty{
-    padding:25px;
-    text-align:center;
-    color:var(--muted);
-    font-size:12px;
+  color:var(--muted);
+  font-size:12px;
+  padding:10px 0;
 }
-
-/* BOTTOM NAV */
 
 .bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:100%;
-    max-width:760px;
-    height:70px;
-    background:rgba(255,255,255,.97);
-    backdrop-filter:blur(14px);
-    border-top:1px solid var(--border);
-    display:grid;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#fff;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:center;
+  z-index:40;
+}
+
+.bottom-inner{
+  width:min(760px,100%);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.bottom-nav a{
+  text-align:center;
+  padding:9px 3px 8px;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+}
+
+.bottom-nav a.active{
+  color:var(--purple);
+}
+
+.bottom-nav svg{
+  display:block;
+  margin:auto auto 3px;
+}
+
+@media(max-width:520px){
+  .quick-grid{
     grid-template-columns:repeat(5,1fr);
-    z-index:100;
-}
+  }
 
-.nav-item{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:4px;
-    color:#8a8392;
-    font-size:10px;
-    font-weight:700;
-}
+  .quick{
+    font-size:9px;
+  }
 
-.nav-item.active{
-    color:var(--purple);
-}
-
-.nav-item svg{
-    width:20px;
-    height:20px;
-}
-
-@media(max-width:430px){
-
-    .quick-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .balance{
-        font-size:30px;
-    }
-
-    .main{
-        padding:18px 13px;
-    }
-
-    .wheel-stage{
-        width:min(315px,84vw);
-    }
-
-    .wheel-center{
-        width:62px;
-        height:62px;
-    }
+  .quick-icon{
+    width:30px;
+    height:30px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
 <header class="header">
-
-<a href="dashboard.html" class="brand">
-
-    <div class="brand-mark">V</div>
-
+  <a href="dashboard.html" class="logo">
+    <span class="logo-mark">V</span>
     <span>VDC</span>
+  </a>
 
-</a>
-
-<div class="header-actions">
-
-<a href="notifications.html" class="icon-btn">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-    <path d="M10 21h4"/>
-</svg>
-
-</a>
-
-</div>
-
+  <div class="header-right">
+    <button class="icon-btn" onclick="window.location.href='notifications.html'" aria-label="Notifications">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+        <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+      </svg>
+    </button>
+  </div>
 </header>
 
+<main class="container">
+
+  <section class="welcome">
+    <small>Welcome back</small>
+    <h1 id="memberName">VDC Member</h1>
+  </section>
+
+  <section class="balance-card">
+    <div class="balance-label">Available Balance</div>
+    <div class="balance" id="balance">₦—</div>
+
+    <div class="balance-actions">
+      <a href="withdraw.html">Withdraw</a>
+      <a href="vip.html">VIP Upgrade</a>
+    </div>
+  </section>
+
+  <section class="quick-grid">
+
+    <a class="quick" href="vip.html">
+      <div class="quick-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3l2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3z"/>
+        </svg>
+      </div>
+      VIP Upgrade
+    </a>
+
+    <a class="quick" href="withdraw.html">
+      <div class="quick-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3v13"/>
+          <path d="M7 11l5 5 5-5"/>
+          <path d="M5 21h14"/>
+        </svg>
+      </div>
+      Withdraw
+    </a>
+
+    <a class="quick" href="tasks.html">
+      <div class="quick-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="4" width="16" height="16" rx="3"/>
+          <path d="M8 12l2.5 2.5L16 9"/>
+        </svg>
+      </div>
+      Earn Tasks
+    </a>
+
+    <a class="quick" href="referrals.html">
+      <div class="quick-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="8" r="3"/>
+          <circle cx="17" cy="9" r="2.5"/>
+          <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+          <path d="M15 15c3.2 0 5.5 2 6 5"/>
+        </svg>
+      </div>
+      Refer & Earn
+    </a>
+
+    <a class="quick" href="#luckyDraw">
+      <div class="quick-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5l3 2"/>
+        </svg>
+      </div>
+      Lucky Draw
+    </a>
+
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>VIP Status</h2>
+      <a href="vip.html">View levels</a>
+    </div>
+
+    <div class="vip-box">
+      <div>
+        <div class="vip-name" id="vipName">Free VIP</div>
+        <div class="vip-level" id="vipLevel">VIP 0</div>
+      </div>
+
+      <div class="vip-stats">
+        <div class="stat">
+          <small>Daily Tasks</small>
+          <strong id="dailyTasks">—</strong>
+        </div>
+
+        <div class="stat">
+          <small>Task Reward</small>
+          <strong id="taskReward">₦—</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Earnings Overview</h2>
+    </div>
 
-<main class="main">
+    <div class="earn-grid">
+      <div class="earn-item">
+        <small>Total Earned</small>
+        <strong id="totalEarned">₦—</strong>
+      </div>
 
-<div class="welcome">
+      <div class="earn-item">
+        <small>Today's Earnings</small>
+        <strong id="todayEarned">₦—</strong>
+      </div>
 
-<small>Welcome back</small>
+      <div class="earn-item">
+        <small>Task Earnings</small>
+        <strong id="taskEarned">₦—</strong>
+      </div>
 
-<h1 id="welcomeName">
-    VDC Member
-</h1>
+      <div class="earn-item">
+        <small>Referral Earnings</small>
+        <strong id="referralEarned">₦—</strong>
+      </div>
 
-</div>
+      <div class="earn-item">
+        <small>Lucky Draw</small>
+        <strong id="luckyEarned">₦—</strong>
+      </div>
 
+      <div class="earn-item">
+        <small>Total Withdrawn</small>
+        <strong id="withdrawn">₦—</strong>
+      </div>
+    </div>
+  </section>
 
-<!-- BALANCE -->
+  <!-- LUCKY DRAW -->
 
-<section class="balance-card">
+  <section class="card lucky-card" id="luckyDraw">
 
-<div class="balance-label">
-    Available Balance
-</div>
+    <div class="card-head">
+      <div>
+        <h2>Daily Lucky Draw</h2>
+        <div class="lucky-sub">Spin the wheel for a chance to receive a VDC reward.</div>
+      </div>
+    </div>
 
-<div class="balance" id="balance">
-    ₦—
-</div>
+    <div class="spin-info">
+      Spins remaining: <strong id="spinsRemaining">—</strong>
+    </div>
 
-<div class="balance-actions">
+    <div class="wheel-area">
 
-<a href="withdraw.html">
-    Withdraw
-</a>
+      <div class="wheel-pointer"></div>
 
-<a href="vip.html">
-    VIP Upgrade
-</a>
+      <div class="wheel-frame">
+        <div class="wheel" id="wheel">
+          <div class="wheel-center">VDC</div>
+        </div>
+      </div>
 
-</div>
+      <button class="spin-btn" id="spinBtn">
+        SPIN
+      </button>
 
-</section>
+      <div class="spin-result" id="spinResult">
+        Spin the wheel to play.
+      </div>
 
+      <div class="error-box" id="luckyError"></div>
 
-<!-- QUICK ACTIONS -->
+    </div>
 
-<section class="quick-grid">
+  </section>
 
-<a href="vip.html" class="quick">
+  <!-- WAYS TO EARN -->
 
-<div class="quick-icon">
+  <section class="card">
 
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
-</svg>
+    <div class="card-head">
+      <h2>Ways to Earn</h2>
+      <a href="earn.html">View all</a>
+    </div>
 
-</div>
+    <div style="font-weight:800;font-size:15px;margin-bottom:5px;">
+      More ways to earn VDC rewards
+    </div>
 
-<span>VIP Upgrade</span>
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;">
+      Complete eligible tasks, participate in available activities,
+      refer new users and use other earning features available to your account.
+    </div>
 
-</a>
+    <a href="earn.html"
+       style="display:block;text-align:center;margin-top:14px;background:var(--purple-light);color:var(--purple-dark);padding:12px;border-radius:12px;font-size:13px;font-weight:800;">
+      Explore Ways to Earn
+    </a>
 
+  </section>
 
-<a href="withdraw.html" class="quick">
+  <!-- ACTIVITY -->
 
-<div class="quick-icon">
+  <section class="card">
 
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M3 6h18v12H3z"/>
-    <path d="M7 12h10"/>
-</svg>
+    <div class="card-head">
+      <h2>Recent Activity</h2>
+      <a href="history.html">View history</a>
+    </div>
 
-</div>
+    <div class="activity" id="activityList">
+      <div class="empty">Loading activity...</div>
+    </div>
 
-<span>Withdraw</span>
-
-</a>
-
-
-<a href="tasks.html" class="quick">
-
-<div class="quick-icon">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M9 11l3 3L21 5"/>
-    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-</svg>
-
-</div>
-
-<span>Earn Tasks</span>
-
-</a>
-
-
-<a href="referrals.html" class="quick">
-
-<div class="quick-icon">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <circle cx="9" cy="7" r="3"/>
-    <circle cx="17" cy="9" r="3"/>
-    <path d="M3 20c0-3.3 2.7-6 6-6"/>
-    <path d="M14 20c0-2.2 1.8-4 4-4"/>
-</svg>
-
-</div>
-
-<span>Refer & Earn</span>
-
-</a>
-
-
-<a href="#luckyDraw" class="quick">
-
-<div class="quick-icon">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <circle cx="12" cy="12" r="9"/>
-    <path d="M8 8l8 8"/>
-    <path d="M16 8l-8 8"/>
-</svg>
-
-</div>
-
-<span>Lucky Draw</span>
-
-</a>
-
-</section>
-
-
-<!-- VIP STATUS -->
-
-<section class="section">
-
-<div class="section-title">
-
-<h2>VIP Status</h2>
-
-<a href="vip.html">
-    View levels
-</a>
-
-</div>
-
-
-<div class="vip-card">
-
-<div class="vip-top">
-
-<div class="vip-name" id="vipName">
-    Free VIP
-</div>
-
-<div class="vip-level" id="vipLevel">
-    VIP 0
-</div>
-
-</div>
-
-
-<div class="vip-details">
-
-<div class="vip-detail">
-
-<small>Daily Tasks</small>
-
-<strong id="dailyTaskLimit">
-    —
-</strong>
-
-</div>
-
-
-<div class="vip-detail">
-
-<small>Task Reward</small>
-
-<strong id="taskReward">
-    ₦—
-</strong>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- EARNINGS -->
-
-<section class="section">
-
-<div class="section-title">
-
-<h2>Earnings Overview</h2>
-
-</div>
-
-
-<div class="earnings-grid">
-
-<div class="earning">
-    <small>Total Earned</small>
-    <strong id="totalEarned">₦—</strong>
-</div>
-
-<div class="earning">
-    <small>Today's Earnings</small>
-    <strong id="todayEarned">₦—</strong>
-</div>
-
-<div class="earning">
-    <small>Task Earnings</small>
-    <strong id="taskEarned">₦—</strong>
-</div>
-
-<div class="earning">
-    <small>Referral Earnings</small>
-    <strong id="referralEarned">₦—</strong>
-</div>
-
-<div class="earning">
-    <small>Lucky Draw</small>
-    <strong id="luckyEarned">₦—</strong>
-</div>
-
-<div class="earning">
-    <small>Total Withdrawn</small>
-    <strong id="withdrawn">₦—</strong>
-</div>
-
-</div>
-
-</section>
-
-
-<!-- LUCKY DRAW -->
-
-<section class="section" id="luckyDraw">
-
-<div class="section-title">
-
-<h2>Lucky Draw</h2>
-
-</div>
-
-
-<div class="lucky-card">
-
-<div class="lucky-top">
-
-<div>
-
-<h3>Daily Lucky Draw</h3>
-
-<p>
-    Spin the wheel for a chance to receive a VDC reward.
-</p>
-
-</div>
-
-<div class="spin-count" id="spinCount">
-    Spins: —
-</div>
-
-</div>
-
-
-<div class="wheel-stage">
-
-<div class="wheel-pointer"></div>
-
-<div class="wheel-ring">
-
-<div class="wheel" id="luckyWheel">
-
-<div class="wheel-labels" id="wheelLabels"></div>
-
-<div class="wheel-center">
-    <span>VDC</span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="lucky-result" id="luckyResult">
-    Spin the wheel to play.
-</div>
-
-
-<button
-    type="button"
-    class="spin-button"
-    id="spinButton"
-    onclick="spinLuckyDraw()"
->
-    SPIN
-</button>
-
-
-<div class="wheel-status" id="wheelStatus">
-    Loading wheel...
-</div>
-
-</div>
-
-</section>
-
-
-<!-- WAYS TO EARN -->
-
-<section class="section">
-
-<div class="section-title">
-
-<h2>Ways to Earn</h2>
-
-<a href="earn.html">
-    View all
-</a>
-
-</div>
-
-
-<div class="ways-card">
-
-<h3>
-    More ways to earn VDC rewards
-</h3>
-
-<p>
-    Complete eligible tasks, participate in available activities,
-    refer new users and use other earning features available to your account.
-</p>
-
-<a href="earn.html" class="ways-btn">
-    Explore Ways to Earn
-</a>
-
-</div>
-
-</section>
-
-
-<!-- RECENT ACTIVITY -->
-
-<section class="section">
-
-<div class="section-title">
-
-<h2>Recent Activity</h2>
-
-<a href="history.html">
-    View history
-</a>
-
-</div>
-
-
-<div class="activity" id="activityList">
-
-<div class="empty">
-    Loading activity...
-</div>
-
-</div>
-
-</section>
+  </section>
 
 </main>
 
-</div>
-
-
-<!-- BOTTOM NAV -->
-
 <nav class="bottom-nav">
+  <div class="bottom-inner">
 
-<a href="dashboard.html" class="nav-item active">
+    <a class="active" href="dashboard.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 11.5L12 4l9 7.5"/>
+        <path d="M5 10v10h14V10"/>
+      </svg>
+      Home
+    </a>
 
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M3 11l9-8 9 8"/>
-    <path d="M5 10v10h14V10"/>
-</svg>
+    <a href="tasks.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="4" y="4" width="16" height="16" rx="3"/>
+        <path d="M8 12l2.5 2.5L16 9"/>
+      </svg>
+      Tasks
+    </a>
 
-<span>Home</span>
+    <a href="vip.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 3l2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3z"/>
+      </svg>
+      VIP
+    </a>
 
-</a>
+    <a href="earn.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 3v18"/>
+        <path d="M17 7.5c0-2-2-3.5-5-3.5S7 5.5 7 7.5 9 11 12 11s5 1.5 5 3.5-2 3.5-5 3.5-5-1.5-5-3.5"/>
+      </svg>
+      Earn
+    </a>
 
+    <a href="profile.html">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="8" r="3"/>
+        <path d="M5 21c0-4 3-7 7-7s7 3 7 7"/>
+      </svg>
+      My
+    </a>
 
-<a href="tasks.html" class="nav-item">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M9 11l3 3L21 5"/>
-    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-</svg>
-
-<span>Tasks</span>
-
-</a>
-
-
-<a href="vip.html" class="nav-item">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M12 2l2.5 5.5L20 8l-4 4 .8 6-4.8-2.7L7.2 18 8 12 4 8l5.5-.5L12 2z"/>
-</svg>
-
-<span>VIP</span>
-
-</a>
-
-
-<a href="earn.html" class="nav-item">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M12 3v18"/>
-    <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/>
-</svg>
-
-<span>Earn</span>
-
-</a>
-
-
-<a href="profile.html" class="nav-item">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <circle cx="12" cy="8" r="4"/>
-    <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-</svg>
-
-<span>My</span>
-
-</a>
-
+  </div>
 </nav>
 
-
 <script>
-
 /* =========================================================
    SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
-    "https://wiorfxlodrcawxdeowbg.supabase.co";
+  "https://wiorfxlodrcawxdeowbg.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+  "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
 
-const db =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+const { createClient } = supabase;
 
+const db = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 /* =========================================================
    STATE
 ========================================================= */
 
 let currentUser = null;
-
 let currentVip = 0;
-
-let dailySpinLimit = 0;
-
-let spinsToday = 0;
-
+let currentVipId = null;
 let wheelPrizes = [];
-
 let wheelRotation = 0;
-
-let wheelBusy = false;
-
+let isSpinning = false;
+let dailyLimit = 0;
+let spinsUsed = 0;
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
 function money(value){
-
-    const number =
-        Number(value || 0);
-
-    return "₦" +
-        number.toLocaleString(
-            "en-NG",
-            {
-                minimumFractionDigits:2,
-                maximumFractionDigits:2
-            }
-        );
+  const n = Number(value || 0);
+  return "₦" + n.toLocaleString("en-NG", {
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
 }
 
-
-function escapeHtml(value){
-
-    return String(value ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+function showLuckyError(message){
+  const box = document.getElementById("luckyError");
+  box.textContent = message;
+  box.style.display = "block";
 }
 
-
-function formatDate(date){
-
-    if(!date) return "";
-
-    return new Date(date).toLocaleString(
-        "en-NG",
-        {
-            day:"numeric",
-            month:"short",
-            hour:"numeric",
-            minute:"2-digit"
-        }
-    );
+function hideLuckyError(){
+  const box = document.getElementById("luckyError");
+  box.textContent = "";
+  box.style.display = "none";
 }
-
 
 /* =========================================================
    AUTH
 ========================================================= */
 
-async function loadDashboard(){
+async function loadUser(){
 
-    try{
+  const { data, error } = await db.auth.getUser();
 
-        const {
-            data:{
-                user
-            },
-            error
-        } = await db.auth.getUser();
+  if(error){
+    console.error("AUTH ERROR:", error);
+    window.location.href = "auth.html";
+    return false;
+  }
 
+  if(!data || !data.user){
+    window.location.href = "auth.html";
+    return false;
+  }
 
-        if(error){
+  currentUser = data.user;
 
-            console.error(error);
-
-            document.getElementById("wheelStatus")
-                .textContent =
-                "Unable to connect to VDC.";
-
-            return;
-        }
-
-
-        if(!user){
-
-            window.location.href =
-                "auth.html";
-
-            return;
-        }
-
-
-        currentUser = user;
-
-
-        await loadProfile();
-
-        await loadWallet();
-
-        await loadVip();
-
-        await loadLuckyDraw();
-
-        await loadEarnings();
-
-        await loadActivity();
-
-    }catch(error){
-
-        console.error(error);
-
-    }
+  return true;
 }
-
 
 /* =========================================================
    PROFILE
@@ -1299,33 +898,27 @@ async function loadDashboard(){
 
 async function loadProfile(){
 
-    const {
-        data,
-        error
-    } = await db
-        .from("profiles")
-        .select("*")
-        .eq("id",currentUser.id)
-        .maybeSingle();
+  const { data, error } = await db
+    .from("profiles")
+    .select("*")
+    .eq("id", currentUser.id)
+    .maybeSingle();
 
+  if(error){
+    console.error("PROFILE ERROR:", error);
+    throw error;
+  }
 
-    if(error){
+  if(data){
 
-        console.error(error);
+    const name =
+      data.full_name ||
+      currentUser.email?.split("@")[0] ||
+      "VDC Member";
 
-        return;
-    }
-
-
-    if(data){
-
-        document.getElementById("welcomeName")
-            .textContent =
-            data.full_name ||
-            "VDC Member";
-    }
+    document.getElementById("memberName").textContent = name;
+  }
 }
-
 
 /* =========================================================
    WALLET
@@ -1333,34 +926,23 @@ async function loadProfile(){
 
 async function loadWallet(){
 
-    const {
-        data,
-        error
-    } = await db
-        .from("wallets")
-        .select("balance,total_earned")
-        .eq("user_id",currentUser.id)
-        .maybeSingle();
+  const { data, error } = await db
+    .from("wallets")
+    .select("balance,total_earned")
+    .eq("user_id", currentUser.id)
+    .maybeSingle();
 
+  if(error){
+    console.error("WALLET ERROR:", error);
+    throw error;
+  }
 
-    if(error){
+  const balance = Number(data?.balance || 0);
+  const total = Number(data?.total_earned || 0);
 
-        console.error(error);
-
-        return;
-    }
-
-
-    document.getElementById("balance")
-        .textContent =
-        money(data?.balance);
-
-
-    document.getElementById("totalEarned")
-        .textContent =
-        money(data?.total_earned);
+  document.getElementById("balance").textContent = money(balance);
+  document.getElementById("totalEarned").textContent = money(total);
 }
-
 
 /* =========================================================
    VIP
@@ -1368,566 +950,78 @@ async function loadWallet(){
 
 async function loadVip(){
 
-    const {
-        data,
-        error
-    } = await db
-        .from("user_vips")
-        .select(`
-            vip_level_id,
-            status,
-            vip_levels(
-                level_number,
-                name,
-                task_reward,
-                daily_task_limit
-            )
-        `)
-        .eq("user_id",currentUser.id)
-        .eq("status","active")
-        .maybeSingle();
+  const { data, error } = await db
+    .from("user_vips")
+    .select(`
+      id,
+      vip_level_id,
+      status,
+      vip_levels (
+        id,
+        level_number,
+        name,
+        daily_task_limit,
+        task_reward
+      )
+    `)
+    .eq("user_id", currentUser.id)
+    .eq("status","active")
+    .maybeSingle();
 
+  if(error){
+    console.error("VIP ERROR:", error);
+    throw error;
+  }
 
-    if(error){
+  if(data && data.vip_levels){
 
-        console.error(error);
+    currentVipId = data.vip_levels.id;
+    currentVip = Number(data.vip_levels.level_number || 0);
 
-        currentVip = 0;
+    document.getElementById("vipName").textContent =
+      data.vip_levels.name;
 
-        return;
+    document.getElementById("vipLevel").textContent =
+      "VIP " + currentVip;
+
+    document.getElementById("dailyTasks").textContent =
+      data.vip_levels.daily_task_limit;
+
+    document.getElementById("taskReward").textContent =
+      money(data.vip_levels.task_reward);
+
+    dailyLimit = Number(data.vip_levels.daily_task_limit || 0);
+
+  }else{
+
+    const { data: freeVip, error: freeError } = await db
+      .from("vip_levels")
+      .select("*")
+      .eq("level_number",0)
+      .maybeSingle();
+
+    if(freeError){
+      console.error("FREE VIP ERROR:",freeError);
+      throw freeError;
     }
 
+    currentVip = 0;
 
-    if(data && data.vip_levels){
+    document.getElementById("vipName").textContent =
+      freeVip?.name || "Free VIP";
 
-        currentVip =
-            Number(
-                data.vip_levels.level_number
-            );
+    document.getElementById("vipLevel").textContent =
+      "VIP 0";
 
+    document.getElementById("dailyTasks").textContent =
+      freeVip?.daily_task_limit ?? 5;
 
-        document.getElementById("vipName")
-            .textContent =
-            data.vip_levels.name ||
-            `VIP ${currentVip}`;
+    document.getElementById("taskReward").textContent =
+      money(freeVip?.task_reward ?? 150);
 
-
-        document.getElementById("vipLevel")
-            .textContent =
-            `VIP ${currentVip}`;
-
-
-        document.getElementById("dailyTaskLimit")
-            .textContent =
-            data.vip_levels.daily_task_limit;
-
-
-        document.getElementById("taskReward")
-            .textContent =
-            money(
-                data.vip_levels.task_reward
-            );
-
-    }else{
-
-        currentVip = 0;
-
-
-        document.getElementById("vipName")
-            .textContent =
-            "Free VIP";
-
-
-        document.getElementById("vipLevel")
-            .textContent =
-            "VIP 0";
-
-
-        document.getElementById("dailyTaskLimit")
-            .textContent =
-            "5";
-
-
-        document.getElementById("taskReward")
-            .textContent =
-            money(150);
-    }
+    dailyLimit = Number(freeVip?.daily_task_limit || 5);
+  }
 }
-
-
-/* =========================================================
-   LOAD WHEEL PRIZES
-========================================================= */
-
-async function loadWheelPrizes(){
-
-    const {
-        data,
-        error
-    } = await db
-        .from("lucky_draw_prizes")
-        .select("prize,weight")
-        .eq("vip_level",currentVip)
-        .eq("active",true)
-        .order("prize",{ascending:true});
-
-
-    if(error){
-
-        console.error(error);
-
-        document.getElementById("wheelStatus")
-            .textContent =
-            "Unable to load wheel prizes.";
-
-        return;
-    }
-
-
-    wheelPrizes =
-        (data || []).map(item => ({
-            prize:Number(item.prize || 0),
-            weight:Number(item.weight || 1)
-        }));
-
-
-    if(!wheelPrizes.length){
-
-        document.getElementById("wheelStatus")
-            .textContent =
-            "No Lucky Draw prizes are configured.";
-
-        return;
-    }
-
-
-    drawWheel();
-}
-
-
-/* =========================================================
-   DRAW WHEEL
-========================================================= */
-
-function drawWheel(){
-
-    const wheel =
-        document.getElementById("luckyWheel");
-
-    const labels =
-        document.getElementById("wheelLabels");
-
-
-    if(!wheel || !wheelPrizes.length)
-        return;
-
-
-    const count =
-        wheelPrizes.length;
-
-
-    const slice =
-        360 / count;
-
-
-    const colors = [
-        "#5b21b6",
-        "#7c3aed",
-        "#9333ea",
-        "#c026d3",
-        "#db2777",
-        "#e11d48",
-        "#ea580c",
-        "#f97316",
-        "#ca8a04",
-        "#65a30d",
-        "#059669",
-        "#0891b2"
-    ];
-
-
-    let gradientParts = [];
-
-
-    for(let i=0;i<count;i++){
-
-        const start =
-            i * slice;
-
-        const end =
-            (i + 1) * slice;
-
-
-        gradientParts.push(
-            `${colors[i % colors.length]} ${start}deg ${end}deg`
-        );
-    }
-
-
-    wheel.style.background =
-        `conic-gradient(${gradientParts.join(",")})`;
-
-
-    labels.innerHTML = "";
-
-
-    wheelPrizes.forEach((item,index)=>{
-
-        const label =
-            document.createElement("div");
-
-
-        label.className =
-            "wheel-label";
-
-
-        const angle =
-            index * slice +
-            slice / 2;
-
-
-        const radius = 34;
-
-
-        const x =
-            Math.sin(
-                angle * Math.PI / 180
-            ) * radius;
-
-
-        const y =
-            -Math.cos(
-                angle * Math.PI / 180
-            ) * radius;
-
-
-        label.style.transform =
-            `translate(${x}px,${y}px) rotate(${angle}deg)`;
-
-
-        label.textContent =
-            item.prize > 0
-                ? `₦${Number(item.prize).toLocaleString("en-NG")}`
-                : "TRY AGAIN";
-
-
-        labels.appendChild(label);
-
-    });
-}
-
-
-/* =========================================================
-   LUCKY DRAW
-========================================================= */
-
-async function loadLuckyDraw(){
-
-    const {
-        data:settings,
-        error:settingsError
-    } = await db
-        .from("lucky_draw_settings")
-        .select("*")
-        .eq("id",1)
-        .maybeSingle();
-
-
-    if(settingsError){
-
-        console.error(settingsError);
-
-        document.getElementById("wheelStatus")
-            .textContent =
-            "Unable to load Lucky Draw.";
-
-        document.getElementById("spinButton")
-            .disabled = true;
-
-        return;
-    }
-
-
-    if(!settings || !settings.enabled){
-
-        dailySpinLimit = 0;
-
-
-        document.getElementById("spinCount")
-            .textContent =
-            "Unavailable";
-
-
-        document.getElementById("spinButton")
-            .disabled = true;
-
-
-        document.getElementById("wheelStatus")
-            .textContent =
-            "Lucky Draw is currently unavailable.";
-
-        return;
-    }
-
-
-    const limitField =
-        currentVip === 0
-            ? "free_daily_spins"
-            : `daily_spins_vip${currentVip}`;
-
-
-    dailySpinLimit =
-        Number(
-            settings[limitField] || 0
-        );
-
-
-    const start =
-        new Date();
-
-    start.setHours(0,0,0,0);
-
-
-    const {
-        count,
-        error:countError
-    } = await db
-        .from("lucky_draw_results")
-        .select(
-            "*",
-            {
-                count:"exact",
-                head:true
-            }
-        )
-        .eq("user_id",currentUser.id)
-        .gte(
-            "created_at",
-            start.toISOString()
-        );
-
-
-    if(countError){
-
-        console.error(countError);
-
-        spinsToday = 0;
-
-    }else{
-
-        spinsToday =
-            Number(count || 0);
-    }
-
-
-    await loadWheelPrizes();
-
-    updateLuckyDrawUI();
-}
-
-
-/* =========================================================
-   UPDATE LUCKY DRAW UI
-========================================================= */
-
-function updateLuckyDrawUI(){
-
-    const remaining =
-        Math.max(
-            0,
-            dailySpinLimit - spinsToday
-        );
-
-
-    document.getElementById("spinCount")
-        .textContent =
-        `Spins: ${remaining}`;
-
-
-    const button =
-        document.getElementById("spinButton");
-
-
-    if(remaining <= 0){
-
-        button.disabled = true;
-
-        button.textContent =
-            "DAILY SPINS USED";
-
-
-        document.getElementById("wheelStatus")
-            .textContent =
-            "Come back tomorrow for new spins.";
-
-    }else{
-
-        button.disabled = false;
-
-        button.textContent =
-            "SPIN";
-
-
-        document.getElementById("wheelStatus")
-            .textContent =
-            "Your available daily spins are shown above.";
-    }
-}
-
-
-/* =========================================================
-   FIND PRIZE POSITION
-========================================================= */
-
-function findPrizeIndex(prize){
-
-    if(!wheelPrizes.length)
-        return 0;
-
-
-    const exact =
-        wheelPrizes.findIndex(
-            item =>
-                Number(item.prize) ===
-                Number(prize)
-        );
-
-
-    if(exact >= 0)
-        return exact;
-
-
-    return 0;
-}
-
-
-/* =========================================================
-   SPIN
-========================================================= */
-
-async function spinLuckyDraw(){
-
-    if(wheelBusy)
-        return;
-
-
-    const button =
-        document.getElementById("spinButton");
-
-
-    if(button.disabled)
-        return;
-
-
-    wheelBusy = true;
-
-    button.disabled = true;
-
-    button.textContent =
-        "SPINNING...";
-
-
-    document.getElementById("luckyResult")
-        .textContent =
-        "The wheel is spinning...";
-
-
-    const {
-        data,
-        error
-    } = await db.rpc(
-        "enter_lucky_draw"
-    );
-
-
-    if(error){
-
-        console.error(error);
-
-
-        document.getElementById("luckyResult")
-            .textContent =
-            error.message ||
-            "Unable to process your spin.";
-
-
-        wheelBusy = false;
-
-        updateLuckyDrawUI();
-
-        return;
-    }
-
-
-    const prize =
-        Number(data || 0);
-
-
-    const prizeIndex =
-        findPrizeIndex(prize);
-
-
-    const slice =
-        360 / wheelPrizes.length;
-
-
-    const targetCenter =
-        prizeIndex * slice +
-        slice / 2;
-
-
-    const targetRotation =
-        360 -
-        targetCenter;
-
-
-    wheelRotation +=
-        360 * 7 +
-        targetRotation;
-
-
-    const wheel =
-        document.getElementById("luckyWheel");
-
-
-    wheel.style.transform =
-        `rotate(${wheelRotation}deg)`;
-
-
-    setTimeout(async()=>{
-
-        spinsToday++;
-
-
-        if(prize > 0){
-
-            document.getElementById("luckyResult")
-                .textContent =
-                `Congratulations! You received ${money(prize)}.`;
-
-        }else{
-
-            document.getElementById("luckyResult")
-                .textContent =
-                "No reward this time. Try again when you have another spin.";
-        }
-
-
-        wheelBusy = false;
-
-
-        updateLuckyDrawUI();
-
-
-        await loadWallet();
-
-        await loadEarnings();
-
-        await loadActivity();
-
-    },5100);
-}
-
 
 /* =========================================================
    EARNINGS
@@ -1935,108 +1029,418 @@ async function spinLuckyDraw(){
 
 async function loadEarnings(){
 
-    const {
-        data,
-        error
-    } = await db
-        .from("transactions")
-        .select(
-            "type,amount,created_at"
-        )
-        .eq("user_id",currentUser.id)
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        );
+  const start = new Date();
+  start.setHours(0,0,0,0);
 
+  const { data, error } = await db
+    .from("transactions")
+    .select("type,amount,created_at")
+    .eq("user_id",currentUser.id);
 
-    if(error){
+  if(error){
+    console.error("TRANSACTION ERROR:",error);
+    throw error;
+  }
 
-        console.error(error);
+  let today = 0;
+  let task = 0;
+  let referral = 0;
+  let lucky = 0;
+  let withdrawn = 0;
 
-        return;
+  (data || []).forEach(row => {
+
+    const amount = Number(row.amount || 0);
+    const date = new Date(row.created_at);
+
+    if(date >= start && amount > 0){
+      today += amount;
     }
 
+    const type = String(row.type || "").toLowerCase();
 
-    let today = 0;
-    let task = 0;
-    let referral = 0;
-    let lucky = 0;
-    let withdrawn = 0;
+    if(type.includes("task")){
+      task += Math.max(amount,0);
+    }
 
+    if(type.includes("referral")){
+      referral += Math.max(amount,0);
+    }
 
-    const start =
-        new Date();
+    if(type.includes("lucky")){
+      lucky += Math.max(amount,0);
+    }
 
-    start.setHours(0,0,0,0);
+    if(type.includes("withdraw")){
+      withdrawn += Math.abs(amount);
+    }
+  });
 
-
-    (data || []).forEach(transaction=>{
-
-        const amount =
-            Number(transaction.amount || 0);
-
-
-        if(
-            transaction.created_at &&
-            new Date(transaction.created_at) >= start &&
-            amount > 0
-        ){
-
-            today += amount;
-        }
-
-
-        const type =
-            String(transaction.type || "")
-                .toLowerCase();
-
-
-        if(type === "task")
-            task += amount;
-
-
-        if(type === "referral")
-            referral += amount;
-
-
-        if(type === "lucky_draw")
-            lucky += amount;
-
-
-        if(type === "withdrawal")
-            withdrawn += Math.abs(amount);
-
-    });
-
-
-    document.getElementById("todayEarned")
-        .textContent =
-        money(today);
-
-
-    document.getElementById("taskEarned")
-        .textContent =
-        money(task);
-
-
-    document.getElementById("referralEarned")
-        .textContent =
-        money(referral);
-
-
-    document.getElementById("luckyEarned")
-        .textContent =
-        money(lucky);
-
-
-    document.getElementById("withdrawn")
-        .textContent =
-        money(withdrawn);
+  document.getElementById("todayEarned").textContent = money(today);
+  document.getElementById("taskEarned").textContent = money(task);
+  document.getElementById("referralEarned").textContent = money(referral);
+  document.getElementById("luckyEarned").textContent = money(lucky);
+  document.getElementById("withdrawn").textContent = money(withdrawn);
 }
 
+/* =========================================================
+   LUCKY DRAW SETTINGS
+========================================================= */
+
+async function loadLuckyDraw(){
+
+  hideLuckyError();
+
+  const { data: settings, error: settingsError } = await db
+    .from("lucky_draw_settings")
+    .select("*")
+    .eq("id",1)
+    .maybeSingle();
+
+  if(settingsError){
+    console.error("LUCKY SETTINGS ERROR:",settingsError);
+    throw settingsError;
+  }
+
+  if(!settings || !settings.enabled){
+    document.getElementById("spinsRemaining").textContent = "0";
+    document.getElementById("spinBtn").disabled = true;
+    document.getElementById("spinResult").textContent =
+      "Lucky Draw is currently unavailable.";
+    return;
+  }
+
+  let limit = 0;
+
+  switch(currentVip){
+
+    case 0:
+      limit = Number(settings.free_daily_spins || 0);
+      break;
+
+    case 1:
+      limit = Number(settings.daily_spins_vip1 || 0);
+      break;
+
+    case 2:
+      limit = Number(settings.daily_spins_vip2 || 0);
+      break;
+
+    case 3:
+      limit = Number(settings.daily_spins_vip3 || 0);
+      break;
+
+    case 4:
+      limit = Number(settings.daily_spins_vip4 || 0);
+      break;
+
+    case 5:
+      limit = Number(settings.daily_spins_vip5 || 0);
+      break;
+
+    case 6:
+      limit = Number(settings.daily_spins_vip6 || 0);
+      break;
+
+    case 7:
+      limit = Number(settings.daily_spins_vip7 || 0);
+      break;
+
+    case 8:
+      limit = Number(settings.daily_spins_vip8 || 0);
+      break;
+
+    case 9:
+      limit = Number(settings.daily_spins_vip9 || 0);
+      break;
+
+    case 10:
+      limit = Number(settings.daily_spins_vip10 || 0);
+      break;
+
+    case 11:
+      limit = Number(settings.daily_spins_vip11 || 0);
+      break;
+
+    case 12:
+      limit = Number(settings.daily_spins_vip12 || 0);
+      break;
+  }
+
+  dailyLimit = limit;
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth()+1).padStart(2,"0");
+  const day = String(today.getDate()).padStart(2,"0");
+
+  const startOfDay =
+    `${year}-${month}-${day}T00:00:00`;
+
+  const { count, error: countError } = await db
+    .from("lucky_draw_results")
+    .select("*",{count:"exact",head:true})
+    .eq("user_id",currentUser.id)
+    .gte("created_at",startOfDay);
+
+  if(countError){
+    console.error("LUCKY COUNT ERROR:",countError);
+    throw countError;
+  }
+
+  spinsUsed = Number(count || 0);
+
+  const remaining =
+    Math.max(limit - spinsUsed,0);
+
+  document.getElementById("spinsRemaining").textContent =
+    remaining;
+
+  const button = document.getElementById("spinBtn");
+
+  button.disabled =
+    remaining <= 0 || isSpinning;
+
+  if(remaining <= 0){
+    document.getElementById("spinResult").textContent =
+      "You have used all your spins for today.";
+  }
+
+  /* Load prizes for current VIP */
+
+  const { data: prizes, error: prizeError } = await db
+    .from("lucky_draw_prizes")
+    .select("id,vip_level,prize,weight,active")
+    .eq("vip_level",currentVip)
+    .eq("active",true)
+    .order("id");
+
+  if(prizeError){
+    console.error("LUCKY PRIZES ERROR:",prizeError);
+    throw prizeError;
+  }
+
+  wheelPrizes = prizes || [];
+
+  if(wheelPrizes.length === 0){
+    throw new Error(
+      "No Lucky Draw prizes are configured for VIP " +
+      currentVip + "."
+    );
+  }
+
+  buildWheel();
+}
+
+/* =========================================================
+   BUILD WHEEL
+========================================================= */
+
+function buildWheel(){
+
+  const wheel = document.getElementById("wheel");
+
+  wheel.innerHTML =
+    '<div class="wheel-center">VDC</div>';
+
+  const count = wheelPrizes.length;
+
+  /*
+    Equal visual segments.
+    The actual winning probability remains controlled
+    securely by the database RPC weights.
+  */
+
+  const colors = [
+    "#6d28d9",
+    "#8b5cf6",
+    "#f97316",
+    "#7c3aed",
+    "#ea580c",
+    "#9333ea"
+  ];
+
+  const slice = 360 / count;
+
+  let gradient = "conic-gradient(";
+
+  wheelPrizes.forEach((p,i)=>{
+
+    const start = i * slice;
+    const end = (i+1) * slice;
+
+    gradient +=
+      `${colors[i % colors.length]} ${start}deg ${end}deg`;
+
+    if(i < count-1){
+      gradient += ",";
+    }
+
+    const label = document.createElement("div");
+
+    label.className = "wheel-label";
+
+    label.style.transform =
+      `rotate(${start}deg)`;
+
+    const span = document.createElement("span");
+
+    const prize = Number(p.prize || 0);
+
+    span.textContent =
+      prize === 0 ? "TRY AGAIN" : "₦" + prize;
+
+    span.style.transform =
+      `rotate(${slice/2}deg)`;
+
+    label.appendChild(span);
+
+    wheel.appendChild(label);
+  });
+
+  gradient += ")";
+
+  wheel.style.background = gradient;
+}
+
+/* =========================================================
+   SPIN
+========================================================= */
+
+async function spinWheel(){
+
+  if(isSpinning){
+    return;
+  }
+
+  hideLuckyError();
+
+  const button =
+    document.getElementById("spinBtn");
+
+  const result =
+    document.getElementById("spinResult");
+
+  if(Number(document.getElementById("spinsRemaining").textContent || 0) <= 0){
+    return;
+  }
+
+  isSpinning = true;
+  button.disabled = true;
+
+  result.textContent = "Spinning...";
+
+  try{
+
+    /*
+      The database RPC is the authority.
+      The browser never decides the reward.
+    */
+
+    const { data, error } = await db.rpc(
+      "enter_lucky_draw"
+    );
+
+    if(error){
+      console.error("LUCKY DRAW RPC ERROR:",error);
+      throw error;
+    }
+
+    const prize = Number(data || 0);
+
+    /*
+      Find returned prize on the wheel.
+    */
+
+    let prizeIndex =
+      wheelPrizes.findIndex(
+        p => Number(p.prize) === prize
+      );
+
+    if(prizeIndex < 0){
+      prizeIndex = 0;
+    }
+
+    const count = wheelPrizes.length;
+    const slice = 360 / count;
+
+    const targetCenter =
+      prizeIndex * slice + slice/2;
+
+    const desiredRotation =
+      360 - targetCenter;
+
+    const currentMod =
+      ((wheelRotation % 360) + 360) % 360;
+
+    let delta =
+      desiredRotation - currentMod;
+
+    if(delta < 0){
+      delta += 360;
+    }
+
+    const extraSpins = 7;
+
+    wheelRotation +=
+      extraSpins * 360 + delta;
+
+    const wheel =
+      document.getElementById("wheel");
+
+    wheel.style.transform =
+      `rotate(${wheelRotation}deg)`;
+
+    setTimeout(async ()=>{
+
+      result.textContent =
+        prize > 0
+          ? `Congratulations! You won ${money(prize)}.`
+          : "No reward this time. Try again when you have another spin.";
+
+      isSpinning = false;
+
+      await refreshAfterSpin();
+
+    },5200);
+
+  }catch(error){
+
+    console.error(error);
+
+    isSpinning = false;
+    button.disabled = false;
+
+    showLuckyError(
+      error?.message ||
+      "Unable to complete Lucky Draw."
+    );
+
+    result.textContent =
+      "Unable to complete the spin.";
+  }
+}
+
+/* =========================================================
+   REFRESH AFTER SPIN
+========================================================= */
+
+async function refreshAfterSpin(){
+
+  try{
+
+    await loadWallet();
+    await loadEarnings();
+    await loadLuckyDraw();
+
+  }catch(error){
+
+    console.error(
+      "REFRESH AFTER SPIN ERROR:",
+      error
+    );
+  }
+}
 
 /* =========================================================
    ACTIVITY
@@ -2044,101 +1448,145 @@ async function loadEarnings(){
 
 async function loadActivity(){
 
-    const {
-        data,
-        error
-    } = await db
-        .from("transactions")
-        .select(
-            "type,amount,description,created_at"
-        )
-        .eq("user_id",currentUser.id)
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        )
-        .limit(8);
+  const list =
+    document.getElementById("activityList");
 
+  const { data, error } = await db
+    .from("activity_events")
+    .select("event_type,message,created_at")
+    .eq("user_id",currentUser.id)
+    .eq("visible",true)
+    .order("created_at",{ascending:false})
+    .limit(6);
 
-    if(error){
+  if(error){
+    console.error("ACTIVITY ERROR:",error);
+    list.innerHTML =
+      '<div class="empty">Unable to load activity.</div>';
+    return;
+  }
 
-        console.error(error);
+  if(!data || data.length === 0){
+    list.innerHTML =
+      '<div class="empty">No recent activity yet.</div>';
+    return;
+  }
 
-        document.getElementById("activityList")
-            .innerHTML =
-            `<div class="empty">
-                Unable to load activity.
-            </div>`;
+  list.innerHTML = "";
 
-        return;
-    }
+  data.forEach(row => {
 
+    const item =
+      document.createElement("div");
 
-    if(!data || !data.length){
+    item.className =
+      "activity-row";
 
-        document.getElementById("activityList")
-            .innerHTML =
-            `<div class="empty">
-                No activity yet.
-            </div>`;
+    item.innerHTML = `
+      <div class="activity-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3v18"/>
+          <path d="M17 7.5c0-2-2-3.5-5-3.5S7 5.5 7 7.5 9 11 12 11s5 1.5 5 3.5-2 3.5-5 3.5-5-1.5-5-3.5"/>
+        </svg>
+      </div>
 
-        return;
-    }
+      <div class="activity-main">
+        <strong>${escapeHtml(row.message || "Activity")}</strong>
+        <small>${formatDate(row.created_at)}</small>
+      </div>
+    `;
 
-
-    document.getElementById("activityList")
-        .innerHTML =
-        data.map(item=>{
-
-            const amount =
-                Number(item.amount || 0);
-
-
-            const type =
-                String(item.type || "activity")
-                    .replaceAll("_"," ");
-
-
-            return `
-                <div class="activity-item">
-
-                    <div class="activity-left">
-
-                        <strong>
-                            ${escapeHtml(
-                                item.description ||
-                                type
-                            )}
-                        </strong>
-
-                        <small>
-                            ${formatDate(
-                                item.created_at
-                            )}
-                        </small>
-
-                    </div>
-
-                    <div class="activity-amount">
-                        ${amount >= 0 ? "+" : ""}
-                        ${money(amount)}
-                    </div>
-
-                </div>
-            `;
-
-        }).join("");
+    list.appendChild(item);
+  });
 }
 
+/* =========================================================
+   SECURITY HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function formatDate(date){
+
+  try{
+
+    return new Date(date).toLocaleString(
+      "en-NG",
+      {
+        day:"numeric",
+        month:"short",
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+  }catch{
+    return "";
+  }
+}
 
 /* =========================================================
    START
 ========================================================= */
 
-loadDashboard();
+async function init(){
 
+  try{
+
+    const authenticated =
+      await loadUser();
+
+    if(!authenticated){
+      return;
+    }
+
+    await loadProfile();
+    await loadWallet();
+    await loadVip();
+    await loadEarnings();
+    await loadLuckyDraw();
+    await loadActivity();
+
+  }catch(error){
+
+    console.error(
+      "DASHBOARD INITIALIZATION ERROR:",
+      error
+    );
+
+    /*
+      Do not replace the entire dashboard with
+      an error screen. Individual sections retain
+      their existing fallback values.
+    */
+
+    if(
+      String(error?.message || "")
+        .toLowerCase()
+        .includes("api key")
+    ){
+
+      showLuckyError(
+        "Supabase API key was rejected. Check the Publishable Key in Supabase Project Settings → API."
+      );
+    }
+  }
+}
+
+document
+  .getElementById("spinBtn")
+  .addEventListener("click",spinWheel);
+
+init();
 </script>
 
 </body>
