@@ -1,719 +1,1023 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VDC VIP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>VDC — VIP</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    :root{
-      --purple:#6d28d9;
-      --purple-dark:#4c1d95;
-      --purple-light:#f3e8ff;
-      --orange:#f97316;
-      --orange-dark:#ea580c;
-      --green:#008751;
-      --bg:#faf9fc;
-      --card:#ffffff;
-      --text:#17121f;
-      --muted:#6b6474;
-      --border:#eee8f4;
-      --danger:#dc2626;
-      --shadow:0 8px 25px rgba(50,20,80,.07);
+<style>
+:root{
+    --purple:#6d28d9;
+    --purple-dark:#4c1d95;
+    --purple-light:#f3e8ff;
+    --orange:#f97316;
+    --orange-dark:#ea580c;
+    --green:#008751;
+    --bg:#faf9fc;
+    --card:#ffffff;
+    --text:#17121f;
+    --muted:#6b6474;
+    --border:#eee8f4;
+    --danger:#b42318;
+    --shadow:0 8px 30px rgba(50,20,80,.07);
+}
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+    padding-bottom:100px;
+}
+
+button,a{
+    font:inherit;
+}
+
+button{
+    border:0;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+.app{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+    min-height:100vh;
+    padding-bottom:100px;
+}
+
+
+/* =========================================================
+   HEADER — MATCH DASHBOARD
+========================================================= */
+
+.topbar{
+    height:68px;
+    background:rgba(255,255,255,.97);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter:blur(14px);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:19px;
+    font-weight:900;
+    color:var(--purple-dark);
+}
+
+.brand-mark{
+    width:36px;
+    height:36px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:16px;
+    font-weight:900;
+    background:linear-gradient(
+        135deg,
+        var(--purple),
+        var(--orange)
+    );
+    box-shadow:0 5px 15px rgba(109,40,217,.20);
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.icon-button{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f7f4fa;
+    border:1px solid var(--border);
+    color:var(--purple-dark);
+    position:relative;
+}
+
+.icon-button svg{
+    width:20px;
+    height:20px;
+}
+
+.notification-dot{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--orange);
+    right:8px;
+    top:7px;
+    border:2px solid white;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main{
+    padding:18px;
+}
+
+.hero{
+    margin-top:4px;
+}
+
+.hero h1{
+    margin:0;
+    font-size:25px;
+    line-height:1.15;
+    font-weight:950;
+    letter-spacing:-.5px;
+}
+
+.hero p{
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+    display:none;
+    margin-top:16px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+    box-shadow:var(--shadow);
+}
+
+.status.show{
+    display:block;
+}
+
+.status.error{
+    border-color:#fecaca;
+    background:#fff7f7;
+}
+
+.status-title{
+    font-size:14px;
+    font-weight:900;
+    margin-bottom:5px;
+}
+
+.status.error .status-title{
+    color:var(--danger);
+}
+
+.status-text{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+    word-break:break-word;
+}
+
+
+/* =========================================================
+   CURRENT VIP
+========================================================= */
+
+.current-card{
+    margin-top:18px;
+    padding:20px;
+    border-radius:22px;
+    color:white;
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple-dark),
+            var(--purple),
+            #7c3aed
+        );
+    box-shadow:
+        0 12px 30px rgba(76,29,149,.20);
+    position:relative;
+    overflow:hidden;
+}
+
+.current-card::after{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:rgba(255,255,255,.07);
+    right:-55px;
+    top:-55px;
+}
+
+.current-label{
+    position:relative;
+    z-index:2;
+    font-size:12px;
+    opacity:.82;
+    font-weight:700;
+}
+
+.current-name{
+    position:relative;
+    z-index:2;
+    margin-top:4px;
+    font-size:27px;
+    font-weight:950;
+    letter-spacing:-.5px;
+}
+
+.stats{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:16px;
+}
+
+.stat{
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:13px;
+    padding:11px 8px;
+}
+
+.stat-label{
+    font-size:10px;
+    opacity:.75;
+    margin-bottom:5px;
+}
+
+.stat-value{
+    font-size:13px;
+    font-weight:900;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section-head{
+    margin-top:22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.section-title{
+    font-size:17px;
+    font-weight:950;
+}
+
+.section-subtitle{
+    color:var(--muted);
+    font-size:12px;
+}
+
+
+/* =========================================================
+   VIP CARDS
+========================================================= */
+
+.levels{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
+
+.vip-level-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:15px;
+    box-shadow:var(--shadow);
+}
+
+.vip-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.vip-left{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.vip-number{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    background:var(--purple-light);
+    color:var(--purple);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:950;
+    flex-shrink:0;
+}
+
+.vip-name{
+    font-size:15px;
+    font-weight:900;
+}
+
+.vip-price{
+    color:var(--purple-dark);
+    font-size:14px;
+    font-weight:950;
+    white-space:nowrap;
+}
+
+.vip-info{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    margin-top:12px;
+}
+
+.info-box{
+    background:#faf8fd;
+    border:1px solid #f0eaf6;
+    border-radius:12px;
+    padding:10px;
+}
+
+.info-box small{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin-bottom:4px;
+}
+
+.info-box strong{
+    font-size:13px;
+    font-weight:900;
+}
+
+.upgrade-btn{
+    width:100%;
+    min-height:42px;
+    margin-top:11px;
+    border-radius:12px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            var(--purple-dark)
+        );
+    color:white;
+    font-size:12px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.upgrade-btn:active{
+    transform:scale(.98);
+}
+
+.upgrade-btn.current,
+.upgrade-btn.locked{
+    background:#f1edf4;
+    color:#817a89;
+    cursor:default;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.48);
+    z-index:500;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:760px;
+    background:white;
+    border-radius:24px 24px 0 0;
+    padding:22px 18px 28px;
+}
+
+.modal-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:17px;
+}
+
+.modal-head h3{
+    margin:0;
+    font-size:19px;
+    font-weight:950;
+}
+
+.close-btn{
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    background:#f5f2f7;
+    color:var(--text);
+    font-size:20px;
+}
+
+.payment-box{
+    background:var(--purple-light);
+    border-radius:15px;
+    padding:13px 15px;
+}
+
+.payment-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:7px 0;
+    font-size:13px;
+}
+
+.payment-row span{
+    color:var(--muted);
+}
+
+.payment-row strong{
+    color:var(--purple-dark);
+}
+
+.notice{
+    margin:14px 0;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+.confirm-btn{
+    width:100%;
+    min-height:45px;
+    border-radius:13px;
+    background:var(--orange);
+    color:white;
+    font-size:13px;
+    font-weight:900;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:28px 15px;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    box-shadow:var(--shadow);
+}
+
+.spinner{
+    width:24px;
+    height:24px;
+    border:3px solid #e8ddf5;
+    border-top-color:var(--purple);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 9px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
     }
+}
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
 
-    body{
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      padding-bottom:85px;
-    }
+/* =========================================================
+   BOTTOM NAVIGATION — EXACT DASHBOARD STYLE
+========================================================= */
 
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
+.bottom-nav{
+    position:fixed;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    width:min(760px,100%);
+    height:78px;
+    background:rgba(255,255,255,.97);
+    border-top:1px solid var(--border);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    z-index:200;
+    backdrop-filter:blur(14px);
+    padding-bottom:env(safe-area-inset-bottom);
+}
 
-    button{
-      font:inherit;
-    }
+.nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    color:#817a89;
+    font-size:10px;
+    font-weight:800;
+    position:relative;
+}
 
-    .app{
-      width:100%;
-      max-width:760px;
-      margin:auto;
-      min-height:100vh;
-    }
+.nav-item svg{
+    width:21px;
+    height:21px;
+}
 
-    /* HEADER */
+.nav-item.active{
+    color:var(--purple);
+}
 
-    header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      height:64px;
-      background:rgba(255,255,255,.95);
-      backdrop-filter:blur(12px);
-      border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 18px;
-    }
+.nav-item.active::before{
+    content:"";
+    position:absolute;
+    top:0;
+    width:28px;
+    height:3px;
+    border-radius:0 0 5px 5px;
+    background:var(--purple);
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:800;
-      font-size:19px;
-      color:var(--purple-dark);
-    }
 
-    .logo{
-      width:36px;
-      height:36px;
-      border-radius:11px;
-      background:linear-gradient(135deg,var(--purple),var(--purple-dark));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-weight:900;
-      box-shadow:0 5px 14px rgba(109,40,217,.25);
-    }
+/* =========================================================
+   SMALL SCREENS
+========================================================= */
 
-    .back-btn{
-      width:40px;
-      height:40px;
-      border:none;
-      background:var(--purple-light);
-      color:var(--purple-dark);
-      border-radius:12px;
-      cursor:pointer;
-      font-size:20px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    /* MAIN */
+@media(max-width:390px){
 
     main{
-      padding:20px 16px 30px;
-    }
-
-    .hero{
-      margin-bottom:20px;
-    }
-
-    .hero h1{
-      font-size:26px;
-      line-height:1.2;
-      margin-bottom:7px;
-    }
-
-    .hero p{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    /* CURRENT VIP */
-
-    .current-card{
-      background:linear-gradient(135deg,var(--purple),var(--purple-dark));
-      color:white;
-      border-radius:22px;
-      padding:22px;
-      margin-bottom:24px;
-      box-shadow:0 12px 30px rgba(76,29,149,.20);
-    }
-
-    .current-label{
-      font-size:12px;
-      opacity:.8;
-      text-transform:uppercase;
-      letter-spacing:.7px;
-      margin-bottom:6px;
+        padding:15px;
     }
 
     .current-name{
-      font-size:27px;
-      font-weight:800;
-      margin-bottom:17px;
+        font-size:25px;
     }
 
     .stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
+        gap:6px;
     }
 
     .stat{
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.13);
-      border-radius:14px;
-      padding:12px 9px;
-    }
-
-    .stat-label{
-      font-size:10px;
-      opacity:.75;
-      margin-bottom:5px;
+        padding:10px 6px;
     }
 
     .stat-value{
-      font-size:14px;
-      font-weight:750;
-    }
-
-    /* SECTION */
-
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin:0 2px 12px;
-    }
-
-    .section-title h2{
-      font-size:18px;
-    }
-
-    .section-title span{
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    /* VIP LEVELS */
-
-    .levels{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-
-    .vip-card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:17px;
-      box-shadow:var(--shadow);
-    }
-
-    .vip-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:13px;
-    }
-
-    .vip-title{
-      display:flex;
-      align-items:center;
-      gap:11px;
-    }
-
-    .vip-number{
-      width:42px;
-      height:42px;
-      border-radius:13px;
-      background:var(--purple-light);
-      color:var(--purple-dark);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:850;
-      font-size:14px;
-    }
-
-    .vip-name{
-      font-size:16px;
-      font-weight:800;
+        font-size:12px;
     }
 
     .vip-price{
-      font-weight:850;
-      color:var(--purple-dark);
-      white-space:nowrap;
-      font-size:14px;
-    }
-
-    .vip-info{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-      margin-bottom:14px;
-    }
-
-    .info-box{
-      background:#faf8fd;
-      border:1px solid #f0eaf6;
-      border-radius:12px;
-      padding:10px;
-    }
-
-    .info-box small{
-      display:block;
-      color:var(--muted);
-      font-size:10px;
-      margin-bottom:4px;
-    }
-
-    .info-box strong{
-      font-size:13px;
-    }
-
-    .upgrade-btn{
-      width:100%;
-      border:0;
-      border-radius:12px;
-      background:var(--purple);
-      color:white;
-      padding:12px;
-      font-weight:750;
-      cursor:pointer;
-    }
-
-    .upgrade-btn:active{
-      transform:scale(.98);
-    }
-
-    .upgrade-btn.current{
-      background:#e9e5ed;
-      color:#77717d;
-      cursor:default;
-    }
-
-    .upgrade-btn.locked{
-      background:#f3f0f5;
-      color:#817985;
-      cursor:default;
-    }
-
-    /* STATUS */
-
-    .status{
-      display:none;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px;
-      margin-bottom:18px;
-    }
-
-    .status.show{
-      display:block;
-    }
-
-    .status-title{
-      font-weight:800;
-      margin-bottom:6px;
-    }
-
-    .status-text{
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5;
-      word-break:break-word;
-    }
-
-    .status.error{
-      border-color:#fecaca;
-      background:#fff7f7;
-    }
-
-    .status.error .status-title{
-      color:var(--danger);
-    }
-
-    /* MODAL */
-
-    .modal{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.48);
-      z-index:100;
-      display:none;
-      align-items:flex-end;
-      justify-content:center;
-    }
-
-    .modal.show{
-      display:flex;
-    }
-
-    .modal-box{
-      width:100%;
-      max-width:760px;
-      background:white;
-      border-radius:25px 25px 0 0;
-      padding:22px 18px 28px;
-      animation:slideUp .2s ease;
-    }
-
-    @keyframes slideUp{
-      from{
-        transform:translateY(30px);
-        opacity:.5;
-      }
-      to{
-        transform:translateY(0);
-        opacity:1;
-      }
-    }
-
-    .modal-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:18px;
-    }
-
-    .modal-head h3{
-      font-size:19px;
-    }
-
-    .close-btn{
-      width:36px;
-      height:36px;
-      border:none;
-      border-radius:10px;
-      background:#f4f1f6;
-      cursor:pointer;
-      font-size:18px;
-    }
-
-    .payment-box{
-      background:var(--purple-light);
-      border-radius:15px;
-      padding:15px;
-      margin-bottom:16px;
-    }
-
-    .payment-row{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      padding:7px 0;
-      font-size:14px;
-    }
-
-    .payment-row span{
-      color:var(--muted);
-    }
-
-    .payment-row strong{
-      color:var(--purple-dark);
-    }
-
-    .notice{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.5;
-      margin-bottom:17px;
-    }
-
-    .confirm-btn{
-      width:100%;
-      border:none;
-      background:var(--orange);
-      color:white;
-      border-radius:13px;
-      padding:14px;
-      font-weight:800;
-      cursor:pointer;
-    }
-
-    /* BOTTOM NAV */
-
-    .bottom-nav{
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
-      z-index:60;
-      height:70px;
-      background:rgba(255,255,255,.97);
-      backdrop-filter:blur(12px);
-      border-top:1px solid var(--border);
-      display:flex;
-      justify-content:center;
-    }
-
-    .nav-inner{
-      width:100%;
-      max-width:760px;
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-    }
-
-    .nav-item{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      color:#8a8391;
-      font-size:10px;
-      font-weight:650;
-    }
-
-    .nav-item .icon{
-      font-size:18px;
-      line-height:1;
-    }
-
-    .nav-item.active{
-      color:var(--purple);
-    }
-
-    /* LOADING */
-
-    .loading{
-      text-align:center;
-      padding:30px 10px;
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .spinner{
-      width:24px;
-      height:24px;
-      border:3px solid #e8ddf5;
-      border-top-color:var(--purple);
-      border-radius:50%;
-      animation:spin .8s linear infinite;
-      margin:0 auto 10px;
-    }
-
-    @keyframes spin{
-      to{transform:rotate(360deg)}
-    }
-
-    @media(max-width:420px){
-      .stats{
-        gap:6px;
-      }
-
-      .stat{
-        padding:10px 6px;
-      }
-
-      .stat-value{
         font-size:12px;
-      }
-
-      .vip-price{
-        font-size:12px;
-      }
     }
-  </style>
+
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <header>
-    <button class="back-btn" onclick="goHome()">‹</button>
+<header class="topbar">
 
     <a href="dashboard.html" class="brand">
-      <div class="logo">V</div>
-      <span>VDC</span>
+
+        <div class="brand-mark">
+            V
+        </div>
+
+        <span>VDC</span>
+
     </a>
 
-    <div style="width:40px;"></div>
-  </header>
+    <div class="header-actions">
 
-  <main>
+        <a
+            href="notifications.html"
+            class="icon-button"
+            aria-label="Notifications"
+        >
 
-    <section class="hero">
-      <h1>VIP Membership</h1>
-      <p>
-        Upgrade your VIP level to unlock higher daily task limits and rewards.
-      </p>
-    </section>
+            <span class="notification-dot"></span>
 
-    <div id="statusBox" class="status">
-      <div id="statusTitle" class="status-title"></div>
-      <div id="statusText" class="status-text"></div>
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path
+                    d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+                />
+                <path d="M10 21h4"/>
+            </svg>
+
+        </a>
+
     </div>
 
-    <section class="current-card">
+</header>
 
-      <div class="current-label">
-        Your Current Level
-      </div>
 
-      <div id="currentName" class="current-name">
-        Loading...
-      </div>
+<main>
 
-      <div class="stats">
+<section class="hero">
 
-        <div class="stat">
-          <div class="stat-label">Level</div>
-          <div id="currentLevel" class="stat-value">—</div>
-        </div>
+    <h1>VIP Membership</h1>
 
-        <div class="stat">
-          <div class="stat-label">Daily Tasks</div>
-          <div id="currentTasks" class="stat-value">—</div>
-        </div>
+    <p>
+        Upgrade your VIP level to unlock higher daily task limits and rewards.
+    </p>
 
-        <div class="stat">
-          <div class="stat-label">Task Reward</div>
-          <div id="currentReward" class="stat-value">₦0</div>
-        </div>
+</section>
 
-      </div>
 
-    </section>
+<div id="statusBox" class="status">
 
-    <section>
+    <div id="statusTitle" class="status-title"></div>
 
-      <div class="section-title">
-        <h2>VIP Levels</h2>
-        <span>Choose your level</span>
-      </div>
-
-      <div id="vipLevels" class="levels">
-
-        <div class="loading">
-          <div class="spinner"></div>
-          Loading VIP levels...
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
+    <div id="statusText" class="status-text"></div>
 
 </div>
 
-<!-- UPGRADE MODAL -->
+
+<section class="current-card">
+
+    <div class="current-label">
+        Your Current Level
+    </div>
+
+    <div id="currentName" class="current-name">
+        Loading...
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">Level</div>
+            <div id="currentLevel" class="stat-value">—</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Daily Tasks</div>
+            <div id="currentTasks" class="stat-value">—</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Task Reward</div>
+            <div id="currentReward" class="stat-value">₦0</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="section-head">
+
+    <div class="section-title">
+        VIP Levels
+    </div>
+
+    <div class="section-subtitle">
+        Choose your level
+    </div>
+
+</div>
+
+
+<div id="vipLevels" class="levels">
+
+    <div class="loading">
+
+        <div class="spinner"></div>
+
+        Loading VIP levels...
+
+    </div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- =========================================================
+     UPGRADE MODAL
+========================================================= -->
 
 <div id="upgradeModal" class="modal">
 
-  <div class="modal-box">
+    <div class="modal-box">
 
-    <div class="modal-head">
-      <h3>Upgrade VIP</h3>
+        <div class="modal-head">
 
-      <button class="close-btn" onclick="closeModal()">
-        ×
-      </button>
+            <h3>Upgrade VIP</h3>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="payment-box">
+
+            <div class="payment-row">
+                <span>VIP Level</span>
+                <strong id="modalLevel">—</strong>
+            </div>
+
+            <div class="payment-row">
+                <span>Upgrade Price</span>
+                <strong id="modalPrice">₦0</strong>
+            </div>
+
+            <div class="payment-row">
+                <span>Daily Tasks</span>
+                <strong id="modalTasks">—</strong>
+            </div>
+
+            <div class="payment-row">
+                <span>Reward / Task</span>
+                <strong id="modalReward">₦0</strong>
+            </div>
+
+        </div>
+
+        <div class="notice">
+            VIP upgrades are activated only after payment has been
+            received and verified by VDC.
+        </div>
+
+        <button
+            class="confirm-btn"
+            onclick="startUpgrade()"
+        >
+            Continue
+        </button>
+
     </div>
-
-    <div class="payment-box">
-
-      <div class="payment-row">
-        <span>VIP Level</span>
-        <strong id="modalLevel">—</strong>
-      </div>
-
-      <div class="payment-row">
-        <span>Upgrade Price</span>
-        <strong id="modalPrice">₦0</strong>
-      </div>
-
-      <div class="payment-row">
-        <span>Daily Tasks</span>
-        <strong id="modalTasks">—</strong>
-      </div>
-
-      <div class="payment-row">
-        <span>Reward / Task</span>
-        <strong id="modalReward">₦0</strong>
-      </div>
-
-    </div>
-
-    <div class="notice">
-      VIP upgrades are activated only after the payment has been received
-      and verified by VDC. Do not assume an upgrade is active until it appears
-      on your account.
-    </div>
-
-    <button class="confirm-btn" onclick="startUpgrade()">
-      Continue
-    </button>
-
-  </div>
 
 </div>
 
-<!-- BOTTOM NAV -->
+
+<!-- =========================================================
+     BOTTOM NAVIGATION
+     EXACT SVG ICONS FROM DASHBOARD
+========================================================= -->
 
 <nav class="bottom-nav">
 
-  <div class="nav-inner">
+<a
+    href="dashboard.html"
+    class="nav-item"
+>
 
-    <a class="nav-item" href="dashboard.html">
-      <div class="icon">⌂</div>
-      <span>Home</span>
-    </a>
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
 
-    <a class="nav-item" href="tasks.html">
-      <div class="icon">✓</div>
-      <span>Tasks</span>
-    </a>
+        <path d="m3 10 9-7 9 7"/>
 
-    <a class="nav-item active" href="vip.html">
-      <div class="icon">★</div>
-      <span>VIP</span>
-    </a>
+        <path d="M5 9v11h14V9"/>
 
-    <a class="nav-item" href="earn.html">
-      <div class="icon">◈</div>
-      <span>Earn</span>
-    </a>
+        <path d="M9 20v-6h6v6"/>
 
-    <a class="nav-item" href="profile.html">
-      <div class="icon">○</div>
-      <span>My</span>
-    </a>
+    </svg>
 
-  </div>
+    <span>Home</span>
+
+</a>
+
+
+<a
+    href="tasks.html"
+    class="nav-item"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <rect
+            x="4"
+            y="3"
+            width="16"
+            height="18"
+            rx="2"
+        />
+
+        <path d="M8 7h8"/>
+        <path d="M8 11h8"/>
+        <path d="M8 15h5"/>
+
+    </svg>
+
+    <span>Tasks</span>
+
+</a>
+
+
+<a
+    href="vip.html"
+    class="nav-item active"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <path
+            d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6 9.2 8.7 12 3Z"
+        />
+
+    </svg>
+
+    <span>VIP</span>
+
+</a>
+
+
+<a
+    href="earn.html"
+    class="nav-item"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <circle
+            cx="12"
+            cy="12"
+            r="8"
+        />
+
+        <path d="M12 8v8"/>
+
+        <path
+            d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"
+        />
+
+    </svg>
+
+    <span>Earn</span>
+
+</a>
+
+
+<a
+    href="profile.html"
+    class="nav-item"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <circle
+            cx="12"
+            cy="8"
+            r="4"
+        />
+
+        <path
+            d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"
+        />
+
+    </svg>
+
+    <span>My</span>
+
+</a>
 
 </nav>
 
+
 <script>
+
 /* =========================================================
-   VDC SUPABASE CONFIG
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
-  "https://wiorfxlodrcawxdeowbg.supabase.co";
+    "https://wiorfxlodrcawxdeowbg.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
 
-const { createClient } = window.supabase;
+const { createClient } =
+    window.supabase;
 
-const db = createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
-  }
-);
+const db =
+    createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+            auth:{
+                persistSession:true,
+                autoRefreshToken:true,
+                detectSessionInUrl:true
+            }
+        }
+    );
 
 
 /* =========================================================
@@ -726,397 +1030,543 @@ let selectedVip = null;
 
 
 /* =========================================================
-   ELEMENTS
+   HELPERS
 ========================================================= */
 
-const $ = id => document.getElementById(id);
-
-const statusBox = $("statusBox");
-const statusTitle = $("statusTitle");
-const statusText = $("statusText");
+const $ = id =>
+    document.getElementById(id);
 
 
-/* =========================================================
-   STATUS MESSAGE
-========================================================= */
+function escapeHtml(value){
 
-function showStatus(title, message, error = false){
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
-  statusBox.classList.add("show");
-
-  if(error){
-    statusBox.classList.add("error");
-  }else{
-    statusBox.classList.remove("error");
-  }
-
-  statusTitle.textContent = title;
-  statusText.textContent = message;
-}
-
-function hideStatus(){
-  statusBox.classList.remove("show");
 }
 
 
 /* =========================================================
-   AUTHENTICATED USER
+   AUTH
 ========================================================= */
 
 async function getAuthenticatedUser(){
 
-  try{
+    try{
 
-    let { data, error } = await db.auth.getSession();
+        let {
+            data,
+            error
+        } =
+            await db.auth.getSession();
 
-    if(error){
-      throw error;
+        if(error){
+            throw error;
+        }
+
+        if(
+            data &&
+            data.session &&
+            data.session.user
+        ){
+
+            return data.session.user;
+
+        }
+
+        await new Promise(
+            resolve =>
+                setTimeout(resolve,700)
+        );
+
+        const retry =
+            await db.auth.getSession();
+
+        if(retry.error){
+            throw retry.error;
+        }
+
+        if(
+            retry.data &&
+            retry.data.session &&
+            retry.data.session.user
+        ){
+
+            return retry.data.session.user;
+
+        }
+
+        return null;
+
+    }catch(error){
+
+        console.error(
+            "AUTH ERROR:",
+            error
+        );
+
+        throw new Error(
+            "Authentication check failed: " +
+            (
+                error.message ||
+                "Unknown error"
+            )
+        );
+
     }
 
-    if(data && data.session && data.session.user){
-      return data.session.user;
-    }
-
-    await new Promise(resolve => setTimeout(resolve,700));
-
-    const retry = await db.auth.getSession();
-
-    if(retry.error){
-      throw retry.error;
-    }
-
-    if(retry.data &&
-       retry.data.session &&
-       retry.data.session.user){
-
-      return retry.data.session.user;
-    }
-
-    return null;
-
-  }catch(error){
-
-    console.error("AUTH ERROR:", error);
-
-    throw new Error(
-      "Authentication check failed: " +
-      (error.message || "Unknown error")
-    );
-  }
 }
 
 
 /* =========================================================
-   LOAD CURRENT VIP
+   CURRENT VIP
 ========================================================= */
 
 async function loadCurrentVip(){
 
-  const result = await db
-    .from("user_vips")
-    .select(`
-      id,
-      user_id,
-      vip_level_id,
-      status,
-      activated_at,
-      expires_at,
-      vip_levels (
-        id,
-        level_number,
-        name,
-        price,
-        daily_task_limit,
-        task_reward,
-        active
-      )
-    `)
-    .eq("user_id", currentUser.id)
-    .eq("status","active")
-    .order("activated_at",{ascending:false})
-    .limit(1)
-    .maybeSingle();
+    const result =
+        await db
+            .from("user_vips")
+            .select(`
+                id,
+                user_id,
+                vip_level_id,
+                status,
+                activated_at,
+                expires_at,
+                vip_levels (
+                    id,
+                    level_number,
+                    name,
+                    price,
+                    daily_task_limit,
+                    task_reward,
+                    active
+                )
+            `)
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .eq(
+                "status",
+                "active"
+            )
+            .order(
+                "activated_at",
+                {
+                    ascending:false
+                }
+            )
+            .limit(1)
+            .maybeSingle();
 
-  if(result.error){
+    if(result.error){
 
-    console.error("CURRENT VIP ERROR:",result.error);
+        console.error(
+            "CURRENT VIP ERROR:",
+            result.error
+        );
 
-    throw new Error(
-      "Current VIP query failed: " +
-      result.error.message
-    );
-  }
+        throw new Error(
+            "Current VIP query failed: " +
+            result.error.message
+        );
 
-  if(!result.data){
+    }
 
-    currentVipLevel = 0;
+    if(!result.data){
 
-    $("currentName").textContent = "Free VIP";
-    $("currentLevel").textContent = "0";
-    $("currentTasks").textContent = "5";
-    $("currentReward").textContent = "₦150";
+        currentVipLevel = 0;
 
-    return;
-  }
+        $("currentName").textContent =
+            "Free VIP";
 
-  const vip = result.data.vip_levels;
+        $("currentLevel").textContent =
+            "0";
 
-  if(!vip){
+        $("currentTasks").textContent =
+            "5";
 
-    throw new Error(
-      "Your VIP record exists, but its VIP level could not be loaded."
-    );
-  }
+        $("currentReward").textContent =
+            "₦150";
 
-  currentVipLevel = Number(vip.level_number || 0);
+        return;
 
-  $("currentName").textContent =
-    vip.name || ("VIP " + currentVipLevel);
+    }
 
-  $("currentLevel").textContent =
-    currentVipLevel;
+    const vip =
+        result.data.vip_levels;
 
-  $("currentTasks").textContent =
-    vip.daily_task_limit ?? "—";
+    if(!vip){
 
-  $("currentReward").textContent =
-    "₦" + Number(vip.task_reward || 0).toLocaleString();
+        throw new Error(
+            "Your VIP record exists, but its VIP level could not be loaded."
+        );
+
+    }
+
+    currentVipLevel =
+        Number(
+            vip.level_number || 0
+        );
+
+    $("currentName").textContent =
+        vip.name ||
+        ("VIP " + currentVipLevel);
+
+    $("currentLevel").textContent =
+        currentVipLevel;
+
+    $("currentTasks").textContent =
+        vip.daily_task_limit ?? "—";
+
+    $("currentReward").textContent =
+        "₦" +
+        Number(
+            vip.task_reward || 0
+        ).toLocaleString();
 
 }
 
 
 /* =========================================================
-   LOAD VIP LEVELS
+   VIP LEVELS
 ========================================================= */
 
 async function loadVipLevels(){
 
-  const container = $("vipLevels");
+    const container =
+        $("vipLevels");
 
-  const result = await db
-    .from("vip_levels")
-    .select(`
-      id,
-      level_number,
-      name,
-      price,
-      daily_task_limit,
-      task_reward,
-      active
-    `)
-    .eq("active",true)
-    .order("level_number",{ascending:true});
+    const result =
+        await db
+            .from("vip_levels")
+            .select(`
+                id,
+                level_number,
+                name,
+                price,
+                daily_task_limit,
+                task_reward,
+                active
+            `)
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "level_number",
+                {
+                    ascending:true
+                }
+            );
 
-  if(result.error){
+    if(result.error){
 
-    console.error("VIP LEVELS ERROR:",result.error);
+        console.error(
+            "VIP LEVELS ERROR:",
+            result.error
+        );
 
-    throw new Error(
-      "VIP levels query failed: " +
-      result.error.message
-    );
-  }
-
-  if(!result.data || result.data.length === 0){
-
-    container.innerHTML = `
-      <div class="status show">
-        <div class="status-title">No VIP levels found</div>
-        <div class="status-text">
-          No active VIP levels are currently available.
-        </div>
-      </div>
-    `;
-
-    return;
-  }
-
-  container.innerHTML = "";
-
-  result.data.forEach(vip => {
-
-    const level =
-      Number(vip.level_number || 0);
-
-    const price =
-      Number(vip.price || 0);
-
-    const tasks =
-      Number(vip.daily_task_limit || 0);
-
-    const reward =
-      Number(vip.task_reward || 0);
-
-    const card =
-      document.createElement("div");
-
-    card.className = "vip-card";
-
-    let buttonText = "Upgrade";
-
-    let buttonClass = "upgrade-btn";
-
-    let disabled = false;
-
-    if(level === currentVipLevel){
-
-      buttonText = "Current Level";
-      buttonClass += " current";
-      disabled = true;
-
-    }else if(level < currentVipLevel){
-
-      buttonText = "Already Passed";
-      buttonClass += " locked";
-      disabled = true;
+        throw new Error(
+            "VIP levels query failed: " +
+            result.error.message
+        );
 
     }
 
-    card.innerHTML = `
+    if(
+        !result.data ||
+        result.data.length === 0
+    ){
 
-      <div class="vip-top">
+        container.innerHTML = `
+            <div class="status show">
+                <div class="status-title">
+                    No VIP levels found
+                </div>
+                <div class="status-text">
+                    No active VIP levels are currently available.
+                </div>
+            </div>
+        `;
 
-        <div class="vip-title">
-
-          <div class="vip-number">
-            VIP ${level}
-          </div>
-
-          <div class="vip-name">
-            ${escapeHtml(vip.name || ("VIP " + level))}
-          </div>
-
-        </div>
-
-        <div class="vip-price">
-          ${price === 0 ? "Free" : "₦" + price.toLocaleString()}
-        </div>
-
-      </div>
-
-      <div class="vip-info">
-
-        <div class="info-box">
-          <small>Daily Tasks</small>
-          <strong>${tasks}</strong>
-        </div>
-
-        <div class="info-box">
-          <small>Reward / Task</small>
-          <strong>₦${reward.toLocaleString()}</strong>
-        </div>
-
-      </div>
-
-      <button
-        class="${buttonClass}"
-        ${disabled ? "disabled" : ""}
-      >
-        ${buttonText}
-      </button>
-    `;
-
-    const button =
-      card.querySelector("button");
-
-    if(!disabled){
-
-      button.addEventListener("click",() => {
-
-        selectedVip = vip;
-
-        $("modalLevel").textContent =
-          vip.name || ("VIP " + level);
-
-        $("modalPrice").textContent =
-          "₦" + price.toLocaleString();
-
-        $("modalTasks").textContent =
-          tasks;
-
-        $("modalReward").textContent =
-          "₦" + reward.toLocaleString();
-
-        $("upgradeModal").classList.add("show");
-      });
+        return;
 
     }
 
-    container.appendChild(card);
+    container.innerHTML = "";
 
-  });
+    result.data.forEach(vip => {
+
+        const level =
+            Number(
+                vip.level_number || 0
+            );
+
+        const price =
+            Number(
+                vip.price || 0
+            );
+
+        const tasks =
+            Number(
+                vip.daily_task_limit || 0
+            );
+
+        const reward =
+            Number(
+                vip.task_reward || 0
+            );
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "vip-level-card";
+
+        let buttonText =
+            "Upgrade";
+
+        let buttonClass =
+            "upgrade-btn";
+
+        let disabled =
+            false;
+
+
+        if(
+            level ===
+            currentVipLevel
+        ){
+
+            buttonText =
+                "Current Level";
+
+            buttonClass +=
+                " current";
+
+            disabled =
+                true;
+
+        }else if(
+            level <
+            currentVipLevel
+        ){
+
+            buttonText =
+                "Already Passed";
+
+            buttonClass +=
+                " locked";
+
+            disabled =
+                true;
+
+        }
+
+
+        card.innerHTML = `
+
+            <div class="vip-top">
+
+                <div class="vip-left">
+
+                    <div class="vip-number">
+                        VIP ${level}
+                    </div>
+
+                    <div class="vip-name">
+                        ${escapeHtml(
+                            vip.name ||
+                            ("VIP " + level)
+                        )}
+                    </div>
+
+                </div>
+
+                <div class="vip-price">
+                    ${
+                        price === 0
+                        ? "Free"
+                        : "₦" +
+                          price.toLocaleString()
+                    }
+                </div>
+
+            </div>
+
+
+            <div class="vip-info">
+
+                <div class="info-box">
+
+                    <small>
+                        Daily Tasks
+                    </small>
+
+                    <strong>
+                        ${tasks}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <small>
+                        Reward / Task
+                    </small>
+
+                    <strong>
+                        ₦${reward.toLocaleString()}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="${buttonClass}"
+                ${disabled ? "disabled" : ""}
+            >
+                ${buttonText}
+            </button>
+        `;
+
+
+        const button =
+            card.querySelector("button");
+
+
+        if(!disabled){
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedVip =
+                        vip;
+
+                    $("modalLevel")
+                        .textContent =
+                        vip.name ||
+                        ("VIP " + level);
+
+                    $("modalPrice")
+                        .textContent =
+                        "₦" +
+                        price.toLocaleString();
+
+                    $("modalTasks")
+                        .textContent =
+                        tasks;
+
+                    $("modalReward")
+                        .textContent =
+                        "₦" +
+                        reward.toLocaleString();
+
+                    $("upgradeModal")
+                        .classList
+                        .add("show");
+
+                }
+            );
+
+        }
+
+
+        container.appendChild(card);
+
+    });
 
 }
 
 
 /* =========================================================
-   START PAGE
+   INITIALIZE
 ========================================================= */
 
 async function initialize(){
 
-  hideStatus();
+    try{
 
-  try{
+        currentUser =
+            await getAuthenticatedUser();
 
-    currentUser =
-      await getAuthenticatedUser();
+        if(!currentUser){
 
-    if(!currentUser){
+            window.location.href =
+                "auth.html";
 
-      window.location.href = "login.html";
-      return;
+            return;
+
+        }
+
+        await loadCurrentVip();
+
+        await loadVipLevels();
+
+    }catch(error){
+
+        console.error(
+            "VDC VIP ERROR:",
+            error
+        );
+
+        $("currentName")
+            .textContent =
+            "Unable to load";
+
+        $("currentLevel")
+            .textContent =
+            "—";
+
+        $("currentTasks")
+            .textContent =
+            "—";
+
+        $("currentReward")
+            .textContent =
+            "₦0";
+
+        $("vipLevels").innerHTML = `
+            <div class="status show error">
+
+                <div class="status-title">
+                    Unable to load VIP levels
+                </div>
+
+                <div class="status-text">
+                    ${escapeHtml(
+                        error.message ||
+                        "Unknown error"
+                    )}
+                </div>
+
+            </div>
+        `;
+
+        $("statusBox")
+            .classList
+            .add("show");
+
+        $("statusTitle")
+            .textContent =
+            "Unable to load VIP information";
+
+        $("statusText")
+            .textContent =
+            error.message ||
+            "Unknown error";
+
     }
-
-    console.log(
-      "VDC AUTH USER:",
-      currentUser.id
-    );
-
-    await loadCurrentVip();
-
-    await loadVipLevels();
-
-  }catch(error){
-
-    console.error(
-      "VDC VIP INITIALIZATION ERROR:",
-      error
-    );
-
-    $("currentName").textContent =
-      "Unable to load";
-
-    $("currentLevel").textContent =
-      "—";
-
-    $("currentTasks").textContent =
-      "—";
-
-    $("currentReward").textContent =
-      "₦0";
-
-    $("vipLevels").innerHTML = `
-      <div class="status show error">
-
-        <div class="status-title">
-          Unable to load VIP levels
-        </div>
-
-        <div class="status-text">
-          ${escapeHtml(error.message || "Unknown error")}
-        </div>
-
-      </div>
-    `;
-
-    showStatus(
-      "Unable to load VIP information",
-      error.message || "Unknown error",
-      true
-    );
-
-  }
 
 }
 
@@ -1125,20 +1575,21 @@ async function initialize(){
    AUTH STATE
 ========================================================= */
 
-db.auth.onAuthStateChange((event, session) => {
+db.auth.onAuthStateChange(
+    (event) => {
 
-  console.log(
-    "VDC AUTH EVENT:",
-    event
-  );
+        if(
+            event ===
+            "SIGNED_OUT"
+        ){
 
-  if(event === "SIGNED_OUT"){
+            window.location.href =
+                "auth.html";
 
-    window.location.href = "login.html";
+        }
 
-  }
-
-});
+    }
+);
 
 
 /* =========================================================
@@ -1147,65 +1598,47 @@ db.auth.onAuthStateChange((event, session) => {
 
 function closeModal(){
 
-  $("upgradeModal").classList.remove("show");
+    $("upgradeModal")
+        .classList
+        .remove("show");
 
-  selectedVip = null;
+    selectedVip =
+        null;
+
 }
+
 
 function startUpgrade(){
 
-  if(!selectedVip){
-    return;
-  }
+    if(!selectedVip){
+        return;
+    }
 
-  /*
-    Payment processing will be connected here.
-    We intentionally do NOT activate VIP from the browser.
-  */
+    alert(
+        "VIP upgrade payment processing will be connected here. Your VIP level will only activate after the payment is verified."
+    );
 
-  alert(
-    "VIP upgrade payment processing will be connected here. Your VIP level will only activate after the payment is verified."
-  );
-
-  closeModal();
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(value){
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function goHome(){
-  window.location.href = "dashboard.html";
-}
-
-
-/* =========================================================
-   CLOSE MODAL OUTSIDE
-========================================================= */
-
-$("upgradeModal").addEventListener("click",event => {
-
-  if(event.target === $("upgradeModal")){
     closeModal();
-  }
 
-});
+}
+
+
+$("upgradeModal")
+    .addEventListener(
+        "click",
+        event => {
+
+            if(
+                event.target ===
+                $("upgradeModal")
+            ){
+
+                closeModal();
+
+            }
+
+        }
+    );
 
 
 /* =========================================================
