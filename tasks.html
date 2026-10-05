@@ -651,15 +651,24 @@ h1{
   <div class="brand-name">VDC</div>
 </div>
 
-<button class="icon-btn" onclick="go('notifications.html')" aria-label="Notifications">
+<button
+  class="icon-btn"
+  onclick="go('notifications.html')"
+  aria-label="Notifications"
+>
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.9"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+  </svg>
 
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-<path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-</svg>
-
-<span class="notification-dot"></span>
-
+  <span class="notification-dot"></span>
 </button>
 
 </header>
@@ -730,7 +739,10 @@ Daily task progress
 
 <div class="progress-track">
 
-<div class="progress-bar" id="progressBar"></div>
+<div
+  class="progress-bar"
+  id="progressBar"
+></div>
 
 </div>
 
@@ -748,19 +760,32 @@ Daily task progress
 Available Tasks
 </div>
 
-<div class="section-subtitle" id="taskCountLabel">
+<div
+  class="section-subtitle"
+  id="taskCountLabel"
+>
 Loading...
 </div>
 
 </div>
 
-<div id="taskList" class="task-list">
+<div
+  id="taskList"
+  class="task-list"
+>
 
 <div class="state-card">
 
 <div class="state-icon">
 
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <path d="M12 6v6l4 2"/>
 <circle cx="12" cy="12" r="9"/>
 </svg>
@@ -789,7 +814,14 @@ Please wait while your available tasks are loaded.
 
 <div class="info-icon">
 
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <circle cx="12" cy="12" r="9"/>
 <path d="M12 10v6"/>
 <path d="M12 7h.01"/>
@@ -819,7 +851,10 @@ Your daily task limit and reward amount are determined by your active VIP level.
 
 <!-- TASK DETAIL -->
 
-<div id="detailOverlay" class="detail-overlay">
+<div
+  id="detailOverlay"
+  class="detail-overlay"
+>
 
 <div class="detail-sheet">
 
@@ -829,19 +864,36 @@ Your daily task limit and reward amount are determined by your active VIP level.
 
 <div>
 
-<div id="detailTitle" class="detail-title">
+<div
+  id="detailTitle"
+  class="detail-title"
+>
 Task
 </div>
 
-<div id="detailReward" class="detail-reward">
+<div
+  id="detailReward"
+  class="detail-reward"
+>
 +₦0.00
 </div>
 
 </div>
 
-<button class="detail-close" onclick="closeTaskDetail()" aria-label="Close">
+<button
+  class="detail-close"
+  onclick="closeTaskDetail()"
+  aria-label="Close"
+>
 
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <path d="M6 6l12 12"/>
 <path d="M18 6 6 18"/>
 </svg>
@@ -850,11 +902,18 @@ Task
 
 </div>
 
-<div id="detailDescription" class="detail-description">
+<div
+  id="detailDescription"
+  class="detail-description"
+>
 Task information will appear here.
 </div>
 
-<button id="detailAction" class="detail-link" onclick="continueTask()">
+<button
+  id="detailAction"
+  class="detail-link"
+  onclick="continueTask()"
+>
 Continue Task
 </button>
 
@@ -866,11 +925,19 @@ Continue Task
 
 <nav class="bottom-nav">
 
-<!-- HOME -->
+<a
+  class="nav-item"
+  href="dashboard.html"
+>
 
-<a class="nav-item" href="dashboard.html">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.9"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <path d="m3 10 9-7 9 7"/>
 <path d="M5 9v11h14V9"/>
 <path d="M9 20v-6h6v6"/>
@@ -880,11 +947,19 @@ Continue Task
 
 </a>
 
-<!-- TASKS -->
+<a
+  class="nav-item active"
+  href="tasks.html"
+>
 
-<a class="nav-item active" href="tasks.html">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.9"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <rect x="4" y="3" width="16" height="18" rx="2"/>
 <path d="M8 7h8"/>
 <path d="M8 11h8"/>
@@ -895,11 +970,19 @@ Continue Task
 
 </a>
 
-<!-- VIP -->
+<a
+  class="nav-item"
+  href="vip.html"
+>
 
-<a class="nav-item" href="vip.html">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.9"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <path d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6 9.2 8.7 12 3Z"/>
 </svg>
 
@@ -907,11 +990,19 @@ Continue Task
 
 </a>
 
-<!-- EARN -->
+<a
+  class="nav-item"
+  href="earn.html"
+>
 
-<a class="nav-item" href="earn.html">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.9"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <circle cx="12" cy="12" r="8"/>
 <path d="M12 8v8"/>
 <path d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"/>
@@ -921,11 +1012,19 @@ Continue Task
 
 </a>
 
-<!-- MY -->
+<a
+  class="nav-item"
+  href="profile.html"
+>
 
-<a class="nav-item" href="profile.html">
-
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.9"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
 <circle cx="12" cy="8" r="4"/>
 <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>
 </svg>
@@ -945,8 +1044,13 @@ Continue Task
 const SUPABASE_URL =
 "https://wiorfxlodrcawxdeowbg.supabase.co";
 
+/*
+  Legacy Supabase anon/public key.
+  Safe for browser use when RLS is correctly configured.
+*/
+
 const SUPABASE_KEY =
-"sb_publishable_b3FIKdf_P_UKP0Ii8ZbMREw_CVqOQv9g";
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indpb3JmeGxvZHJjYXd4ZGVvd2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2MDY0OTMsImV4cCI6MjEwNjE4MjQ5M30.sWkCBMMzlRVwhQ1za50wJgULaT8HUxGulublXEVEgXI";
 
 const db =
 window.supabase.createClient(
@@ -963,6 +1067,7 @@ detectSessionInUrl:true
 
 let currentTask = null;
 
+
 /* =========================================================
    NAVIGATION
 ========================================================= */
@@ -970,6 +1075,7 @@ let currentTask = null;
 function go(page){
 window.location.href = page;
 }
+
 
 /* =========================================================
    MONEY
@@ -988,6 +1094,7 @@ maximumFractionDigits:2
 
 }
 
+
 /* =========================================================
    ESCAPE HTML
 ========================================================= */
@@ -1003,6 +1110,7 @@ return String(value ?? "")
 
 }
 
+
 /* =========================================================
    AUTHENTICATED USER
 ========================================================= */
@@ -1010,9 +1118,7 @@ return String(value ?? "")
 async function getAuthenticatedUser(){
 
 const {
-data:{
-session
-}
+data:{session}
 } = await db.auth.getSession();
 
 if(session?.user){
@@ -1024,9 +1130,7 @@ resolve => setTimeout(resolve,700)
 );
 
 const {
-data:{
-session:secondSession
-}
+data:{session:secondSession}
 } = await db.auth.getSession();
 
 if(secondSession?.user){
@@ -1040,6 +1144,7 @@ return null;
 
 }
 
+
 /* =========================================================
    LOAD TASK PAGE
 ========================================================= */
@@ -1052,6 +1157,7 @@ const user =
 await getAuthenticatedUser();
 
 if(!user) return;
+
 
 /* -----------------------------------------------
    VIP
@@ -1129,12 +1235,12 @@ document.getElementById(
 "taskLimit"
 ).textContent = taskLimit;
 
+
 /* -----------------------------------------------
    TODAY'S COMPLETIONS
 ------------------------------------------------ */
 
-const now =
-new Date();
+const now = new Date();
 
 const todayStart =
 new Date(
@@ -1180,15 +1286,10 @@ completedCount,
 taskLimit
 );
 
+
 /* -----------------------------------------------
    TASKS
 ------------------------------------------------ */
-
-/*
-   IMPORTANT:
-   These are the exact columns currently
-   confirmed in public.tasks.
-*/
 
 const {
 data:tasks,
@@ -1208,7 +1309,10 @@ min_vip_level,
 max_completions_per_day,
 url
 `)
-.eq("active",true)
+.eq(
+"active",
+true
+)
 .order(
 "created_at",
 {
@@ -1262,6 +1366,7 @@ showState(
 
 }
 
+
 /* =========================================================
    PROGRESS
 ========================================================= */
@@ -1300,6 +1405,7 @@ percent + "%";
 
 }
 
+
 /* =========================================================
    RENDER TASKS
 ========================================================= */
@@ -1333,12 +1439,14 @@ return;
 
 }
 
+
 /*
-   Filter tasks according to minimum VIP.
+  Filter tasks according to minimum VIP.
 */
 
 const eligibleTasks =
-tasks.filter(task => {
+tasks.filter(
+task => {
 
 const minimumVip =
 Number(
@@ -1347,7 +1455,8 @@ task.min_vip_level || 0
 
 return vipLevelNumber >= minimumVip;
 
-});
+}
+);
 
 if(!eligibleTasks.length){
 
@@ -1373,7 +1482,8 @@ eligibleTasks.length +
 
 list.innerHTML = "";
 
-eligibleTasks.forEach(task => {
+eligibleTasks.forEach(
+task => {
 
 const id =
 String(task.id);
@@ -1439,17 +1549,22 @@ card.innerHTML = `
 
 <div class="task-icon">
 
-<svg viewBox="0 0 24 24"
+<svg
+viewBox="0 0 24 24"
 fill="none"
 stroke="currentColor"
 stroke-width="1.8"
 stroke-linecap="round"
-stroke-linejoin="round">
+stroke-linejoin="round"
+>
 
-<rect x="4" y="3"
+<rect
+x="4"
+y="3"
 width="16"
 height="18"
-rx="2"/>
+rx="2"
+/>
 
 <path d="M8 8h8"/>
 <path d="M8 12h8"/>
@@ -1514,16 +1629,19 @@ if(
 
 button.addEventListener(
 "click",
-() => openTaskDetails(task)
+() =>
+openTaskDetails(task)
 );
 
 }
 
 list.appendChild(card);
 
-});
+}
+);
 
 }
+
 
 /* =========================================================
    OPEN TASK DETAILS
@@ -1567,9 +1685,9 @@ document.getElementById(
 ).textContent =
 description;
 
+
 /*
-   The database currently contains both
-   url and target_url, so support both.
+  Support both URL columns.
 */
 
 const url =
@@ -1603,12 +1721,15 @@ true;
 
 document.getElementById(
 "detailOverlay"
-).classList.add("show");
+).classList.add(
+"show"
+);
 
 document.body.style.overflow =
 "hidden";
 
 }
+
 
 /* =========================================================
    CONTINUE TASK
@@ -1616,8 +1737,7 @@ document.body.style.overflow =
 
 function continueTask(){
 
-if(!currentTask)
-return;
+if(!currentTask) return;
 
 const url =
 currentTask.url ||
@@ -1625,8 +1745,7 @@ currentTask.target_url ||
 currentTask.link ||
 currentTask.task_url;
 
-if(!url)
-return;
+if(!url) return;
 
 window.open(
 url,
@@ -1635,6 +1754,7 @@ url,
 );
 
 }
+
 
 /* =========================================================
    CLOSE DETAILS
@@ -1671,6 +1791,7 @@ closeTaskDetail();
 }
 );
 
+
 /* =========================================================
    STATE
 ========================================================= */
@@ -1693,16 +1814,20 @@ document.getElementById(
 
 <div class="state-icon">
 
-<svg viewBox="0 0 24 24"
+<svg
+viewBox="0 0 24 24"
 fill="none"
 stroke="currentColor"
 stroke-width="1.8"
 stroke-linecap="round"
-stroke-linejoin="round">
+stroke-linejoin="round"
+>
 
-<circle cx="12"
+<circle
+cx="12"
 cy="12"
-r="9"/>
+r="9"
+/>
 
 <path d="M12 8v5"/>
 <path d="M12 16h.01"/>
@@ -1725,6 +1850,7 @@ ${escapeHtml(message)}
 
 }
 
+
 /* =========================================================
    AUTH STATE
 ========================================================= */
@@ -1744,6 +1870,7 @@ window.location.href =
 
 }
 );
+
 
 /* =========================================================
    START
