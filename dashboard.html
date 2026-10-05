@@ -2,2474 +2,2235 @@
 <html lang="en">
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
-    <title>VDC — Dashboard</title>
+<title>VDC — Dashboard</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
+<style>
 
-        :root {
-            --purple: #6d28d9;
-            --purple-dark: #4c1d95;
-            --purple-light: #f3e8ff;
+:root {
+    --purple: #6d28d9;
+    --purple-dark: #4c1d95;
+    --purple-light: #f3e8ff;
 
-            --orange: #f97316;
-            --orange-dark: #ea580c;
+    --orange: #f97316;
+    --orange-dark: #ea580c;
 
-            --green: #008751;
+    --green: #008751;
 
-            --bg: #faf9fc;
-            --card: #ffffff;
+    --bg: #faf9fc;
+    --card: #ffffff;
 
-            --text: #17121f;
-            --muted: #6b6474;
-            --border: #eee8f4;
+    --text: #17121f;
+    --muted: #6b6474;
+    --border: #eee8f4;
 
-            --danger: #b42318;
+    --danger: #b42318;
 
-            --shadow:
-                0 8px 30px rgba(50, 20, 80, .07);
-        }
+    --shadow:
+        0 8px 30px rgba(50, 20, 80, .07);
+}
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        html {
-            scroll-behavior: smooth;
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
 
-            background: var(--bg);
-            color: var(--text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
 
-            font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Arial,
-                sans-serif;
-        }
+button,
+a {
+    font: inherit;
+}
 
-        button,
-        a {
-            font: inherit;
-        }
+button {
+    border: 0;
+}
 
-        button {
-            border: 0;
-        }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+.app {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding-bottom: 100px;
+}
 
-        .app {
-            width: 100%;
-            max-width: 760px;
-            margin: 0 auto;
 
-            min-height: 100vh;
+/* =========================================================
+   HEADER
+========================================================= */
 
-            padding-bottom: 100px;
-        }
+.topbar {
+    height: 68px;
 
+    background: rgba(255,255,255,.97);
 
-        /* =========================================================
-           HEADER
-        ========================================================= */
+    border-bottom:
+        1px solid var(--border);
 
-        .topbar {
-            height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            background: rgba(255,255,255,.97);
+    padding: 0 18px;
 
-            border-bottom:
-                1px solid var(--border);
+    position: sticky;
+    top: 0;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    z-index: 100;
 
-            padding: 0 18px;
+    backdrop-filter: blur(14px);
+}
 
-            position: sticky;
-            top: 0;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-            z-index: 100;
+    font-size: 19px;
+    font-weight: 900;
 
-            backdrop-filter: blur(14px);
-        }
+    color: var(--purple-dark);
+}
 
-        .brand {
-            display: flex;
-            align-items: center;
+.brand-mark {
+    width: 36px;
+    height: 36px;
 
-            gap: 10px;
+    border-radius: 11px;
 
-            font-size: 19px;
-            font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            color: var(--purple-dark);
-        }
+    color: white;
 
-        .brand-mark {
-            width: 36px;
-            height: 36px;
+    font-size: 16px;
+    font-weight: 900;
 
-            border-radius: 11px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            var(--orange)
+        );
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    box-shadow:
+        0 5px 15px rgba(109,40,217,.20);
+}
 
-            color: white;
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-            font-size: 16px;
-            font-weight: 900;
+.icon-button {
+    width: 42px;
+    height: 42px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--purple),
-                    var(--orange)
-                );
+    border-radius: 13px;
 
-            box-shadow:
-                0 5px 15px rgba(109,40,217,.20);
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        .header-actions {
-            display: flex;
-            align-items: center;
+    background: #f7f4fa;
 
-            gap: 8px;
-        }
+    border:
+        1px solid var(--border);
 
-        .icon-button {
-            width: 42px;
-            height: 42px;
+    color: var(--purple-dark);
 
-            border-radius: 13px;
+    position: relative;
+}
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+.icon-button svg {
+    width: 20px;
+    height: 20px;
+}
 
-            background: #f7f4fa;
+.notification-dot {
+    position: absolute;
 
-            border:
-                1px solid var(--border);
+    width: 8px;
+    height: 8px;
 
-            color: var(--purple-dark);
+    border-radius: 50%;
 
-            position: relative;
-        }
+    background: var(--orange);
 
-        .icon-button svg {
-            width: 20px;
-            height: 20px;
-        }
+    right: 8px;
+    top: 7px;
 
-        .notification-dot {
-            position: absolute;
+    border: 2px solid white;
+}
 
-            width: 8px;
-            height: 8px;
 
-            border-radius: 50%;
+/* =========================================================
+   MAIN
+========================================================= */
 
-            background: var(--orange);
+main {
+    padding: 18px;
+}
 
-            right: 8px;
-            top: 7px;
+.welcome {
+    margin-top: 4px;
+}
 
-            border: 2px solid white;
-        }
+.welcome-small {
+    color: var(--muted);
 
+    font-size: 13px;
+    font-weight: 700;
+}
 
-        /* =========================================================
-           MAIN
-        ========================================================= */
+.welcome-title {
+    margin: 3px 0 0;
 
-        main {
-            padding: 18px;
-        }
+    font-size: 25px;
+    line-height: 1.15;
 
-        .welcome {
-            margin-top: 4px;
-        }
+    font-weight: 950;
 
-        .welcome-small {
-            color: var(--muted);
+    letter-spacing: -.5px;
+}
 
-            font-size: 13px;
-            font-weight: 700;
-        }
 
-        .welcome-title {
-            margin: 3px 0 0;
+/* =========================================================
+   WALLET
+========================================================= */
 
-            font-size: 25px;
-            line-height: 1.15;
+.wallet-card {
+    margin-top: 18px;
 
-            font-weight: 950;
+    padding: 20px;
 
-            letter-spacing: -.5px;
-        }
+    border-radius: 22px;
 
+    color: white;
 
-        /* =========================================================
-           WALLET CARD
-        ========================================================= */
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple-dark),
+            var(--purple),
+            #7c3aed
+        );
 
-        .wallet-card {
-            margin-top: 18px;
+    box-shadow:
+        0 12px 30px rgba(76,29,149,.20);
 
-            padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
 
-            border-radius: 22px;
+.wallet-card::after {
+    content: "";
 
-            color: white;
+    position: absolute;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--purple-dark),
-                    var(--purple),
-                    #7c3aed
-                );
+    width: 170px;
+    height: 170px;
 
-            box-shadow:
-                0 12px 30px rgba(76,29,149,.20);
+    border-radius: 50%;
 
-            position: relative;
-            overflow: hidden;
-        }
+    background:
+        rgba(255,255,255,.08);
 
-        .wallet-card::after {
-            content: "";
+    right: -70px;
+    top: -70px;
+}
 
-            position: absolute;
+.wallet-label {
+    position: relative;
+    z-index: 2;
 
-            width: 170px;
-            height: 170px;
+    font-size: 12px;
 
-            border-radius: 50%;
+    opacity: .82;
 
-            background:
-                rgba(255,255,255,.08);
+    font-weight: 700;
+}
 
-            right: -70px;
-            top: -70px;
-        }
+.wallet-row {
+    position: relative;
+    z-index: 2;
 
-        .wallet-label {
-            position: relative;
-            z-index: 2;
+    display: flex;
 
-            font-size: 12px;
+    align-items: center;
+    justify-content: space-between;
 
-            opacity: .82;
+    gap: 10px;
 
-            font-weight: 700;
-        }
+    margin-top: 6px;
+}
 
-        .wallet-row {
-            position: relative;
-            z-index: 2;
+.wallet-balance {
+    font-size: 31px;
 
-            display: flex;
+    font-weight: 950;
 
-            align-items: center;
-            justify-content: space-between;
+    letter-spacing: -.7px;
+}
 
-            gap: 10px;
+.balance-toggle {
+    width: 38px;
+    height: 38px;
 
-            margin-top: 6px;
-        }
+    border-radius: 12px;
 
-        .wallet-balance {
-            font-size: 31px;
+    background:
+        rgba(255,255,255,.13);
 
-            font-weight: 950;
+    color: white;
 
-            letter-spacing: -.7px;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        .balance-toggle {
-            width: 38px;
-            height: 38px;
+    cursor: pointer;
+}
 
-            border-radius: 12px;
+.balance-toggle svg {
+    width: 19px;
+    height: 19px;
+}
 
-            background:
-                rgba(255,255,255,.13);
+.wallet-footer {
+    position: relative;
+    z-index: 2;
 
-            color: white;
+    margin-top: 15px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            cursor: pointer;
-        }
+    font-size: 11px;
 
-        .balance-toggle svg {
-            width: 19px;
-            height: 19px;
-        }
+    opacity: .82;
+}
 
-        .wallet-footer {
-            position: relative;
-            z-index: 2;
 
-            margin-top: 15px;
+/* =========================================================
+   VIP SUMMARY
+========================================================= */
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+.vip-card {
+    margin-top: 12px;
 
-            font-size: 11px;
+    padding: 15px;
 
-            opacity: .82;
-        }
+    background: var(--card);
 
+    border:
+        1px solid var(--border);
 
-        /* =========================================================
-           VIP SUMMARY
-        ========================================================= */
+    border-radius: 18px;
 
-        .vip-card {
-            margin-top: 12px;
+    box-shadow: var(--shadow);
 
-            padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            background: var(--card);
+    gap: 12px;
+}
 
-            border:
-                1px solid var(--border);
+.vip-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-            border-radius: 18px;
+.vip-icon {
+    width: 42px;
+    height: 42px;
 
-            box-shadow: var(--shadow);
+    border-radius: 13px;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            gap: 12px;
-        }
+    background: var(--purple-light);
 
-        .vip-left {
-            display: flex;
-            align-items: center;
+    color: var(--purple);
+}
 
-            gap: 12px;
-        }
+.vip-icon svg {
+    width: 21px;
+    height: 21px;
+}
 
-        .vip-icon {
-            width: 42px;
-            height: 42px;
+.vip-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 700;
+}
 
-            border-radius: 13px;
+.vip-name {
+    margin-top: 2px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    font-size: 15px;
+    font-weight: 900;
+}
 
-            background: var(--purple-light);
+.vip-arrow {
+    color: var(--purple);
 
-            color: var(--purple);
-        }
+    width: 34px;
+    height: 34px;
 
-        .vip-icon svg {
-            width: 21px;
-            height: 21px;
-        }
+    border-radius: 10px;
 
-        .vip-label {
-            font-size: 11px;
-            color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            font-weight: 700;
-        }
+    background: #faf7ff;
+}
 
-        .vip-name {
-            margin-top: 2px;
+.vip-arrow svg {
+    width: 18px;
+    height: 18px;
+}
 
-            font-size: 15px;
-            font-weight: 900;
-        }
 
-        .vip-arrow {
-            color: var(--purple);
+/* =========================================================
+   QUICK STATS
+========================================================= */
 
-            width: 34px;
-            height: 34px;
+.stats-grid {
+    display: grid;
 
-            border-radius: 10px;
+    grid-template-columns:
+        repeat(2, 1fr);
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    gap: 10px;
 
-            background: #faf7ff;
-        }
+    margin-top: 12px;
+}
 
-        .vip-arrow svg {
-            width: 18px;
-            height: 18px;
-        }
+.stat-card {
+    background: var(--card);
 
+    border:
+        1px solid var(--border);
 
-        /* =========================================================
-           QUICK STATS
-        ========================================================= */
+    border-radius: 17px;
 
-        .stats-grid {
-            display: grid;
+    padding: 14px;
 
-            grid-template-columns:
-                repeat(2, 1fr);
+    box-shadow: var(--shadow);
+}
 
-            gap: 10px;
+.stat-label {
+    font-size: 11px;
 
-            margin-top: 12px;
-        }
+    color: var(--muted);
 
-        .stat-card {
-            background: var(--card);
+    font-weight: 700;
 
-            border:
-                1px solid var(--border);
+    margin-bottom: 5px;
+}
 
-            border-radius: 17px;
+.stat-value {
+    font-size: 18px;
 
-            padding: 14px;
+    font-weight: 950;
+}
 
-            box-shadow: var(--shadow);
-        }
+.stat-value.green {
+    color: var(--green);
+}
 
-        .stat-label {
-            font-size: 11px;
+.stat-value.purple {
+    color: var(--purple);
+}
 
-            color: var(--muted);
+.stat-value.orange {
+    color: var(--orange-dark);
+}
 
-            font-weight: 700;
 
-            margin-bottom: 5px;
-        }
+/* =========================================================
+   SECTION HEADER
+========================================================= */
 
-        .stat-value {
-            font-size: 18px;
+.section-head {
+    margin-top: 22px;
 
-            font-weight: 950;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-        .stat-value.green {
-            color: var(--green);
-        }
+.section-title {
+    font-size: 17px;
+    font-weight: 950;
+}
 
-        .stat-value.purple {
-            color: var(--purple);
-        }
+.section-link {
+    color: var(--purple);
 
-        .stat-value.orange {
-            color: var(--orange-dark);
-        }
+    font-size: 12px;
 
+    font-weight: 800;
+}
 
-        /* =========================================================
-           SECTION HEADER
-        ========================================================= */
 
-        .section-head {
-            margin-top: 22px;
+/* =========================================================
+   QUICK ACCESS
+========================================================= */
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+.shortcut-grid {
+    display: grid;
 
-        .section-title {
-            font-size: 17px;
+    grid-template-columns:
+        repeat(3, 1fr);
 
-            font-weight: 950;
-        }
+    gap: 10px;
 
-        .section-link {
-            color: var(--purple);
+    margin-top: 10px;
+}
 
-            font-size: 12px;
+.shortcut {
+    min-height: 92px;
 
-            font-weight: 800;
-        }
+    background: var(--card);
 
+    border:
+        1px solid var(--border);
 
-        /* =========================================================
-           FEATURE SHORTCUTS
-        ========================================================= */
+    border-radius: 17px;
 
-        .shortcut-grid {
-            display: grid;
+    padding: 13px;
 
-            grid-template-columns:
-                repeat(3, 1fr);
+    box-shadow: var(--shadow);
 
-            gap: 10px;
+    display: flex;
+    flex-direction: column;
 
-            margin-top: 10px;
-        }
+    justify-content: space-between;
 
-        .shortcut {
-            min-height: 92px;
+    gap: 8px;
 
-            background: var(--card);
+    transition:
+        transform .16s ease;
+}
 
-            border:
-                1px solid var(--border);
+.shortcut:active {
+    transform: scale(.97);
+}
 
-            border-radius: 17px;
+.shortcut-icon {
+    width: 34px;
+    height: 34px;
 
-            padding: 13px;
+    border-radius: 11px;
 
-            box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            display: flex;
-            flex-direction: column;
+    background: var(--purple-light);
 
-            justify-content: space-between;
+    color: var(--purple);
+}
 
-            gap: 8px;
+.shortcut:nth-child(2)
+.shortcut-icon {
+    background: #fff1e8;
+    color: var(--orange-dark);
+}
 
-            transition:
-                transform .16s ease;
-        }
+.shortcut:nth-child(3)
+.shortcut-icon {
+    background: #eaf8f1;
+    color: var(--green);
+}
 
-        .shortcut:active {
-            transform: scale(.97);
-        }
+.shortcut-icon svg {
+    width: 18px;
+    height: 18px;
+}
 
-        .shortcut-icon {
-            width: 34px;
-            height: 34px;
+.shortcut-name {
+    font-size: 12px;
+    font-weight: 850;
+}
 
-            border-radius: 11px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+/* =========================================================
+   MYSTERY BOX PREVIEW
+========================================================= */
 
-            background: var(--purple-light);
+.lucky-card {
+    margin-top: 10px;
 
-            color: var(--purple);
-        }
+    border-radius: 20px;
 
-        .shortcut:nth-child(2)
-        .shortcut-icon {
-            background: #fff1e8;
-            color: var(--orange-dark);
-        }
+    padding: 17px;
 
-        .shortcut:nth-child(3)
-        .shortcut-icon {
-            background: #eaf8f1;
-            color: var(--green);
-        }
+    background:
+        linear-gradient(
+            135deg,
+            #f3e8ff,
+            #ffffff 65%,
+            #fff7ed
+        );
 
-        .shortcut-icon svg {
-            width: 18px;
-            height: 18px;
-        }
+    border:
+        1px solid #e7daf5;
 
-        .shortcut-name {
-            font-size: 12px;
+    box-shadow:
+        0 8px 25px rgba(109,40,217,.07);
 
-            font-weight: 850;
-        }
+    position: relative;
+    overflow: hidden;
+}
 
+.lucky-card::after {
+    content: "";
 
-        /* =========================================================
-           MYSTERY BOX CARD
-        ========================================================= */
+    position: absolute;
 
-        .lucky-card {
-            margin-top: 12px;
+    width: 130px;
+    height: 130px;
 
-            border-radius: 20px;
+    border-radius: 50%;
 
-            padding: 17px;
+    background:
+        rgba(109,40,217,.06);
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #f3e8ff,
-                    #ffffff 65%,
-                    #fff7ed
-                );
+    right: -50px;
+    bottom: -55px;
+}
 
-            border:
-                1px solid #e7daf5;
+.lucky-content {
+    position: relative;
+    z-index: 2;
+}
 
-            box-shadow:
-                0 8px 25px rgba(109,40,217,.07);
+.lucky-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-            position: relative;
-            overflow: hidden;
-        }
+.lucky-icon {
+    width: 43px;
+    height: 43px;
 
-        .lucky-card::after {
-            content: "";
+    flex-shrink: 0;
 
-            position: absolute;
+    border-radius: 13px;
 
-            width: 130px;
-            height: 130px;
+    background: white;
 
-            border-radius: 50%;
+    border:
+        1px solid #e6daf3;
 
-            background:
-                rgba(109,40,217,.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            right: -50px;
-            bottom: -55px;
-        }
+    color: var(--purple);
 
-        .lucky-content {
-            position: relative;
-            z-index: 2;
-        }
+    box-shadow:
+        0 5px 15px rgba(76,29,149,.07);
+}
 
-        .lucky-top {
-            display: flex;
-            align-items: center;
+.lucky-icon svg {
+    width: 23px;
+    height: 23px;
+}
 
-            gap: 10px;
-        }
+.lucky-title {
+    font-size: 16px;
+    font-weight: 950;
+}
 
-        .lucky-icon {
-            width: 43px;
-            height: 43px;
+.lucky-subtitle {
+    margin-top: 2px;
 
-            border-radius: 13px;
+    color: var(--muted);
 
-            background: white;
+    font-size: 11px;
+}
 
-            border:
-                1px solid #e6daf3;
+.lucky-description {
+    margin-top: 12px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    color: var(--muted);
 
-            color: var(--purple);
+    font-size: 13px;
 
-            box-shadow:
-                0 5px 15px rgba(76,29,149,.07);
-        }
+    line-height: 1.5;
+}
 
-        .lucky-icon svg {
-            width: 23px;
-            height: 23px;
-        }
+.lucky-bottom {
+    margin-top: 14px;
 
-        .lucky-title {
-            font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-            font-weight: 950;
-        }
+    gap: 10px;
+}
 
-        .lucky-subtitle {
-            margin-top: 2px;
+.chance-info {
+    font-size: 12px;
 
-            color: var(--muted);
+    font-weight: 800;
 
-            font-size: 11px;
-        }
+    color: var(--purple-dark);
+}
 
-        .lucky-description {
-            margin-top: 12px;
+.lucky-button {
+    min-height: 42px;
 
-            color: var(--muted);
+    padding:
+        0 16px;
 
-            font-size: 13px;
+    border-radius: 12px;
 
-            line-height: 1.5;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            var(--purple-dark)
+        );
 
-        .lucky-bottom {
-            margin-top: 14px;
+    color: white;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-            gap: 10px;
-        }
+    font-size: 12px;
 
-        .chance-info {
-            font-size: 12px;
+    font-weight: 900;
 
-            font-weight: 800;
+    box-shadow:
+        0 7px 17px rgba(109,40,217,.18);
+}
 
-            color: var(--purple-dark);
-        }
+.lucky-button:active {
+    transform: scale(.97);
+}
 
-        .lucky-button {
-            min-height: 42px;
 
-            padding:
-                0 16px;
+/* =========================================================
+   EARNINGS
+========================================================= */
 
-            border-radius: 12px;
+.earnings-card {
+    margin-top: 10px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--purple),
-                    var(--purple-dark)
-                );
+    background: var(--card);
 
-            color: white;
+    border:
+        1px solid var(--border);
 
-            font-size: 12px;
+    border-radius: 18px;
 
-            font-weight: 900;
+    overflow: hidden;
 
-            box-shadow:
-                0 7px 17px rgba(109,40,217,.18);
-        }
+    box-shadow: var(--shadow);
+}
 
-        .lucky-button:active {
-            transform: scale(.97);
-        }
+.earning-row {
+    min-height: 53px;
 
+    padding:
+        0 14px;
 
-        /* =========================================================
-           EARNINGS BREAKDOWN
-        ========================================================= */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-        .earnings-card {
-            margin-top: 10px;
+    border-bottom:
+        1px solid var(--border);
+}
 
-            background: var(--card);
+.earning-row:last-child {
+    border-bottom: 0;
+}
 
-            border:
-                1px solid var(--border);
+.earning-left {
+    display: flex;
+    align-items: center;
 
-            border-radius: 18px;
+    gap: 10px;
+}
 
-            overflow: hidden;
+.earning-icon {
+    width: 32px;
+    height: 32px;
 
-            box-shadow: var(--shadow);
-        }
+    border-radius: 10px;
 
-        .earning-row {
-            min-height: 53px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-            padding:
-                0 14px;
+    background: var(--purple-light);
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    color: var(--purple);
+}
 
-            border-bottom:
-                1px solid var(--border);
-        }
+.earning-icon svg {
+    width: 16px;
+    height: 16px;
+}
 
-        .earning-row:last-child {
-            border-bottom: 0;
-        }
+.earning-name {
+    font-size: 12px;
+    font-weight: 800;
+}
 
-        .earning-left {
-            display: flex;
-            align-items: center;
+.earning-amount {
+    font-size: 13px;
 
-            gap: 10px;
-        }
+    font-weight: 900;
 
-        .earning-icon {
-            width: 32px;
-            height: 32px;
+    color: var(--green);
+}
 
-            border-radius: 10px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+/* =========================================================
+   ACCOUNT
+========================================================= */
 
-            background: var(--purple-light);
+.info-card {
+    margin-top: 12px;
 
-            color: var(--purple);
-        }
+    background: var(--card);
 
-        .earning-icon svg {
-            width: 16px;
-            height: 16px;
-        }
+    border:
+        1px solid var(--border);
 
-        .earning-name {
-            font-size: 12px;
+    border-radius: 18px;
 
-            font-weight: 800;
-        }
+    padding: 15px;
 
-        .earning-amount {
-            font-size: 13px;
+    box-shadow: var(--shadow);
+}
 
-            font-weight: 900;
+.info-row {
+    display: flex;
 
-            color: var(--green);
-        }
+    align-items: center;
+    justify-content: space-between;
 
+    gap: 12px;
 
-        /* =========================================================
-           WITHDRAWAL / ACCOUNT CARD
-        ========================================================= */
+    padding: 8px 0;
+}
 
-        .info-card {
-            margin-top: 12px;
+.info-row + .info-row {
+    border-top:
+        1px solid var(--border);
+}
 
-            background: var(--card);
+.info-label {
+    color: var(--muted);
 
-            border:
-                1px solid var(--border);
+    font-size: 12px;
+}
 
-            border-radius: 18px;
+.info-value {
+    font-size: 12px;
 
-            padding: 15px;
+    font-weight: 850;
 
-            box-shadow: var(--shadow);
-        }
+    text-align: right;
+}
 
-        .info-row {
-            display: flex;
 
-            align-items: center;
-            justify-content: space-between;
+/* =========================================================
+   BOTTOM NAVIGATION
+========================================================= */
 
-            gap: 12px;
+.bottom-nav {
+    position: fixed;
 
-            padding: 8px 0;
-        }
+    left: 50%;
+    bottom: 0;
 
-        .info-row + .info-row {
-            border-top:
-                1px solid var(--border);
-        }
+    transform:
+        translateX(-50%);
 
-        .info-label {
-            color: var(--muted);
+    width:
+        min(760px, 100%);
 
-            font-size: 12px;
-        }
+    height: 78px;
 
-        .info-value {
-            font-size: 12px;
+    background:
+        rgba(255,255,255,.97);
 
-            font-weight: 850;
+    border-top:
+        1px solid var(--border);
 
-            text-align: right;
-        }
+    display: grid;
 
+    grid-template-columns:
+        repeat(5, 1fr);
 
-        /* =========================================================
-           LOADING / ERROR
-        ========================================================= */
+    z-index: 200;
 
-        .loading {
-            opacity: .6;
-        }
+    backdrop-filter: blur(14px);
 
-        .error-message {
-            color: var(--danger);
+    padding-bottom:
+        env(safe-area-inset-bottom);
+}
 
-            font-size: 12px;
+.nav-item {
+    display: flex;
 
-            text-align: center;
+    flex-direction: column;
 
-            padding: 15px;
-        }
+    align-items: center;
+    justify-content: center;
 
+    gap: 4px;
 
-        /* =========================================================
-           BOTTOM NAVIGATION
-        ========================================================= */
+    color: #817a89;
 
-        .bottom-nav {
-            position: fixed;
+    font-size: 10px;
 
-            left: 50%;
-            bottom: 0;
+    font-weight: 800;
 
-            transform:
-                translateX(-50%);
+    position: relative;
+}
 
-            width:
-                min(760px, 100%);
+.nav-item svg {
+    width: 21px;
+    height: 21px;
+}
 
-            height: 78px;
+.nav-item.active {
+    color: var(--purple);
+}
 
-            background:
-                rgba(255,255,255,.97);
+.nav-item.active::before {
+    content: "";
 
-            border-top:
-                1px solid var(--border);
+    position: absolute;
 
-            display: grid;
+    top: 0;
 
-            grid-template-columns:
-                repeat(5, 1fr);
+    width: 28px;
+    height: 3px;
 
-            z-index: 200;
+    border-radius:
+        0 0 5px 5px;
 
-            backdrop-filter: blur(14px);
+    background:
+        var(--purple);
+}
 
-            padding-bottom:
-                env(safe-area-inset-bottom);
-        }
 
-        .nav-item {
-            display: flex;
+/* =========================================================
+   SMALL SCREENS
+========================================================= */
 
-            flex-direction: column;
+@media (max-width: 390px) {
 
-            align-items: center;
-            justify-content: center;
+    main {
+        padding: 15px;
+    }
 
-            gap: 4px;
+    .wallet-balance {
+        font-size: 27px;
+    }
 
-            color: #817a89;
+    .shortcut {
+        min-height: 88px;
+        padding: 11px;
+    }
 
-            font-size: 10px;
+    .lucky-bottom {
+        align-items: stretch;
+        flex-direction: column;
+    }
 
-            font-weight: 800;
+    .lucky-button {
+        width: 100%;
+    }
 
-            position: relative;
-        }
+}
 
-        .nav-item svg {
-            width: 21px;
-            height: 21px;
-        }
-
-        .nav-item.active {
-            color: var(--purple);
-        }
-
-        .nav-item.active::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-
-            width: 28px;
-            height: 3px;
-
-            border-radius:
-                0 0 5px 5px;
-
-            background:
-                var(--purple);
-        }
-
-
-        /* =========================================================
-           SMALL SCREENS
-        ========================================================= */
-
-        @media (max-width: 390px) {
-
-            main {
-                padding: 15px;
-            }
-
-            .wallet-balance {
-                font-size: 27px;
-            }
-
-            .shortcut {
-                min-height: 88px;
-                padding: 11px;
-            }
-
-            .lucky-bottom {
-                align-items: stretch;
-                flex-direction: column;
-            }
-
-            .lucky-button {
-                width: 100%;
-            }
-
-        }
-
-    </style>
+</style>
 
 </head>
-
 
 <body>
 
 <div class="app">
 
+<header class="topbar">
 
-    <!-- =========================================================
-         HEADER
-    ========================================================= -->
+    <a
+        href="dashboard.html"
+        class="brand"
+    >
 
-    <header class="topbar">
+        <div class="brand-mark">
+            V
+        </div>
+
+        <span>VDC</span>
+
+    </a>
+
+    <div class="header-actions">
 
         <a
-            href="dashboard.html"
-            class="brand"
+            href="notifications.html"
+            class="icon-button"
+            aria-label="Notifications"
         >
 
-            <div class="brand-mark">
-                V
-            </div>
+            <span class="notification-dot"></span>
 
-            <span>
-                VDC
-            </span>
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+
+                <path
+                    d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+                />
+
+                <path d="M10 21h4"/>
+
+            </svg>
 
         </a>
 
+    </div>
 
-        <div class="header-actions">
+</header>
 
-            <a
-                href="notifications.html"
-                class="icon-button"
-                aria-label="Notifications"
-            >
 
-                <span class="notification-dot"></span>
+<main>
 
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
+<section class="welcome">
 
-                    <path
-                        d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
-                    />
+    <div class="welcome-small">
+        Welcome back
+    </div>
 
-                    <path
-                        d="M10 21h4"
-                    />
+    <h1
+        id="welcomeName"
+        class="welcome-title"
+    >
+        Loading...
+    </h1>
 
-                </svg>
+</section>
 
-            </a>
 
+<section class="wallet-card">
+
+    <div class="wallet-label">
+        Available Balance
+    </div>
+
+    <div class="wallet-row">
+
+        <div
+            id="walletBalance"
+            class="wallet-balance"
+        >
+            ₦0.00
         </div>
 
-    </header>
-
-
-
-    <!-- =========================================================
-         MAIN
-    ========================================================= -->
-
-    <main>
-
-
-        <!-- =====================================================
-             WELCOME
-        ====================================================== -->
-
-        <section class="welcome">
-
-            <div class="welcome-small">
-                Welcome back
-            </div>
-
-            <h1
-                id="welcomeName"
-                class="welcome-title"
-            >
-                Loading...
-            </h1>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             WALLET
-        ====================================================== -->
-
-        <section class="wallet-card">
-
-            <div class="wallet-label">
-                Available Balance
-            </div>
-
-
-            <div class="wallet-row">
-
-                <div
-                    id="walletBalance"
-                    class="wallet-balance"
-                >
-                    ₦0.00
-                </div>
-
-
-                <button
-                    id="balanceToggle"
-                    class="balance-toggle"
-                    type="button"
-                    aria-label="Hide balance"
-                >
-
-                    <svg
-                        id="eyeIcon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.9"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"
-                        />
-
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="2.5"
-                        />
-
-                    </svg>
-
-                </button>
-
-            </div>
-
-
-            <div class="wallet-footer">
-
-                <span>
-                    VDC Wallet
-                </span>
-
-                <span id="totalEarnedWallet">
-                    Total earned: ₦0.00
-                </span>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             VIP
-        ====================================================== -->
-
-        <a
-            href="vip.html"
-            class="vip-card"
+        <button
+            id="balanceToggle"
+            class="balance-toggle"
+            type="button"
+            aria-label="Hide balance"
         >
 
-            <div class="vip-left">
-
-                <div class="vip-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <path
-                            d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"
-                        />
-
-                    </svg>
-
-                </div>
-
-
-                <div>
-
-                    <div class="vip-label">
-                        Current membership
-                    </div>
-
-                    <div
-                        id="vipName"
-                        class="vip-name"
-                    >
-                        Free VIP
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="vip-arrow">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-
-                    <path
-                        d="m9 18 6-6-6-6"
-                    />
-
-                </svg>
-
-            </div>
-
-        </a>
-
-
-
-        <!-- =====================================================
-             QUICK STATS
-        ====================================================== -->
-
-        <div class="stats-grid">
-
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Daily Tasks
-                </div>
-
-                <div
-                    id="dailyTaskLimit"
-                    class="stat-value purple"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Task Reward
-                </div>
-
-                <div
-                    id="taskReward"
-                    class="stat-value orange"
-                >
-                    ₦0.00
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Today's Earnings
-                </div>
-
-                <div
-                    id="todayEarnings"
-                    class="stat-value green"
-                >
-                    ₦0.00
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Total Withdrawn
-                </div>
-
-                <div
-                    id="totalWithdrawn"
-                    class="stat-value"
-                >
-                    ₦0.00
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- =====================================================
-             QUICK ACTIONS
-        ====================================================== -->
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Quick Access
-            </div>
-
-        </div>
-
-
-        <div class="shortcut-grid">
-
-
-            <a
-                href="tasks.html"
-                class="shortcut"
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             >
 
-                <div class="shortcut-icon">
+                <path
+                    d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"
+                />
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="2.5"
+                />
 
-                        <rect
-                            x="4"
-                            y="3"
-                            width="16"
-                            height="18"
-                            rx="2"
-                        />
+            </svg>
 
-                        <path d="M8 7h8"/>
-                        <path d="M8 11h8"/>
-                        <path d="M8 15h5"/>
+        </button>
 
-                    </svg>
+    </div>
 
-                </div>
+    <div class="wallet-footer">
 
-                <div class="shortcut-name">
-                    Tasks
-                </div>
+        <span>VDC Wallet</span>
 
-            </a>
+        <span id="totalEarnedWallet">
+            Total earned: ₦0.00
+        </span>
+
+    </div>
+
+</section>
 
 
-            <a
-                href="vip.html"
-                class="shortcut"
+<a
+    href="vip.html"
+    class="vip-card"
+>
+
+    <div class="vip-left">
+
+        <div class="vip-icon">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             >
 
-                <div class="shortcut-icon">
+                <path
+                    d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"
+                />
 
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
+            </svg>
 
-                        <path
-                            d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"
-                        />
+        </div>
 
-                    </svg>
+        <div>
 
-                </div>
+            <div class="vip-label">
+                Current membership
+            </div>
 
-                <div class="shortcut-name">
-                    VIP
-                </div>
-
-            </a>
-
-
-            <a
-                href="earn.html"
-                class="shortcut"
+            <div
+                id="vipName"
+                class="vip-name"
             >
-
-                <div class="shortcut-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="8"
-                        />
-
-                        <path d="M12 8v8"/>
-
-                        <path
-                            d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5-2.5 1.5 2.5 1.5 2.5-.5 2.5-1.5"
-                        />
-
-                    </svg>
-
-                </div>
-
-                <div class="shortcut-name">
-                    Earn
-                </div>
-
-            </a>
-
-
-        </div>
-
-
-
-        <!-- =====================================================
-             MYSTERY BOX
-        ====================================================== -->
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Lucky Draw
-            </div>
-
-            <a
-                href="lucky-draw.html"
-                class="section-link"
-            >
-                Open
-            </a>
-
-        </div>
-
-
-        <div class="lucky-card">
-
-            <div class="lucky-content">
-
-
-                <div class="lucky-top">
-
-                    <div class="lucky-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.7"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <path
-                                d="M4 9h16v11H4z"
-                            />
-
-                            <path
-                                d="M3 6h18v3H3z"
-                            />
-
-                            <path
-                                d="M12 6v14"
-                            />
-
-                            <path
-                                d="M12 6H8.5a2.5 2.5 0 1 1 2.5-2.5C11 4.9 12 6 12 6Z"
-                            />
-
-                            <path
-                                d="M12 6h3.5A2.5 2.5 0 1 0 13 3.5C13 4.9 12 6 12 6Z"
-                            />
-
-                        </svg>
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="lucky-title">
-                            Mystery Box
-                        </div>
-
-                        <div class="lucky-subtitle">
-                            Choose one box and reveal your reward
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="lucky-description">
-
-                    Your Lucky Draw chances are based on your
-                    current VIP level. Open the Mystery Box page
-                    to use your available chances.
-
-                </div>
-
-
-                <div class="lucky-bottom">
-
-                    <div
-                        id="luckyChanceInfo"
-                        class="chance-info"
-                    >
-                        Loading chances...
-                    </div>
-
-
-                    <a
-                        href="lucky-draw.html"
-                        class="lucky-button"
-                    >
-                        Open Mystery Box
-                    </a>
-
-                </div>
-
+                Free VIP
             </div>
 
         </div>
 
+    </div>
+
+    <div class="vip-arrow">
+
+        <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+
+            <path d="m9 18 6-6-6-6"/>
+
+        </svg>
+
+    </div>
+
+</a>
 
 
-        <!-- =====================================================
-             EARNINGS BREAKDOWN
-        ====================================================== -->
+<div class="stats-grid">
 
-        <div class="section-head">
+    <div class="stat-card">
 
-            <div class="section-title">
-                Earnings
-            </div>
-
-            <a
-                href="history.html"
-                class="section-link"
-            >
-                History
-            </a>
-
+        <div class="stat-label">
+            Daily Tasks
         </div>
 
-
-        <div class="earnings-card">
-
-
-            <div class="earning-row">
-
-                <div class="earning-left">
-
-                    <div class="earning-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <rect
-                                x="4"
-                                y="4"
-                                width="16"
-                                height="16"
-                                rx="2"
-                            />
-
-                            <path d="M8 8h8"/>
-                            <path d="M8 12h8"/>
-                            <path d="M8 16h5"/>
-
-                        </svg>
-
-                    </div>
-
-                    <div class="earning-name">
-                        Task Earnings
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="taskEarnings"
-                    class="earning-amount"
-                >
-                    ₦0.00
-                </div>
-
-            </div>
-
-
-            <div class="earning-row">
-
-                <div class="earning-left">
-
-                    <div class="earning-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <circle
-                                cx="9"
-                                cy="8"
-                                r="3"
-                            />
-
-                            <circle
-                                cx="17"
-                                cy="9"
-                                r="2.5"
-                            />
-
-                            <path
-                                d="M3.5 19c.6-3.4 2.4-5 5.5-5s4.9 1.6 5.5 5"
-                            />
-
-                            <path
-                                d="M14 15c2.4.2 4 1.5 4.5 4"
-                            />
-
-                        </svg>
-
-                    </div>
-
-                    <div class="earning-name">
-                        Referral Earnings
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="referralEarnings"
-                    class="earning-amount"
-                >
-                    ₦0.00
-                </div>
-
-            </div>
-
-
-            <div class="earning-row">
-
-                <div class="earning-left">
-
-                    <div class="earning-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <path
-                                d="M12 3v18"
-                            />
-
-                            <path
-                                d="M17 7.5c0-1.7-2.2-3-5-3s-5 1.3-5 3 2.2 3 5 3 5 1.3 5 3-2.2 3-5 3-5-1.3-5-3"
-                            />
-
-                        </svg>
-
-                    </div>
-
-                    <div class="earning-name">
-                        Lucky Draw
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="luckyDrawEarnings"
-                    class="earning-amount"
-                >
-                    ₦0.00
-                </div>
-
-            </div>
-
-
-            <div class="earning-row">
-
-                <div class="earning-left">
-
-                    <div class="earning-icon">
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="8"
-                            />
-
-                            <path d="M12 8v8"/>
-
-                            <path
-                                d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5-2.5 1.5-2.5 1.5"
-                            />
-
-                        </svg>
-
-                    </div>
-
-                    <div class="earning-name">
-                        Total Earned
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="totalEarned"
-                    class="earning-amount"
-                >
-                    ₦0.00
-                </div>
-
-            </div>
-
-
+        <div
+            id="dailyTaskLimit"
+            class="stat-value purple"
+        >
+            0
         </div>
 
+    </div>
 
+    <div class="stat-card">
 
-        <!-- =====================================================
-             ACCOUNT / WITHDRAWAL SUMMARY
-        ====================================================== -->
-
-        <div class="section-head">
-
-            <div class="section-title">
-                Account
-            </div>
-
-            <a
-                href="profile.html"
-                class="section-link"
-            >
-                View
-            </a>
-
+        <div class="stat-label">
+            Task Reward
         </div>
 
-
-        <div class="info-card">
-
-
-            <div class="info-row">
-
-                <span class="info-label">
-                    Withdrawal status
-                </span>
-
-                <span
-                    id="withdrawalStatus"
-                    class="info-value"
-                >
-                    Checking...
-                </span>
-
-            </div>
-
-
-            <div class="info-row">
-
-                <span class="info-label">
-                    Total withdrawn
-                </span>
-
-                <span
-                    id="accountWithdrawn"
-                    class="info-value"
-                >
-                    ₦0.00
-                </span>
-
-            </div>
-
-
+        <div
+            id="taskReward"
+            class="stat-value orange"
+        >
+            ₦0.00
         </div>
 
+    </div>
 
-    </main>
+    <div class="stat-card">
+
+        <div class="stat-label">
+            Today's Earnings
+        </div>
+
+        <div
+            id="todayEarnings"
+            class="stat-value green"
+        >
+            ₦0.00
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <div class="stat-label">
+            Total Withdrawn
+        </div>
+
+        <div
+            id="totalWithdrawn"
+            class="stat-value"
+        >
+            ₦0.00
+        </div>
+
+    </div>
 
 </div>
 
 
+<div class="section-head">
 
-<!-- =============================================================
-     BOTTOM NAVIGATION
-============================================================== -->
+    <div class="section-title">
+        Quick Access
+    </div>
 
-<nav class="bottom-nav">
+</div>
 
 
-    <a
-        href="dashboard.html"
-        class="nav-item active"
-    >
-
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-
-            <path d="m3 10 9-7 9 7"/>
-
-            <path
-                d="M5 9v11h14V9"
-            />
-
-            <path
-                d="M9 20v-6h6v6"
-            />
-
-        </svg>
-
-        <span>
-            Home
-        </span>
-
-    </a>
-
+<div class="shortcut-grid">
 
     <a
         href="tasks.html"
-        class="nav-item"
+        class="shortcut"
     >
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
+        <div class="shortcut-icon">
 
-            <rect
-                x="4"
-                y="3"
-                width="16"
-                height="18"
-                rx="2"
-            />
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
 
-            <path d="M8 7h8"/>
-            <path d="M8 11h8"/>
-            <path d="M8 15h5"/>
+                <rect
+                    x="4"
+                    y="3"
+                    width="16"
+                    height="18"
+                    rx="2"
+                />
 
-        </svg>
+                <path d="M8 7h8"/>
+                <path d="M8 11h8"/>
+                <path d="M8 15h5"/>
 
-        <span>
+            </svg>
+
+        </div>
+
+        <div class="shortcut-name">
             Tasks
-        </span>
+        </div>
 
     </a>
 
 
     <a
         href="vip.html"
-        class="nav-item"
+        class="shortcut"
     >
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
+        <div class="shortcut-icon">
 
-            <path
-                d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"
-            />
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
 
-        </svg>
+                <path
+                    d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"
+                />
 
-        <span>
+            </svg>
+
+        </div>
+
+        <div class="shortcut-name">
             VIP
-        </span>
+        </div>
 
     </a>
 
 
     <a
         href="earn.html"
-        class="nav-item"
+        class="shortcut"
     >
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
+        <div class="shortcut-icon">
 
-            <circle
-                cx="12"
-                cy="12"
-                r="8"
-            />
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
 
-            <path d="M12 8v8"/>
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="8"
+                />
 
-            <path
-                d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5-2.5 1.5-2.5 1.5"
-            />
+                <path d="M12 8v8"/>
 
-        </svg>
+                <path
+                    d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5"
+                />
 
-        <span>
+            </svg>
+
+        </div>
+
+        <div class="shortcut-name">
             Earn
-        </span>
+        </div>
 
     </a>
 
+</div>
+
+
+<!-- =========================================================
+     EARN FEATURE PREVIEW
+========================================================= -->
+
+<div class="section-head">
+
+    <div class="section-title">
+        Earn
+    </div>
+
+    <a
+        href="earn.html"
+        class="section-link"
+    >
+        View all
+    </a>
+
+</div>
+
+
+<div class="lucky-card">
+
+    <div class="lucky-content">
+
+        <div class="lucky-top">
+
+            <div class="lucky-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <path d="M4 9h16v11H4z"/>
+
+                    <path d="M3 6h18v3H3z"/>
+
+                    <path d="M12 6v14"/>
+
+                    <path
+                        d="M12 6H8.5a2.5 2.5 0 1 1 2.5-2.5C11 4.9 12 6 12 6Z"
+                    />
+
+                    <path
+                        d="M12 6h3.5A2.5 2.5 0 1 0 13 3.5C13 4.9 12 6 12 6Z"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <div class="lucky-title">
+                    Mystery Box
+                </div>
+
+                <div class="lucky-subtitle">
+                    Lucky Draw inside Earn
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="lucky-description">
+
+            Choose one mystery box and reveal your reward.
+            Your available chances depend on your current
+            VIP level.
+
+        </div>
+
+
+        <div class="lucky-bottom">
+
+            <div
+                id="luckyChanceInfo"
+                class="chance-info"
+            >
+                Loading chances...
+            </div>
+
+            <a
+                href="lucky-draw.html"
+                class="lucky-button"
+            >
+                Open Mystery Box
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="section-head">
+
+    <div class="section-title">
+        Earnings
+    </div>
+
+    <a
+        href="history.html"
+        class="section-link"
+    >
+        History
+    </a>
+
+</div>
+
+
+<div class="earnings-card">
+
+    <div class="earning-row">
+
+        <div class="earning-left">
+
+            <div class="earning-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <rect
+                        x="4"
+                        y="4"
+                        width="16"
+                        height="16"
+                        rx="2"
+                    />
+
+                    <path d="M8 8h8"/>
+                    <path d="M8 12h8"/>
+                    <path d="M8 16h5"/>
+
+                </svg>
+
+            </div>
+
+            <div class="earning-name">
+                Task Earnings
+            </div>
+
+        </div>
+
+        <div
+            id="taskEarnings"
+            class="earning-amount"
+        >
+            ₦0.00
+        </div>
+
+    </div>
+
+
+    <div class="earning-row">
+
+        <div class="earning-left">
+
+            <div class="earning-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <circle cx="9" cy="8" r="3"/>
+
+                    <circle cx="17" cy="9" r="2.5"/>
+
+                    <path
+                        d="M3.5 19c.6-3.4 2.4-5 5.5-5s4.9 1.6 5.5 5"
+                    />
+
+                    <path
+                        d="M14 15c2.4.2 4 1.5 4.5 4"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div class="earning-name">
+                Referral Earnings
+            </div>
+
+        </div>
+
+        <div
+            id="referralEarnings"
+            class="earning-amount"
+        >
+            ₦0.00
+        </div>
+
+    </div>
+
+
+    <div class="earning-row">
+
+        <div class="earning-left">
+
+            <div class="earning-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <path d="M12 3v18"/>
+
+                    <path
+                        d="M17 7.5c0-1.7-2.2-3-5-3s-5 1.3-5 3 2.2 3 5 3 5 1.3 5 3-2.2 3-5 3-5-1.3-5-3"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div class="earning-name">
+                Lucky Draw
+            </div>
+
+        </div>
+
+        <div
+            id="luckyDrawEarnings"
+            class="earning-amount"
+        >
+            ₦0.00
+        </div>
+
+    </div>
+
+
+    <div class="earning-row">
+
+        <div class="earning-left">
+
+            <div class="earning-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="8"
+                    />
+
+                    <path d="M12 8v8"/>
+
+                    <path
+                        d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div class="earning-name">
+                Total Earned
+            </div>
+
+        </div>
+
+        <div
+            id="totalEarned"
+            class="earning-amount"
+        >
+            ₦0.00
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="section-head">
+
+    <div class="section-title">
+        Account
+    </div>
 
     <a
         href="profile.html"
-        class="nav-item"
+        class="section-link"
     >
-
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-
-            <circle
-                cx="12"
-                cy="8"
-                r="4"
-            />
-
-            <path
-                d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"
-            />
-
-        </svg>
-
-        <span>
-            My
-        </span>
-
+        View
     </a>
 
+</div>
+
+
+<div class="info-card">
+
+    <div class="info-row">
+
+        <span class="info-label">
+            Withdrawal status
+        </span>
+
+        <span
+            id="withdrawalStatus"
+            class="info-value"
+        >
+            Checking...
+        </span>
+
+    </div>
+
+
+    <div class="info-row">
+
+        <span class="info-label">
+            Total withdrawn
+        </span>
+
+        <span
+            id="accountWithdrawn"
+            class="info-value"
+        >
+            ₦0.00
+        </span>
+
+    </div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- =========================================================
+     BOTTOM NAVIGATION
+========================================================= -->
+
+<nav class="bottom-nav">
+
+<a
+    href="dashboard.html"
+    class="nav-item active"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <path d="m3 10 9-7 9 7"/>
+
+        <path d="M5 9v11h14V9"/>
+
+        <path d="M9 20v-6h6v6"/>
+
+    </svg>
+
+    <span>Home</span>
+
+</a>
+
+
+<a
+    href="tasks.html"
+    class="nav-item"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <rect
+            x="4"
+            y="3"
+            width="16"
+            height="18"
+            rx="2"
+        />
+
+        <path d="M8 7h8"/>
+        <path d="M8 11h8"/>
+        <path d="M8 15h5"/>
+
+    </svg>
+
+    <span>Tasks</span>
+
+</a>
+
+
+<a
+    href="vip.html"
+    class="nav-item"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <path
+            d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"
+        />
+
+    </svg>
+
+    <span>VIP</span>
+
+</a>
+
+
+<a
+    href="earn.html"
+    class="nav-item"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <circle
+            cx="12"
+            cy="12"
+            r="8"
+        />
+
+        <path d="M12 8v8"/>
+
+        <path
+            d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"
+        />
+
+    </svg>
+
+    <span>Earn</span>
+
+</a>
+
+
+<a
+    href="profile.html"
+    class="nav-item"
+>
+
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <circle
+            cx="12"
+            cy="8"
+            r="4"
+        />
+
+        <path
+            d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"
+        />
+
+    </svg>
+
+    <span>My</span>
+
+</a>
 
 </nav>
 
 
-
 <script>
 
-    /* =========================================================
-       SUPABASE
-    ========================================================= */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-    const SUPABASE_URL =
-        "https://wiorfxlodrcawxdeowbg.supabase.co";
+const SUPABASE_URL =
+    "https://wiorfxlodrcawxdeowbg.supabase.co";
 
-    const SUPABASE_KEY =
-        "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+const SUPABASE_KEY =
+    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
 
-
-    const supabaseClient =
-        supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
-
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
 
 
-    /* =========================================================
-       STATE
-    ========================================================= */
+/* =========================================================
+   STATE
+========================================================= */
 
-    let currentUser = null;
-
-    let currentVipLevel = 0;
-
-    let balanceVisible = true;
+let currentUser = null;
+let currentVipLevel = 0;
+let balanceVisible = true;
 
 
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
+const welcomeName =
+    document.getElementById("welcomeName");
 
-    const welcomeName =
-        document.getElementById(
-            "welcomeName"
-        );
+const walletBalance =
+    document.getElementById("walletBalance");
 
-    const walletBalance =
-        document.getElementById(
-            "walletBalance"
-        );
+const totalEarnedWallet =
+    document.getElementById("totalEarnedWallet");
 
-    const totalEarnedWallet =
-        document.getElementById(
-            "totalEarnedWallet"
-        );
+const vipName =
+    document.getElementById("vipName");
 
-    const vipName =
-        document.getElementById(
-            "vipName"
-        );
+const dailyTaskLimit =
+    document.getElementById("dailyTaskLimit");
 
-    const dailyTaskLimit =
-        document.getElementById(
-            "dailyTaskLimit"
-        );
+const taskReward =
+    document.getElementById("taskReward");
 
-    const taskReward =
-        document.getElementById(
-            "taskReward"
-        );
+const todayEarnings =
+    document.getElementById("todayEarnings");
 
-    const todayEarnings =
-        document.getElementById(
-            "todayEarnings"
-        );
+const totalWithdrawn =
+    document.getElementById("totalWithdrawn");
 
-    const totalWithdrawn =
-        document.getElementById(
-            "totalWithdrawn"
-        );
+const taskEarnings =
+    document.getElementById("taskEarnings");
 
-    const taskEarnings =
-        document.getElementById(
-            "taskEarnings"
-        );
+const referralEarnings =
+    document.getElementById("referralEarnings");
 
-    const referralEarnings =
-        document.getElementById(
-            "referralEarnings"
-        );
+const luckyDrawEarnings =
+    document.getElementById("luckyDrawEarnings");
 
-    const luckyDrawEarnings =
-        document.getElementById(
-            "luckyDrawEarnings"
-        );
+const totalEarned =
+    document.getElementById("totalEarned");
 
-    const totalEarned =
-        document.getElementById(
-            "totalEarned"
-        );
+const accountWithdrawn =
+    document.getElementById("accountWithdrawn");
 
-    const accountWithdrawn =
-        document.getElementById(
-            "accountWithdrawn"
-        );
+const withdrawalStatus =
+    document.getElementById("withdrawalStatus");
 
-    const withdrawalStatus =
-        document.getElementById(
-            "withdrawalStatus"
-        );
+const luckyChanceInfo =
+    document.getElementById("luckyChanceInfo");
 
-    const luckyChanceInfo =
-        document.getElementById(
-            "luckyChanceInfo"
-        );
-
-    const balanceToggle =
-        document.getElementById(
-            "balanceToggle"
-        );
+const balanceToggle =
+    document.getElementById("balanceToggle");
 
 
+/* =========================================================
+   MONEY
+========================================================= */
 
-    /* =========================================================
-       MONEY FORMAT
-    ========================================================= */
+function formatMoney(amount) {
 
-    function formatMoney(amount) {
-
-        return Number(amount || 0)
-            .toLocaleString(
-                "en-NG",
-                {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }
-            );
-
-    }
-
-
-
-    /* =========================================================
-       NIGERIA TODAY
-    ========================================================= */
-
-    function getNigeriaDateParts() {
-
-        const formatter =
-            new Intl.DateTimeFormat(
-                "en-CA",
-                {
-                    timeZone: "Africa/Lagos",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit"
-                }
-            );
-
-        const parts =
-            formatter.formatToParts(
-                new Date()
-            );
-
-        const result = {};
-
-        parts.forEach(part => {
-
-            if (
-                part.type !== "literal"
-            ) {
-
-                result[part.type] =
-                    part.value;
-
+    return Number(amount || 0)
+        .toLocaleString(
+            "en-NG",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             }
+        );
 
-        });
-
-        return result;
-
-    }
+}
 
 
+/* =========================================================
+   NIGERIA DATE
+========================================================= */
 
-    function getNigeriaTodayStartISO() {
+function getNigeriaDateParts() {
 
-        const parts =
-            getNigeriaDateParts();
+    const formatter =
+        new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone: "Africa/Lagos",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }
+        );
 
-        return new Date(
-            Date.UTC(
-                Number(parts.year),
-                Number(parts.month) - 1,
-                Number(parts.day),
-                23,
-                0,
-                0
-            )
-        ).toISOString();
+    const parts =
+        formatter.formatToParts(
+            new Date()
+        );
 
-    }
+    const result = {};
 
-
-
-    /* =========================================================
-       SESSION
-    ========================================================= */
-
-    async function loadSession() {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.getSession();
-
+    parts.forEach(part => {
 
         if (
-            error ||
-            !data ||
-            !data.session
+            part.type !== "literal"
         ) {
 
-            window.location.href =
-                "auth.html";
-
-            return null;
+            result[part.type] =
+                part.value;
 
         }
 
+    });
 
-        currentUser =
-            data.session.user;
+    return result;
+
+}
 
 
-        return currentUser;
+function getNigeriaTodayStartISO() {
+
+    const parts =
+        getNigeriaDateParts();
+
+    return new Date(
+        Date.UTC(
+            Number(parts.year),
+            Number(parts.month) - 1,
+            Number(parts.day),
+            23,
+            0,
+            0
+        )
+    ).toISOString();
+
+}
+
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+async function loadSession() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.getSession();
+
+    if (
+        error ||
+        !data ||
+        !data.session
+    ) {
+
+        window.location.href =
+            "auth.html";
+
+        return null;
 
     }
 
+    currentUser =
+        data.session.user;
+
+    return currentUser;
+
+}
 
 
-    /* =========================================================
-       LOAD PROFILE
-    ========================================================= */
+/* =========================================================
+   PROFILE
+========================================================= */
 
-    async function loadProfile() {
+async function loadProfile() {
 
-        const {
-            data,
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "Profile error:",
             error
-        } =
-            await supabaseClient
-                .from("profiles")
-                .select("*")
-                .eq(
-                    "id",
-                    currentUser.id
-                )
-                .maybeSingle();
+        );
 
-
-        if (error) {
-
-            console.error(
-                "Profile error:",
-                error
-            );
-
-            return;
-
-        }
-
-
-        if (!data) {
-            return;
-        }
-
-
-        const username =
-            data.username ||
-            data.full_name ||
-            "Welcome";
-
-
-        welcomeName.textContent =
-            username;
+        return;
 
     }
 
+    if (!data) {
+        return;
+    }
+
+    const username =
+        data.username ||
+        data.full_name ||
+        "Welcome";
+
+    welcomeName.textContent =
+        username;
+
+}
 
 
-    /* =========================================================
-       LOAD WALLET
-    ========================================================= */
+/* =========================================================
+   WALLET
+========================================================= */
 
-    async function loadWallet() {
+async function loadWallet() {
 
-        const {
-            data,
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("wallets")
+            .select("*")
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "Wallet error:",
             error
-        } =
-            await supabaseClient
-                .from("wallets")
-                .select("*")
-                .eq(
-                    "user_id",
-                    currentUser.id
-                )
-                .maybeSingle();
+        );
 
+        return;
 
-        if (error) {
+    }
 
-            console.error(
-                "Wallet error:",
-                error
-            );
+    if (!data) {
+        return;
+    }
 
-            return;
+    const balance =
+        Number(
+            data.balance || 0
+        );
 
-        }
+    const earned =
+        Number(
+            data.total_earned || 0
+        );
 
-
-        if (!data) {
-            return;
-        }
-
-
-        const balance =
-            Number(
-                data.balance || 0
-            );
-
-        const earned =
-            Number(
-                data.total_earned || 0
-            );
-
+    if (balanceVisible) {
 
         walletBalance.textContent =
             `₦${formatMoney(balance)}`;
 
-
-        totalEarnedWallet.textContent =
-            `Total earned: ₦${formatMoney(earned)}`;
-
-
-        totalEarned.textContent =
-            `₦${formatMoney(earned)}`;
-
-
-        return data;
-
     }
 
+    totalEarnedWallet.textContent =
+        `Total earned: ₦${formatMoney(earned)}`;
+
+    totalEarned.textContent =
+        `₦${formatMoney(earned)}`;
+
+    return data;
+
+}
 
 
-    /* =========================================================
-       LOAD VIP
-    ========================================================= */
+/* =========================================================
+   VIP
+========================================================= */
 
-    async function loadVip() {
+async function loadVip() {
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("user_vips")
-                .select(`
-                    vip_level_id,
-                    vip_levels (
-                        level_number,
-                        name,
-                        daily_task_limit,
-                        task_reward
-                    )
-                `)
-                .eq(
-                    "user_id",
-                    currentUser.id
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("user_vips")
+            .select(`
+                vip_level_id,
+                vip_levels (
+                    level_number,
+                    name,
+                    daily_task_limit,
+                    task_reward
                 )
-                .maybeSingle();
+            `)
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .maybeSingle();
 
+    if (error) {
 
-        if (error) {
-
-            console.error(
-                "VIP error:",
-                error
-            );
-
-            vipName.textContent =
-                "Free VIP";
-
-            return null;
-
-        }
-
-
-        if (
-            data &&
-            data.vip_levels
-        ) {
-
-            currentVipLevel =
-                Number(
-                    data.vip_levels.level_number || 0
-                );
-
-
-            vipName.textContent =
-                data.vip_levels.name ||
-                (
-                    currentVipLevel === 0
-                        ? "Free VIP"
-                        : `VIP ${currentVipLevel}`
-                );
-
-
-            dailyTaskLimit.textContent =
-                Number(
-                    data.vip_levels.daily_task_limit || 0
-                );
-
-
-            taskReward.textContent =
-                `₦${formatMoney(
-                    data.vip_levels.task_reward || 0
-                )}`;
-
-
-            return data.vip_levels;
-
-        }
-
+        console.error(
+            "VIP error:",
+            error
+        );
 
         currentVipLevel = 0;
 
@@ -2482,395 +2243,429 @@
         taskReward.textContent =
             "₦150.00";
 
-
         return null;
 
     }
 
+    if (
+        data &&
+        data.vip_levels
+    ) {
 
-
-    /* =========================================================
-       LOAD LUCKY DRAW CHANCES
-    ========================================================= */
-
-    async function loadLuckyDrawChances() {
-
-        const {
-            data: settings,
-            error: settingsError
-        } =
-            await supabaseClient
-                .from("lucky_draw_settings")
-                .select("*")
-                .eq(
-                    "id",
-                    1
-                )
-                .maybeSingle();
-
-
-        if (settingsError) {
-
-            console.error(
-                "Lucky Draw settings:",
-                settingsError
+        currentVipLevel =
+            Number(
+                data.vip_levels.level_number || 0
             );
 
-            luckyChanceInfo.textContent =
-                "Open Mystery Box";
-
-            return;
-
-        }
-
-
-        if (
-            !settings ||
-            !settings.enabled
-        ) {
-
-            luckyChanceInfo.textContent =
-                "Lucky Draw currently unavailable";
-
-            return;
-
-        }
-
-
-        let dailyLimit = 0;
-
-
-        if (
-            currentVipLevel === 0
-        ) {
-
-            dailyLimit =
-                Number(
-                    settings.free_daily_spins || 0
-                );
-
-        } else {
-
-            const column =
-                `daily_spins_vip${currentVipLevel}`;
-
-            dailyLimit =
-                Number(
-                    settings[column] || 0
-                );
-
-        }
-
-
-        const todayStart =
-            getNigeriaTodayStartISO();
-
-
-        const {
-            count,
-            error: countError
-        } =
-            await supabaseClient
-                .from("lucky_draw_results")
-                .select(
-                    "id",
-                    {
-                        count: "exact",
-                        head: true
-                    }
-                )
-                .eq(
-                    "user_id",
-                    currentUser.id
-                )
-                .gte(
-                    "created_at",
-                    todayStart
-                );
-
-
-        if (countError) {
-
-            console.error(
-                "Lucky Draw count:",
-                countError
+        vipName.textContent =
+            data.vip_levels.name ||
+            (
+                currentVipLevel === 0
+                    ? "Free VIP"
+                    : `VIP ${currentVipLevel}`
             );
 
-            luckyChanceInfo.textContent =
-                "Open Mystery Box";
-
-            return;
-
-        }
-
-
-        const used =
-            Number(count || 0);
-
-
-        const remaining =
-            Math.max(
-                0,
-                dailyLimit - used
+        dailyTaskLimit.textContent =
+            Number(
+                data.vip_levels.daily_task_limit || 0
             );
 
+        taskReward.textContent =
+            `₦${formatMoney(
+                data.vip_levels.task_reward || 0
+            )}`;
 
-        if (remaining > 0) {
-
-            luckyChanceInfo.textContent =
-                `${remaining} chance${remaining === 1 ? "" : "s"} remaining today`;
-
-        } else {
-
-            luckyChanceInfo.textContent =
-                "No chances left today";
-
-        }
+        return data.vip_levels;
 
     }
 
+    currentVipLevel = 0;
+
+    vipName.textContent =
+        "Free VIP";
+
+    dailyTaskLimit.textContent =
+        "5";
+
+    taskReward.textContent =
+        "₦150.00";
+
+    return null;
+
+}
 
 
-    /* =========================================================
-       LOAD TRANSACTION EARNINGS
-    ========================================================= */
+/* =========================================================
+   LUCKY DRAW CHANCES
+   Dashboard only displays the status.
+   The actual game remains on lucky-draw.html.
+========================================================= */
 
-    async function loadEarnings() {
+async function loadLuckyDrawChances() {
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("transactions")
-                .select(
-                    "amount,type,created_at"
-                )
-                .eq(
-                    "user_id",
-                    currentUser.id
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(500);
+    const {
+        data: settings,
+        error: settingsError
+    } =
+        await supabaseClient
+            .from("lucky_draw_settings")
+            .select("*")
+            .eq(
+                "id",
+                1
+            )
+            .maybeSingle();
 
+    if (settingsError) {
 
-        if (error) {
-
-            console.error(
-                "Transactions error:",
-                error
-            );
-
-            return;
-
-        }
-
-
-        let taskTotal = 0;
-        let referralTotal = 0;
-        let luckyTotal = 0;
-        let todayTotal = 0;
-        let withdrawnTotal = 0;
-
-
-        const todayStart =
-            getNigeriaTodayStartISO();
-
-
-        (data || []).forEach(
-            transaction => {
-
-                const amount =
-                    Number(
-                        transaction.amount || 0
-                    );
-
-
-                const type =
-                    String(
-                        transaction.type || ""
-                    ).toLowerCase();
-
-
-                if (
-                    type.includes("task")
-                ) {
-
-                    taskTotal += amount;
-
-                }
-
-
-                if (
-                    type.includes("referral")
-                ) {
-
-                    referralTotal += amount;
-
-                }
-
-
-                if (
-                    type.includes("lucky")
-                ) {
-
-                    luckyTotal += amount;
-
-                }
-
-
-                if (
-                    type.includes("withdraw")
-                ) {
-
-                    withdrawnTotal +=
-                        Math.abs(amount);
-
-                }
-
-
-                if (
-                    transaction.created_at &&
-                    transaction.created_at >=
-                        todayStart
-                ) {
-
-                    if (
-                        !type.includes("withdraw")
-                    ) {
-
-                        todayTotal += amount;
-
-                    }
-
-                }
-
-            }
+        console.error(
+            "Lucky Draw settings:",
+            settingsError
         );
 
+        luckyChanceInfo.textContent =
+            "Open Mystery Box";
 
-        taskEarnings.textContent =
-            `₦${formatMoney(taskTotal)}`;
-
-
-        referralEarnings.textContent =
-            `₦${formatMoney(referralTotal)}`;
-
-
-        luckyDrawEarnings.textContent =
-            `₦${formatMoney(luckyTotal)}`;
-
-
-        todayEarnings.textContent =
-            `₦${formatMoney(todayTotal)}`;
-
-
-        totalWithdrawn.textContent =
-            `₦${formatMoney(withdrawnTotal)}`;
-
-
-        accountWithdrawn.textContent =
-            `₦${formatMoney(withdrawnTotal)}`;
+        return;
 
     }
 
+    if (
+        !settings ||
+        !settings.enabled
+    ) {
 
+        luckyChanceInfo.textContent =
+            "Currently unavailable";
 
-    /* =========================================================
-       LOAD WITHDRAWAL STATUS
-    ========================================================= */
+        return;
 
-    async function loadWithdrawalStatus() {
+    }
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("settings")
-                .select("*");
+    let dailyLimit = 0;
 
+    if (
+        currentVipLevel === 0
+    ) {
 
-        if (error) {
-
-            console.error(
-                "Settings error:",
-                error
+        dailyLimit =
+            Number(
+                settings.free_daily_spins || 0
             );
+
+    } else {
+
+        const column =
+            `daily_spins_vip${currentVipLevel}`;
+
+        dailyLimit =
+            Number(
+                settings[column] || 0
+            );
+
+    }
+
+    const todayStart =
+        getNigeriaTodayStartISO();
+
+    const {
+        count,
+        error: countError
+    } =
+        await supabaseClient
+            .from("lucky_draw_results")
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .gte(
+                "created_at",
+                todayStart
+            );
+
+    if (countError) {
+
+        console.error(
+            "Lucky Draw count:",
+            countError
+        );
+
+        luckyChanceInfo.textContent =
+            "Open Mystery Box";
+
+        return;
+
+    }
+
+    const used =
+        Number(count || 0);
+
+    const remaining =
+        Math.max(
+            0,
+            dailyLimit - used
+        );
+
+    if (remaining > 0) {
+
+        luckyChanceInfo.textContent =
+            `${remaining} chance${remaining === 1 ? "" : "s"} remaining today`;
+
+    } else {
+
+        luckyChanceInfo.textContent =
+            "No chances left today";
+
+    }
+
+}
+
+
+/* =========================================================
+   EARNINGS
+========================================================= */
+
+async function loadEarnings() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("transactions")
+            .select(
+                "amount,type,created_at"
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+            .limit(500);
+
+    if (error) {
+
+        console.error(
+            "Transactions error:",
+            error
+        );
+
+        return;
+
+    }
+
+    let taskTotal = 0;
+    let referralTotal = 0;
+    let luckyTotal = 0;
+    let todayTotal = 0;
+    let withdrawnTotal = 0;
+
+    const todayStart =
+        getNigeriaTodayStartISO();
+
+    (data || []).forEach(
+        transaction => {
+
+            const amount =
+                Number(
+                    transaction.amount || 0
+                );
+
+            const type =
+                String(
+                    transaction.type || ""
+                ).toLowerCase();
+
+            if (
+                type.includes("task")
+            ) {
+
+                taskTotal += amount;
+
+            }
+
+            if (
+                type.includes("referral")
+            ) {
+
+                referralTotal += amount;
+
+            }
+
+            if (
+                type.includes("lucky")
+            ) {
+
+                luckyTotal += amount;
+
+            }
+
+            if (
+                type.includes("withdraw")
+            ) {
+
+                withdrawnTotal +=
+                    Math.abs(amount);
+
+            }
+
+            if (
+                transaction.created_at &&
+                transaction.created_at >=
+                    todayStart &&
+                !type.includes("withdraw")
+            ) {
+
+                todayTotal += amount;
+
+            }
+
+        }
+    );
+
+    taskEarnings.textContent =
+        `₦${formatMoney(taskTotal)}`;
+
+    referralEarnings.textContent =
+        `₦${formatMoney(referralTotal)}`;
+
+    luckyDrawEarnings.textContent =
+        `₦${formatMoney(luckyTotal)}`;
+
+    todayEarnings.textContent =
+        `₦${formatMoney(todayTotal)}`;
+
+    totalWithdrawn.textContent =
+        `₦${formatMoney(withdrawnTotal)}`;
+
+    accountWithdrawn.textContent =
+        `₦${formatMoney(withdrawnTotal)}`;
+
+}
+
+
+/* =========================================================
+   WITHDRAWAL STATUS
+========================================================= */
+
+async function loadWithdrawalStatus() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("settings")
+            .select("*");
+
+    if (error) {
+
+        console.error(
+            "Settings error:",
+            error
+        );
+
+        withdrawalStatus.textContent =
+            "View withdrawals";
+
+        return;
+
+    }
+
+    let withdrawalsEnabled = true;
+
+    let openDate = null;
+    let closeDate = null;
+
+    (data || []).forEach(
+        setting => {
+
+            const key =
+                setting.key ||
+                setting.name;
+
+            const value =
+                setting.value;
+
+            if (
+                key ===
+                "withdrawals_enabled"
+            ) {
+
+                withdrawalsEnabled =
+                    value === true ||
+                    value === "true" ||
+                    value === 1 ||
+                    value === "1";
+
+            }
+
+            if (
+                key ===
+                "withdrawal_open_date"
+            ) {
+
+                openDate = value;
+
+            }
+
+            if (
+                key ===
+                "withdrawal_close_date"
+            ) {
+
+                closeDate = value;
+
+            }
+
+        }
+    );
+
+    if (!withdrawalsEnabled) {
+
+        withdrawalStatus.textContent =
+            "Currently closed";
+
+        return;
+
+    }
+
+    const now =
+        new Date();
+
+    if (
+        openDate &&
+        closeDate
+    ) {
+
+        const open =
+            new Date(openDate);
+
+        const close =
+            new Date(closeDate);
+
+        if (now < open) {
 
             withdrawalStatus.textContent =
-                "View withdrawals";
+                "Opens soon";
 
             return;
 
         }
 
-
-        let withdrawalsEnabled =
-            true;
-
-
-        let openDate = null;
-        let closeDate = null;
-
-
-        (data || []).forEach(
-            setting => {
-
-                const key =
-                    setting.key ||
-                    setting.name;
-
-
-                const value =
-                    setting.value;
-
-
-                if (
-                    key ===
-                    "withdrawals_enabled"
-                ) {
-
-                    withdrawalsEnabled =
-                        value === true ||
-                        value === "true" ||
-                        value === 1 ||
-                        value === "1";
-
-                }
-
-
-                if (
-                    key ===
-                    "withdrawal_open_date"
-                ) {
-
-                    openDate =
-                        value;
-
-                }
-
-
-                if (
-                    key ===
-                    "withdrawal_close_date"
-                ) {
-
-                    closeDate =
-                        value;
-
-                }
-
-            }
-        );
-
-
-        if (!withdrawalsEnabled) {
+        if (now > close) {
 
             withdrawalStatus.textContent =
                 "Currently closed";
@@ -2879,166 +2674,112 @@
 
         }
 
-
-        const now =
-            new Date();
-
-
-        if (
-            openDate &&
-            closeDate
-        ) {
-
-            const open =
-                new Date(openDate);
-
-            const close =
-                new Date(closeDate);
-
-
-            if (
-                now < open
-            ) {
-
-                withdrawalStatus.textContent =
-                    "Opens soon";
-
-                return;
-
-            }
-
-
-            if (
-                now > close
-            ) {
-
-                withdrawalStatus.textContent =
-                    "Currently closed";
-
-                return;
-
-            }
-
-        }
-
-
-        withdrawalStatus.textContent =
-            "Withdrawals open";
-
     }
 
+    withdrawalStatus.textContent =
+        "Withdrawals open";
+
+}
 
 
-    /* =========================================================
-       BALANCE VISIBILITY
-    ========================================================= */
+/* =========================================================
+   BALANCE VISIBILITY
+========================================================= */
 
-    balanceToggle.addEventListener(
-        "click",
-        () => {
+balanceToggle.addEventListener(
+    "click",
+    () => {
 
-            balanceVisible =
-                !balanceVisible;
+        balanceVisible =
+            !balanceVisible;
 
+        if (balanceVisible) {
 
-            if (balanceVisible) {
+            loadWallet();
 
-                loadWallet();
-
-                balanceToggle.setAttribute(
-                    "aria-label",
-                    "Hide balance"
-                );
-
-            } else {
-
-                walletBalance.textContent =
-                    "₦••••••";
-
-                balanceToggle.setAttribute(
-                    "aria-label",
-                    "Show balance"
-                );
-
-            }
-
-        }
-    );
-
-
-
-    /* =========================================================
-       AUTH STATE
-    ========================================================= */
-
-    supabaseClient.auth.onAuthStateChange(
-        (event) => {
-
-            if (
-                event ===
-                "SIGNED_OUT"
-            ) {
-
-                window.location.href =
-                    "auth.html";
-
-            }
-
-        }
-    );
-
-
-
-    /* =========================================================
-       INITIALIZE DASHBOARD
-    ========================================================= */
-
-    async function initializeDashboard() {
-
-        try {
-
-            const user =
-                await loadSession();
-
-
-            if (!user) {
-                return;
-            }
-
-
-            await Promise.all([
-                loadProfile(),
-                loadWallet(),
-                loadVip(),
-                loadEarnings(),
-                loadWithdrawalStatus()
-            ]);
-
-
-            await loadLuckyDrawChances();
-
-
-        } catch (error) {
-
-            console.error(
-                "Dashboard initialization error:",
-                error
+            balanceToggle.setAttribute(
+                "aria-label",
+                "Hide balance"
             );
 
-            welcomeName.textContent =
-                "Welcome back";
+        } else {
+
+            walletBalance.textContent =
+                "₦••••••";
+
+            balanceToggle.setAttribute(
+                "aria-label",
+                "Show balance"
+            );
 
         }
 
     }
+);
 
 
+/* =========================================================
+   AUTH STATE
+========================================================= */
 
-    /* =========================================================
-       START
-    ========================================================= */
+supabaseClient.auth.onAuthStateChange(
+    (event) => {
 
-    initializeDashboard();
+        if (
+            event ===
+            "SIGNED_OUT"
+        ) {
+
+            window.location.href =
+                "auth.html";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+async function initializeDashboard() {
+
+    try {
+
+        const user =
+            await loadSession();
+
+        if (!user) {
+            return;
+        }
+
+        await Promise.all([
+            loadProfile(),
+            loadWallet(),
+            loadVip(),
+            loadEarnings(),
+            loadWithdrawalStatus()
+        ]);
+
+        await loadLuckyDrawChances();
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard initialization error:",
+            error
+        );
+
+        welcomeName.textContent =
+            "Welcome back";
+
+    }
+
+}
+
+
+initializeDashboard();
 
 </script>
 
