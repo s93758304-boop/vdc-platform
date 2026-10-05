@@ -49,7 +49,7 @@ button{
   max-width:760px;
   min-height:100vh;
   margin:auto;
-  padding-bottom:90px;
+  padding-bottom:100px;
 }
 
 /* HEADER */
@@ -155,6 +155,49 @@ h1{
   color:var(--muted);
   font-size:14px;
   line-height:1.55;
+}
+
+/* VPN WARNING */
+
+.security-warning{
+  display:flex;
+  gap:11px;
+  align-items:flex-start;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:18px;
+}
+
+.security-warning-icon{
+  width:34px;
+  height:34px;
+  flex-shrink:0;
+  border-radius:10px;
+  background:#ffedd5;
+  color:#ea580c;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.security-warning-icon svg{
+  width:18px;
+  height:18px;
+}
+
+.security-warning h3{
+  font-size:12px;
+  font-weight:850;
+  color:#9a3412;
+  margin-bottom:4px;
+}
+
+.security-warning p{
+  color:#7c2d12;
+  font-size:10.5px;
+  line-height:1.5;
 }
 
 /* SUMMARY */
@@ -490,6 +533,12 @@ h1{
   cursor:pointer;
 }
 
+.detail-link:disabled{
+  background:#f1eef4;
+  color:#9a929f;
+  cursor:not-allowed;
+}
+
 /* STATE */
 
 .state-card{
@@ -568,23 +617,22 @@ h1{
   line-height:1.55;
 }
 
-/* BOTTOM NAV */
+/* BOTTOM NAV — SAME AS DASHBOARD */
 
 .bottom-nav{
   position:fixed;
-  z-index:60;
-  bottom:0;
   left:50%;
+  bottom:0;
   transform:translateX(-50%);
-  width:100%;
-  max-width:760px;
-  height:72px;
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(14px);
+  width:min(760px,100%);
+  height:78px;
+  background:rgba(255,255,255,.97);
   border-top:1px solid var(--border);
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+  z-index:200;
+  backdrop-filter:blur(14px);
+  padding-bottom:env(safe-area-inset-bottom);
 }
 
 .nav-item{
@@ -593,10 +641,10 @@ h1{
   align-items:center;
   justify-content:center;
   gap:4px;
-  color:#918a99;
+  color:#817a89;
   font-size:10px;
-  font-weight:750;
-  border-radius:12px;
+  font-weight:800;
+  position:relative;
 }
 
 .nav-item svg{
@@ -606,7 +654,16 @@ h1{
 
 .nav-item.active{
   color:var(--purple);
-  background:var(--purple-light);
+}
+
+.nav-item.active::before{
+  content:"";
+  position:absolute;
+  top:0;
+  width:28px;
+  height:3px;
+  border-radius:0 0 5px 5px;
+  background:var(--purple);
 }
 
 @media(max-width:380px){
@@ -637,23 +694,27 @@ h1{
     <div class="brand-name">VDC</div>
   </div>
 
-  <div>
-    <button class="icon-btn"
-      onclick="go('notifications.html')"
-      aria-label="Notifications">
+  <button
+    class="icon-btn"
+    onclick="go('notifications.html')"
+    aria-label="Notifications">
 
-      <svg viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="1.9">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round">
 
-        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
 
-      </svg>
+    </svg>
 
-      <span class="notification-dot"></span>
+    <span class="notification-dot"></span>
 
-    </button>
-  </div>
+  </button>
 
 </header>
 
@@ -662,9 +723,13 @@ h1{
 
   <div class="page-heading">
 
-    <div class="eyebrow">VDC TASKS</div>
+    <div class="eyebrow">
+      VDC TASKS
+    </div>
 
-    <h1>Daily Tasks</h1>
+    <h1>
+      Daily Tasks
+    </h1>
 
     <p>
       Complete available tasks and earn rewards based on your current VIP level.
@@ -673,21 +738,72 @@ h1{
   </div>
 
 
+  <!-- VPN / PROXY WARNING -->
+
+  <div class="security-warning">
+
+    <div class="security-warning-icon">
+
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.9"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+
+        <path d="M12 3 4.5 6v5.5c0 4.7 3.1 8.4 7.5 9.5 4.4-1.1 7.5-4.8 7.5-9.5V6L12 3Z"/>
+        <path d="M12 8v4"/>
+        <path d="M12 15h.01"/>
+
+      </svg>
+
+    </div>
+
+    <div>
+
+      <h3>
+        Security Notice
+      </h3>
+
+      <p>
+        VPNs, proxies and location-masking services are not allowed while completing tasks.
+        If suspicious traffic is detected, the task may not be credited.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- SUMMARY -->
+
   <section class="summary-card">
 
     <div class="summary-top">
 
       <div>
-        <div class="summary-label">Today's Progress</div>
+
+        <div class="summary-label">
+          Today's Progress
+        </div>
 
         <div class="summary-value">
           <span id="completedCount">0</span>/<span id="taskLimit">0</span>
         </div>
+
       </div>
 
       <div class="vip-pill">
-        <small>Your VIP</small>
-        <strong id="vipName">Free VIP</strong>
+
+        <small>
+          Your VIP
+        </small>
+
+        <strong id="vipName">
+          Free VIP
+        </strong>
+
       </div>
 
     </div>
@@ -696,18 +812,32 @@ h1{
     <div class="progress-area">
 
       <div class="progress-label">
-        <span>Daily task progress</span>
-        <span id="progressPercent">0%</span>
+
+        <span>
+          Daily task progress
+        </span>
+
+        <span id="progressPercent">
+          0%
+        </span>
+
       </div>
 
       <div class="progress-track">
-        <div class="progress-bar" id="progressBar"></div>
+
+        <div
+          class="progress-bar"
+          id="progressBar">
+        </div>
+
       </div>
 
     </div>
 
   </section>
 
+
+  <!-- TASKS -->
 
   <section class="section">
 
@@ -717,23 +847,32 @@ h1{
         Available Tasks
       </div>
 
-      <div class="section-subtitle" id="taskCountLabel">
+      <div
+        class="section-subtitle"
+        id="taskCountLabel">
+
         Loading...
+
       </div>
 
     </div>
 
 
-    <div id="taskList" class="task-list">
+    <div
+      id="taskList"
+      class="task-list">
 
       <div class="state-card">
 
         <div class="state-icon">
 
-          <svg viewBox="0 0 24 24"
+          <svg
+            viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="1.8">
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round">
 
             <path d="M12 6v6l4 2"/>
             <circle cx="12" cy="12" r="9"/>
@@ -742,7 +881,9 @@ h1{
 
         </div>
 
-        <h3>Loading tasks</h3>
+        <h3>
+          Loading tasks
+        </h3>
 
         <p>
           Please wait while your available tasks are loaded.
@@ -755,16 +896,21 @@ h1{
   </section>
 
 
+  <!-- INFO -->
+
   <div class="info-card">
 
     <div class="info-row">
 
       <div class="info-icon">
 
-        <svg viewBox="0 0 24 24"
+        <svg
+          viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.8">
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round">
 
           <circle cx="12" cy="12" r="9"/>
           <path d="M12 10v6"/>
@@ -776,7 +922,9 @@ h1{
 
       <div>
 
-        <h3>About daily tasks</h3>
+        <h3>
+          About daily tasks
+        </h3>
 
         <p>
           Your daily task limit and reward amount are determined by your active VIP level.
@@ -796,7 +944,9 @@ h1{
 
 <!-- TASK DETAIL -->
 
-<div id="detailOverlay" class="detail-overlay">
+<div
+  id="detailOverlay"
+  class="detail-overlay">
 
   <div class="detail-sheet">
 
@@ -805,21 +955,37 @@ h1{
     <div class="detail-head">
 
       <div>
-        <div id="detailTitle" class="detail-title">
+
+        <div
+          id="detailTitle"
+          class="detail-title">
+
           Task
+
         </div>
 
-        <div id="detailReward" class="detail-reward">
+        <div
+          id="detailReward"
+          class="detail-reward">
+
           +₦0.00
+
         </div>
+
       </div>
 
-      <button class="detail-close" onclick="closeTaskDetail()">
+      <button
+        class="detail-close"
+        onclick="closeTaskDetail()"
+        aria-label="Close">
 
-        <svg viewBox="0 0 24 24"
+        <svg
+          viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2">
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
 
           <path d="M6 6l12 12"/>
           <path d="M18 6 6 18"/>
@@ -831,12 +997,17 @@ h1{
     </div>
 
 
-    <div id="detailDescription" class="detail-description">
+    <div
+      id="detailDescription"
+      class="detail-description">
+
       Task information will appear here.
+
     </div>
 
 
-    <button id="detailAction"
+    <button
+      id="detailAction"
       class="detail-link"
       onclick="continueTask()">
 
@@ -849,12 +1020,23 @@ h1{
 </div>
 
 
+<!-- BOTTOM NAV -->
+
 <nav class="bottom-nav">
 
-  <a class="nav-item" href="dashboard.html">
+  <!-- HOME -->
 
-    <svg viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="1.8">
+  <a
+    class="nav-item"
+    href="dashboard.html">
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round">
 
       <path d="m3 10 9-7 9 7"/>
       <path d="M5 9v11h14V9"/>
@@ -862,68 +1044,130 @@ h1{
 
     </svg>
 
-    <span>Home</span>
+    <span>
+      Home
+    </span>
 
   </a>
 
 
-  <a class="nav-item active" href="tasks.html">
+  <!-- TASKS -->
 
-    <svg viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="1.8">
+  <a
+    class="nav-item active"
+    href="tasks.html">
 
-      <rect x="4" y="3" width="16" height="18" rx="2"/>
-      <path d="M8 8h8"/>
-      <path d="M8 12h8"/>
-      <path d="M8 16h5"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+
+      <rect
+        x="4"
+        y="3"
+        width="16"
+        height="18"
+        rx="2"/>
+
+      <path d="M8 7h8"/>
+      <path d="M8 11h8"/>
+      <path d="M8 15h5"/>
 
     </svg>
 
-    <span>Tasks</span>
+    <span>
+      Tasks
+    </span>
 
   </a>
 
 
-  <a class="nav-item" href="vip.html">
+  <!-- VIP -->
 
-    <svg viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="1.8">
+  <a
+    class="nav-item"
+    href="vip.html">
 
-      <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+
+      <path d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
 
     </svg>
 
-    <span>VIP</span>
+    <span>
+      VIP
+    </span>
 
   </a>
 
 
-  <a class="nav-item" href="earn.html">
+  <!-- EARN -->
 
-    <svg viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="1.8">
+  <a
+    class="nav-item"
+    href="earn.html">
 
-      <path d="M12 2v20"/>
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H7"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+
+      <circle
+        cx="12"
+        cy="12"
+        r="8"/>
+
+      <path d="M12 8v8"/>
+
+      <path d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"/>
 
     </svg>
 
-    <span>Earn</span>
+    <span>
+      Earn
+    </span>
 
   </a>
 
 
-  <a class="nav-item" href="profile.html">
+  <!-- MY -->
 
-    <svg viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="1.8">
+  <a
+    class="nav-item"
+    href="profile.html">
 
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M4 21a8 8 0 0 1 16 0"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.9"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+
+      <circle
+        cx="12"
+        cy="8"
+        r="4"/>
+
+      <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>
 
     </svg>
 
-    <span>My</span>
+    <span>
+      My
+    </span>
 
   </a>
 
@@ -932,33 +1176,46 @@ h1{
 
 <script>
 
+/* =========================================================
+   SUPABASE
+========================================================= */
+
 const SUPABASE_URL =
-"https://wiorfxlodrcawxdeowbg.supabase.co";
+  "https://wiorfxlodrcawxdeowbg.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_b3FIKdf_P_UKP0Ii8ZbMREw_CVqOQv9g";
+  "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+
 
 const db =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
     }
-  }
-);
+  );
 
 
 let currentTask = null;
 
 
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
 function go(page){
   window.location.href = page;
 }
 
+
+/* =========================================================
+   MONEY
+========================================================= */
 
 function money(value){
 
@@ -974,6 +1231,10 @@ function money(value){
 }
 
 
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
 function escapeHtml(value){
 
   return String(value ?? "")
@@ -986,17 +1247,11 @@ function escapeHtml(value){
 }
 
 
-/*
-=========================================================
-GET AUTHENTICATED USER
-=========================================================
-*/
+/* =========================================================
+   AUTHENTICATED USER
+========================================================= */
 
 async function getAuthenticatedUser(){
-
-  /*
-    First use the existing browser session.
-  */
 
   const {
     data:{
@@ -1012,14 +1267,8 @@ async function getAuthenticatedUser(){
   }
 
 
-  /*
-    Give Supabase a moment to restore the session.
-    This prevents false auth redirects when the page
-    is opened directly from another VDC page.
-  */
-
-  await new Promise(resolve =>
-    setTimeout(resolve,700)
+  await new Promise(
+    resolve => setTimeout(resolve,700)
   );
 
 
@@ -1037,10 +1286,6 @@ async function getAuthenticatedUser(){
   }
 
 
-  /*
-    Only redirect when there is genuinely no session.
-  */
-
   window.location.href =
     "auth.html?redirect=tasks.html";
 
@@ -1049,11 +1294,9 @@ async function getAuthenticatedUser(){
 }
 
 
-/*
-=========================================================
-LOAD PAGE
-=========================================================
-*/
+/* =========================================================
+   LOAD TASK PAGE
+========================================================= */
 
 async function loadTaskPage(){
 
@@ -1066,14 +1309,15 @@ async function loadTaskPage(){
     if(!user) return;
 
 
-    /*
-    -----------------------------------------------
-    VIP
-    -----------------------------------------------
-    */
+    /* -----------------------------------------------
+       VIP
+    ----------------------------------------------- */
 
-    let vipName = "Free VIP";
-    let taskLimit = 5;
+    let vipName =
+      "Free VIP";
+
+    let taskLimit =
+      5;
 
 
     const {
@@ -1137,21 +1381,23 @@ async function loadTaskPage(){
 
     document.getElementById(
       "vipName"
-    ).textContent = vipName;
+    ).textContent =
+      vipName;
 
 
     document.getElementById(
       "taskLimit"
-    ).textContent = taskLimit;
+    ).textContent =
+      taskLimit;
 
 
-    /*
-    -----------------------------------------------
-    TODAY'S COMPLETIONS
-    -----------------------------------------------
-    */
+    /* -----------------------------------------------
+       TODAY'S COMPLETIONS
+    ----------------------------------------------- */
 
-    const now = new Date();
+    const now =
+      new Date();
+
 
     const todayStart =
       new Date(
@@ -1203,11 +1449,9 @@ async function loadTaskPage(){
     );
 
 
-    /*
-    -----------------------------------------------
-    TASKS
-    -----------------------------------------------
-    */
+    /* -----------------------------------------------
+       TASKS
+    ----------------------------------------------- */
 
     const {
       data:tasks,
@@ -1266,11 +1510,9 @@ async function loadTaskPage(){
 }
 
 
-/*
-=========================================================
-PROGRESS
-=========================================================
-*/
+/* =========================================================
+   PROGRESS
+========================================================= */
 
 function updateProgress(
   completedCount,
@@ -1310,11 +1552,9 @@ function updateProgress(
 }
 
 
-/*
-=========================================================
-RENDER TASKS
-=========================================================
-*/
+/* =========================================================
+   RENDER TASKS
+========================================================= */
 
 function renderTasks(
   tasks,
@@ -1434,12 +1674,17 @@ function renderTasks(
 
         <div class="task-icon">
 
-          <svg viewBox="0 0 24 24"
+          <svg
+            viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="1.8">
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round">
 
-            <rect x="4" y="3"
+            <rect
+              x="4"
+              y="3"
               width="16"
               height="18"
               rx="2"/>
@@ -1491,9 +1736,10 @@ function renderTasks(
 
       <button
         class="${buttonClass}"
-        ${completed || limitReached ? "disabled" : ""}
-      >
+        ${completed || limitReached ? "disabled" : ""}>
+
         ${buttonText}
+
       </button>
 
     `;
@@ -1509,9 +1755,7 @@ function renderTasks(
 
       button.addEventListener(
         "click",
-        () => openTaskDetails(
-          task
-        )
+        () => openTaskDetails(task)
       );
 
     }
@@ -1524,11 +1768,9 @@ function renderTasks(
 }
 
 
-/*
-=========================================================
-OPEN TASK DETAILS
-=========================================================
-*/
+/* =========================================================
+   OPEN TASK DETAILS
+========================================================= */
 
 function openTaskDetails(task){
 
@@ -1610,9 +1852,7 @@ function openTaskDetails(task){
 
   document.getElementById(
     "detailOverlay"
-  ).classList.add(
-    "show"
-  );
+  ).classList.add("show");
 
 
   document.body.style.overflow =
@@ -1621,11 +1861,9 @@ function openTaskDetails(task){
 }
 
 
-/*
-=========================================================
-CONTINUE TASK
-=========================================================
-*/
+/* =========================================================
+   CONTINUE TASK
+========================================================= */
 
 function continueTask(){
 
@@ -1639,17 +1877,8 @@ function continueTask(){
     currentTask.task_url;
 
 
-  if(!url){
+  if(!url) return;
 
-    return;
-
-  }
-
-
-  /*
-    Open the external task without
-    navigating the VDC page away.
-  */
 
   window.open(
     url,
@@ -1660,19 +1889,15 @@ function continueTask(){
 }
 
 
-/*
-=========================================================
-CLOSE DETAILS
-=========================================================
-*/
+/* =========================================================
+   CLOSE DETAILS
+========================================================= */
 
 function closeTaskDetail(){
 
   document.getElementById(
     "detailOverlay"
-  ).classList.remove(
-    "show"
-  );
+  ).classList.remove("show");
 
 
   document.body.style.overflow =
@@ -1691,10 +1916,7 @@ document.getElementById(
   "click",
   function(event){
 
-    if(
-      event.target ===
-      this
-    ){
+    if(event.target === this){
 
       closeTaskDetail();
 
@@ -1704,11 +1926,9 @@ document.getElementById(
 );
 
 
-/*
-=========================================================
-STATE
-=========================================================
-*/
+/* =========================================================
+   STATE
+========================================================= */
 
 function showState(
   title,
@@ -1729,12 +1949,16 @@ function showState(
 
       <div class="state-icon">
 
-        <svg viewBox="0 0 24 24"
+        <svg
+          viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.8">
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round">
 
-          <circle cx="12"
+          <circle
+            cx="12"
             cy="12"
             r="9"/>
 
@@ -1760,19 +1984,12 @@ function showState(
 }
 
 
-/*
-=========================================================
-AUTH STATE MONITOR
-=========================================================
-*/
+/* =========================================================
+   AUTH STATE
+========================================================= */
 
 db.auth.onAuthStateChange(
   (event,session) => {
-
-    /*
-      Do NOT redirect when Supabase is simply
-      refreshing/restoring the session.
-    */
 
     if(
       event === "SIGNED_OUT" &&
@@ -1788,11 +2005,9 @@ db.auth.onAuthStateChange(
 );
 
 
-/*
-=========================================================
-START
-=========================================================
-*/
+/* =========================================================
+   START
+========================================================= */
 
 loadTaskPage();
 
