@@ -574,7 +574,7 @@ h1{
   line-height:1.55;
 }
 
-/* BOTTOM NAV */
+/* BOTTOM NAV — SAME AS DASHBOARD */
 
 .bottom-nav{
   position:fixed;
@@ -646,1191 +646,1175 @@ h1{
 
 <header class="header">
 
-  <div class="brand" onclick="go('dashboard.html')">
-    <div class="brand-mark">V</div>
-    <div class="brand-name">VDC</div>
-  </div>
+<div class="brand" onclick="go('dashboard.html')">
+<div class="brand-mark">V</div>
+<div class="brand-name">VDC</div>
+</div>
 
-  <button
-    class="icon-btn"
-    onclick="go('notifications.html')"
-    aria-label="Notifications">
+<button
+class="icon-btn"
+onclick="go('notifications.html')"
+aria-label="Notifications">
 
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.9"
-      stroke-linecap="round"
-      stroke-linejoin="round">
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"/>
 
-    </svg>
+</svg>
 
-    <span class="notification-dot"></span>
+<span class="notification-dot"></span>
 
-  </button>
+</button>
 
 </header>
 
-
 <main class="content">
 
-  <div class="page-heading">
+<div class="page-heading">
 
-    <div class="eyebrow">
-      VDC TASKS
-    </div>
+<div class="eyebrow">
+VDC TASKS
+</div>
 
-    <h1>
-      Daily Tasks
-    </h1>
+<h1>
+Daily Tasks
+</h1>
 
-    <p>
-      Complete available tasks and earn rewards based on your current VIP level.
-    </p>
+<p>
+Complete available tasks and earn rewards based on your current VIP level.
+</p>
 
-  </div>
+</div>
 
+<!-- SUMMARY -->
 
-  <section class="summary-card">
+<section class="summary-card">
 
-    <div class="summary-top">
+<div class="summary-top">
 
-      <div>
+<div>
 
-        <div class="summary-label">
-          Today's Progress
-        </div>
+<div class="summary-label">
+Today's Progress
+</div>
 
-        <div class="summary-value">
-          <span id="completedCount">0</span>/<span id="taskLimit">0</span>
-        </div>
+<div class="summary-value">
+<span id="completedCount">0</span>/<span id="taskLimit">0</span>
+</div>
 
-      </div>
+</div>
 
-      <div class="vip-pill">
+<div class="vip-pill">
 
-        <small>
-          Your VIP
-        </small>
+<small>
+Your VIP
+</small>
 
-        <strong id="vipName">
-          Free VIP
-        </strong>
+<strong id="vipName">
+Free VIP
+</strong>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
+<div class="progress-area">
 
-    <div class="progress-area">
+<div class="progress-label">
 
-      <div class="progress-label">
+<span>
+Daily task progress
+</span>
 
-        <span>
-          Daily task progress
-        </span>
+<span id="progressPercent">
+0%
+</span>
 
-        <span id="progressPercent">
-          0%
-        </span>
+</div>
 
-      </div>
+<div class="progress-track">
 
-      <div class="progress-track">
+<div
+class="progress-bar"
+id="progressBar">
+</div>
 
-        <div
-          class="progress-bar"
-          id="progressBar">
-        </div>
+</div>
 
-      </div>
+</div>
 
-    </div>
+</section>
 
-  </section>
+<!-- TASKS -->
 
+<section class="section">
 
-  <section class="section">
+<div class="section-head">
 
-    <div class="section-head">
+<div class="section-title">
+Available Tasks
+</div>
 
-      <div class="section-title">
-        Available Tasks
-      </div>
+<div
+class="section-subtitle"
+id="taskCountLabel">
 
-      <div
-        class="section-subtitle"
-        id="taskCountLabel">
+Loading...
 
-        Loading...
+</div>
 
-      </div>
+</div>
 
-    </div>
+<div
+id="taskList"
+class="task-list">
 
+<div class="state-card">
 
-    <div
-      id="taskList"
-      class="task-list">
+<div class="state-icon">
 
-      <div class="state-card">
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-        <div class="state-icon">
+<path d="M12 6v6l4 2"/>
+<circle cx="12" cy="12" r="9"/>
 
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round">
+</svg>
 
-            <path d="M12 6v6l4 2"/>
-            <circle cx="12" cy="12" r="9"/>
+</div>
 
-          </svg>
+<h3>
+Loading tasks
+</h3>
 
-        </div>
+<p>
+Please wait while your available tasks are loaded.
+</p>
 
-        <h3>
-          Loading tasks
-        </h3>
+</div>
 
-        <p>
-          Please wait while your available tasks are loaded.
-        </p>
+</div>
 
-      </div>
+</section>
 
-    </div>
+<!-- INFO -->
 
-  </section>
+<div class="info-card">
 
+<div class="info-row">
 
-  <div class="info-card">
+<div class="info-icon">
 
-    <div class="info-row">
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-      <div class="info-icon">
+<circle cx="12" cy="12" r="9"/>
+<path d="M12 10v6"/>
+<path d="M12 7h.01"/>
 
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round">
+</svg>
 
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 10v6"/>
-          <path d="M12 7h.01"/>
+</div>
 
-        </svg>
+<div>
 
-      </div>
+<h3>
+About daily tasks
+</h3>
 
-      <div>
+<p>
+Your daily task limit and reward amount are determined by your active VIP level.
+Only eligible tasks count toward your daily progress.
+</p>
 
-        <h3>
-          About daily tasks
-        </h3>
+</div>
 
-        <p>
-          Your daily task limit and reward amount are determined by your active VIP level.
-          Only eligible tasks count toward your daily progress.
-        </p>
+</div>
 
-      </div>
-
-    </div>
-
-  </div>
+</div>
 
 </main>
 
 </div>
 
+<!-- TASK DETAIL -->
 
 <div
-  id="detailOverlay"
-  class="detail-overlay">
+id="detailOverlay"
+class="detail-overlay">
 
-  <div class="detail-sheet">
+<div class="detail-sheet">
 
-    <div class="detail-handle"></div>
+<div class="detail-handle"></div>
 
-    <div class="detail-head">
+<div class="detail-head">
 
-      <div>
+<div>
 
-        <div
-          id="detailTitle"
-          class="detail-title">
+<div
+id="detailTitle"
+class="detail-title">
+Task
+</div>
 
-          Task
-
-        </div>
-
-        <div
-          id="detailReward"
-          class="detail-reward">
-
-          +₦0.00
-
-        </div>
-
-      </div>
-
-      <button
-        class="detail-close"
-        onclick="closeTaskDetail()"
-        aria-label="Close">
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round">
-
-          <path d="M6 6l12 12"/>
-          <path d="M18 6 6 18"/>
-
-        </svg>
-
-      </button>
-
-    </div>
-
-
-    <div
-      id="detailDescription"
-      class="detail-description">
-
-      Task information will appear here.
-
-    </div>
-
-
-    <button
-      id="detailAction"
-      class="detail-link"
-      onclick="continueTask()">
-
-      Continue Task
-
-    </button>
-
-  </div>
+<div
+id="detailReward"
+class="detail-reward">
++₦0.00
+</div>
 
 </div>
 
+<button
+class="detail-close"
+onclick="closeTaskDetail()"
+aria-label="Close">
+
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<path d="M6 6l12 12"/>
+<path d="M18 6 6 18"/>
+
+</svg>
+
+</button>
+
+</div>
+
+<div
+id="detailDescription"
+class="detail-description">
+Task information will appear here.
+</div>
+
+<button
+id="detailAction"
+class="detail-link"
+onclick="continueTask()">
+Continue Task
+</button>
+
+</div>
+
+</div>
+
+<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
-  <a
-    class="nav-item"
-    href="dashboard.html">
+<!-- HOME -->
 
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.9"
-      stroke-linecap="round"
-      stroke-linejoin="round">
+<a
+class="nav-item"
+href="dashboard.html">
 
-      <path d="m3 10 9-7 9 7"/>
-      <path d="M5 9v11h14V9"/>
-      <path d="M9 20v-6h6v6"/>
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-    </svg>
+<path d="m3 10 9-7 9 7"/>
+<path d="M5 9v11h14V9"/>
+<path d="M9 20v-6h6v6"/>
 
-    <span>Home</span>
+</svg>
 
-  </a>
+<span>
+Home
+</span>
 
+</a>
 
-  <a
-    class="nav-item active"
-    href="tasks.html">
+<!-- TASKS -->
 
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.9"
-      stroke-linecap="round"
-      stroke-linejoin="round">
+<a
+class="nav-item active"
+href="tasks.html">
 
-      <rect x="4" y="3" width="16" height="18" rx="2"/>
-      <path d="M8 7h8"/>
-      <path d="M8 11h8"/>
-      <path d="M8 15h5"/>
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-    </svg>
+<rect
+x="4"
+y="3"
+width="16"
+height="18"
+rx="2"/>
 
-    <span>Tasks</span>
+<path d="M8 7h8"/>
+<path d="M8 11h8"/>
+<path d="M8 15h5"/>
 
-  </a>
+</svg>
 
+<span>
+Tasks
+</span>
 
-  <a
-    class="nav-item"
-    href="vip.html">
+</a>
 
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.9"
-      stroke-linecap="round"
-      stroke-linejoin="round">
+<!-- VIP -->
 
-      <path d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
+<a
+class="nav-item"
+href="vip.html">
 
-    </svg>
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-    <span>VIP</span>
+<path d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
 
-  </a>
+</svg>
 
+<span>
+VIP
+</span>
 
-  <a
-    class="nav-item"
-    href="earn.html">
+</a>
 
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.9"
-      stroke-linecap="round"
-      stroke-linejoin="round">
+<!-- EARN -->
 
-      <circle cx="12" cy="12" r="8"/>
-      <path d="M12 8v8"/>
-      <path d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"/>
+<a
+class="nav-item"
+href="earn.html">
 
-    </svg>
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-    <span>Earn</span>
+<circle
+cx="12"
+cy="12"
+r="8"/>
 
-  </a>
+<path d="M12 8v8"/>
+<path d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"/>
 
+</svg>
 
-  <a
-    class="nav-item"
-    href="profile.html">
+<span>
+Earn
+</span>
 
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.9"
-      stroke-linecap="round"
-      stroke-linejoin="round">
+</a>
 
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>
+<!-- MY -->
 
-    </svg>
+<a
+class="nav-item"
+href="profile.html">
 
-    <span>My</span>
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.9"
+stroke-linecap="round"
+stroke-linejoin="round">
 
-  </a>
+<circle
+cx="12"
+cy="8"
+r="4"/>
+
+<path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>
+
+</svg>
+
+<span>
+My
+</span>
+
+</a>
 
 </nav>
 
-
 <script>
 
+/* =========================================================
+   SUPABASE
+========================================================= */
+
 const SUPABASE_URL =
-  "https://wiorfxlodrcawxdeowbg.supabase.co";
+"https://wiorfxlodrcawxdeowbg.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_b3FIKdf_P_UKP0Ii8ZbMREw_CVqOQv9g";
+"sb_publishable_b3FIKdf_P_UKP0Ii8ZbMREw_CVqOQv9g";
 
 const db =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        persistSession:true,
-        autoRefreshToken:true,
-        detectSessionInUrl:true
-      }
-    }
-  );
-
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY,
+{
+auth:{
+persistSession:true,
+autoRefreshToken:true,
+detectSessionInUrl:true
+}
+}
+);
 
 let currentTask = null;
 
-
-/* NAVIGATION */
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 function go(page){
-  window.location.href = page;
+window.location.href = page;
 }
 
-
-/* MONEY */
+/* =========================================================
+   MONEY
+========================================================= */
 
 function money(value){
 
-  return "₦" +
-    Number(value || 0).toLocaleString(
-      "en-NG",
-      {
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-      }
-    );
+return "₦" +
+Number(value || 0).toLocaleString(
+"en-NG",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
 
 }
 
-
-/* ESCAPE HTML */
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHtml(value){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
-
-/* AUTHENTICATED USER */
+/* =========================================================
+   AUTHENTICATED USER
+========================================================= */
 
 async function getAuthenticatedUser(){
 
-  const {
-    data:{
-      session
-    }
-  } = await db.auth.getSession();
+const {
+data:{
+session
+}
+} = await db.auth.getSession();
 
+if(session?.user){
+return session.user;
+}
 
-  if(session?.user){
-    return session.user;
-  }
+await new Promise(
+resolve => setTimeout(resolve,700)
+);
 
+const {
+data:{
+session:secondSession
+}
+} = await db.auth.getSession();
 
-  await new Promise(
-    resolve => setTimeout(resolve,700)
-  );
+if(secondSession?.user){
+return secondSession.user;
+}
 
+window.location.href =
+"auth.html?redirect=tasks.html";
 
-  const {
-    data:{
-      session:secondSession
-    }
-  } = await db.auth.getSession();
-
-
-  if(secondSession?.user){
-    return secondSession.user;
-  }
-
-
-  window.location.href =
-    "auth.html?redirect=tasks.html";
-
-  return null;
+return null;
 
 }
 
-
-/* LOAD PAGE */
+/* =========================================================
+   LOAD TASK PAGE
+========================================================= */
 
 async function loadTaskPage(){
 
-  try{
+try{
 
-    const user =
-      await getAuthenticatedUser();
+const user =
+await getAuthenticatedUser();
 
+if(!user) return;
 
-    if(!user) return;
+/* -----------------------------------------------
+   VIP
+----------------------------------------------- */
 
+let vipName =
+"Free VIP";
 
-    let vipName =
-      "Free VIP";
+let taskLimit =
+5;
 
-    let taskLimit =
-      5;
+const {
+data:userVip,
+error:vipError
+} = await db
+.from("user_vips")
+.select("vip_level_id")
+.eq("user_id",user.id)
+.maybeSingle();
 
+if(vipError){
 
-    const {
-      data:userVip,
-      error:vipError
-    } = await db
-      .from("user_vips")
-      .select("vip_level_id")
-      .eq("user_id",user.id)
-      .maybeSingle();
-
-
-    if(vipError){
-      console.error(
-        "VIP error:",
-        vipError
-      );
-    }
-
-
-    if(userVip?.vip_level_id){
-
-      const {
-        data:vip,
-        error:levelError
-      } = await db
-        .from("vip_levels")
-        .select(
-          "level_number,name,daily_task_limit,task_reward"
-        )
-        .eq("id",userVip.vip_level_id)
-        .maybeSingle();
-
-
-      if(levelError){
-        console.error(
-          "VIP level error:",
-          levelError
-        );
-      }
-
-
-      if(vip){
-
-        vipName =
-          vip.name || "Free VIP";
-
-        taskLimit =
-          Number(
-            vip.daily_task_limit || 5
-          );
-
-      }
-
-    }
-
-
-    document.getElementById(
-      "vipName"
-    ).textContent =
-      vipName;
-
-
-    document.getElementById(
-      "taskLimit"
-    ).textContent =
-      taskLimit;
-
-
-    /* TODAY'S COMPLETIONS */
-
-    const now =
-      new Date();
-
-
-    const todayStart =
-      new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      );
-
-
-    const {
-      data:completions,
-      error:completionError
-    } = await db
-      .from("task_completions")
-      .select("task_id")
-      .eq("user_id",user.id)
-      .gte(
-        "created_at",
-        todayStart.toISOString()
-      );
-
-
-    if(completionError){
-      console.error(
-        "Completion error:",
-        completionError
-      );
-    }
-
-
-    const completedIds =
-      new Set(
-        (completions || [])
-          .map(
-            row => String(row.task_id)
-          )
-      );
-
-
-    const completedCount =
-      completedIds.size;
-
-
-    updateProgress(
-      completedCount,
-      taskLimit
-    );
-
-
-    /* TASKS */
-
-    const {
-      data:tasks,
-      error:taskError
-    } = await db
-      .from("tasks")
-      .select("*")
-      .eq("active",true)
-      .order(
-        "created_at",
-        {
-          ascending:true
-        }
-      );
-
-
-    if(taskError){
-
-      console.error(
-        "Task error:",
-        taskError
-      );
-
-      showState(
-        "Unable to load tasks",
-        "We could not load the available tasks right now."
-      );
-
-      return;
-
-    }
-
-
-    renderTasks(
-      tasks || [],
-      completedIds,
-      completedCount,
-      taskLimit
-    );
-
-
-  }catch(error){
-
-    console.error(
-      "Tasks page error:",
-      error
-    );
-
-    showState(
-      "Something went wrong",
-      "Please refresh the page and try again."
-    );
-
-  }
+console.error(
+"VIP error:",
+vipError
+);
 
 }
 
+if(userVip?.vip_level_id){
 
-/* PROGRESS */
+const {
+data:vip,
+error:levelError
+} = await db
+.from("vip_levels")
+.select(
+"level_number,name,daily_task_limit,task_reward"
+)
+.eq("id",userVip.vip_level_id)
+.maybeSingle();
+
+if(levelError){
+
+console.error(
+"VIP level error:",
+levelError
+);
+
+}
+
+if(vip){
+
+vipName =
+vip.name || "Free VIP";
+
+taskLimit =
+Number(
+vip.daily_task_limit || 5
+);
+
+}
+
+}
+
+document.getElementById(
+"vipName"
+).textContent =
+vipName;
+
+document.getElementById(
+"taskLimit"
+).textContent =
+taskLimit;
+
+/* -----------------------------------------------
+   TODAY'S COMPLETIONS
+----------------------------------------------- */
+
+const now =
+new Date();
+
+const todayStart =
+new Date(
+now.getFullYear(),
+now.getMonth(),
+now.getDate()
+);
+
+const {
+data:completions,
+error:completionError
+} = await db
+.from("task_completions")
+.select("task_id")
+.eq("user_id",user.id)
+.gte(
+"created_at",
+todayStart.toISOString()
+);
+
+if(completionError){
+
+console.error(
+"Completion error:",
+completionError
+);
+
+}
+
+const completedIds =
+new Set(
+(completions || [])
+.map(
+row => String(row.task_id)
+)
+);
+
+const completedCount =
+completedIds.size;
+
+updateProgress(
+completedCount,
+taskLimit
+);
+
+/* -----------------------------------------------
+   TASKS
+----------------------------------------------- */
+
+const {
+data:tasks,
+error:taskError
+} = await db
+.from("tasks")
+.select("*")
+.eq("active",true)
+.order(
+"created_at",
+{
+ascending:true
+}
+);
+
+if(taskError){
+
+console.error(
+"Task error:",
+taskError
+);
+
+showState(
+"Unable to load tasks",
+"We could not load the available tasks right now."
+);
+
+return;
+
+}
+
+renderTasks(
+tasks || [],
+completedIds,
+completedCount,
+taskLimit
+);
+
+}catch(error){
+
+console.error(
+"Tasks page error:",
+error
+);
+
+showState(
+"Something went wrong",
+"Please refresh the page and try again."
+);
+
+}
+
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
 
 function updateProgress(
-  completedCount,
-  taskLimit
+completedCount,
+taskLimit
 ){
 
-  document.getElementById(
-    "completedCount"
-  ).textContent =
-    completedCount;
+document.getElementById(
+"completedCount"
+).textContent =
+completedCount;
 
+const percent =
+taskLimit > 0
+? Math.min(
+100,
+Math.round(
+completedCount /
+taskLimit *
+100
+)
+)
+: 0;
 
-  const percent =
-    taskLimit > 0
-      ? Math.min(
-          100,
-          Math.round(
-            completedCount /
-            taskLimit *
-            100
-          )
-        )
-      : 0;
+document.getElementById(
+"progressPercent"
+).textContent =
+percent + "%";
 
-
-  document.getElementById(
-    "progressPercent"
-  ).textContent =
-    percent + "%";
-
-
-  document.getElementById(
-    "progressBar"
-  ).style.width =
-    percent + "%";
+document.getElementById(
+"progressBar"
+).style.width =
+percent + "%";
 
 }
 
-
-/* RENDER TASKS */
+/* =========================================================
+   RENDER TASKS
+========================================================= */
 
 function renderTasks(
-  tasks,
-  completedIds,
-  completedCount,
-  taskLimit
+tasks,
+completedIds,
+completedCount,
+taskLimit
 ){
 
-  const list =
-    document.getElementById(
-      "taskList"
-    );
-
-
-  if(!tasks.length){
-
-    document.getElementById(
-      "taskCountLabel"
-    ).textContent =
-      "0 available";
-
-
-    showState(
-      "No tasks available",
-      "There are no active tasks available right now. Check again later."
-    );
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "taskCountLabel"
-  ).textContent =
-    tasks.length +
-    " available";
-
-
-  list.innerHTML = "";
-
-
-  tasks.forEach(task => {
-
-    const id =
-      String(task.id);
-
-
-    const completed =
-      completedIds.has(id);
-
-
-    const limitReached =
-      completedCount >= taskLimit &&
-      !completed;
-
-
-    const title =
-      task.title ||
-      task.name ||
-      "Daily Task";
-
-
-    const description =
-      task.description ||
-      "Complete this task to earn your reward.";
-
-
-    const reward =
-      Number(
-        task.reward ??
-        task.amount ??
-        0
-      );
-
-
-    const card =
-      document.createElement(
-        "div"
-      );
-
-
-    card.className =
-      "task-card";
-
-
-    let buttonText =
-      "View Task";
-
-
-    let buttonClass =
-      "task-action";
-
-
-    if(completed){
-
-      buttonText =
-        "Completed";
-
-      buttonClass =
-        "task-action completed";
-
-    }else if(limitReached){
-
-      buttonText =
-        "Daily Limit Reached";
-
-      buttonClass =
-        "task-action disabled";
-
-    }
-
-
-    card.innerHTML = `
-
-      <div class="task-main">
-
-        <div class="task-icon">
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            stroke-linejoin="round">
-
-            <rect
-              x="4"
-              y="3"
-              width="16"
-              height="18"
-              rx="2"/>
-
-            <path d="M8 8h8"/>
-            <path d="M8 12h8"/>
-            <path d="M8 16h5"/>
-
-          </svg>
-
-        </div>
-
-
-        <div class="task-info">
-
-          <div class="task-title">
-            ${escapeHtml(title)}
-          </div>
-
-          <div class="task-description">
-            ${escapeHtml(description)}
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="task-meta">
-
-        <div class="task-reward">
-          +${money(reward)}
-        </div>
-
-        <div class="task-status">
-
-          ${
-            completed
-              ? "Completed today"
-              : limitReached
-                ? "Limit reached"
-                : "Available"
-          }
-
-        </div>
-
-      </div>
-
-
-      <button
-        class="${buttonClass}"
-        ${completed || limitReached ? "disabled" : ""}>
-
-        ${buttonText}
-
-      </button>
-
-    `;
-
-
-    const button =
-      card.querySelector(
-        ".task-action"
-      );
-
-
-    if(!completed && !limitReached){
-
-      button.addEventListener(
-        "click",
-        () => openTaskDetails(task)
-      );
-
-    }
-
-
-    list.appendChild(card);
-
-  });
+const list =
+document.getElementById(
+"taskList"
+);
+
+if(!tasks.length){
+
+document.getElementById(
+"taskCountLabel"
+).textContent =
+"0 available";
+
+showState(
+"No tasks available",
+"There are no active tasks available right now. Check again later."
+);
+
+return;
 
 }
 
+document.getElementById(
+"taskCountLabel"
+).textContent =
+tasks.length +
+" available";
 
-/* TASK DETAILS */
+list.innerHTML = "";
+
+tasks.forEach(task => {
+
+const id =
+String(task.id);
+
+const completed =
+completedIds.has(id);
+
+const limitReached =
+completedCount >= taskLimit &&
+!completed;
+
+const title =
+task.title ||
+task.name ||
+"Daily Task";
+
+const description =
+task.description ||
+"Complete this task to earn your reward.";
+
+const reward =
+Number(
+task.reward ??
+task.amount ??
+0
+);
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"task-card";
+
+let buttonText =
+"View Task";
+
+let buttonClass =
+"task-action";
+
+if(completed){
+
+buttonText =
+"Completed";
+
+buttonClass =
+"task-action completed";
+
+}else if(limitReached){
+
+buttonText =
+"Daily Limit Reached";
+
+buttonClass =
+"task-action disabled";
+
+}
+
+card.innerHTML = `
+
+<div class="task-main">
+
+<div class="task-icon">
+
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<rect
+x="4"
+y="3"
+width="16"
+height="18"
+rx="2"/>
+
+<path d="M8 8h8"/>
+<path d="M8 12h8"/>
+<path d="M8 16h5"/>
+
+</svg>
+
+</div>
+
+<div class="task-info">
+
+<div class="task-title">
+${escapeHtml(title)}
+</div>
+
+<div class="task-description">
+${escapeHtml(description)}
+</div>
+
+</div>
+
+</div>
+
+<div class="task-meta">
+
+<div class="task-reward">
++${money(reward)}
+</div>
+
+<div class="task-status">
+
+${
+completed
+? "Completed today"
+: limitReached
+? "Limit reached"
+: "Available"
+}
+
+</div>
+
+</div>
+
+<button
+class="${buttonClass}"
+${completed || limitReached ? "disabled" : ""}>
+
+${buttonText}
+
+</button>
+
+`;
+
+const button =
+card.querySelector(
+".task-action"
+);
+
+if(!completed && !limitReached){
+
+button.addEventListener(
+"click",
+() => openTaskDetails(task)
+);
+
+}
+
+list.appendChild(card);
+
+});
+
+}
+
+/* =========================================================
+   OPEN TASK DETAILS
+========================================================= */
 
 function openTaskDetails(task){
 
-  if(!task) return;
+if(!task) return;
 
+currentTask =
+task;
 
-  currentTask =
-    task;
+const title =
+task.title ||
+task.name ||
+"Daily Task";
 
+const description =
+task.description ||
+"Complete this task to earn your reward.";
 
-  const title =
-    task.title ||
-    task.name ||
-    "Daily Task";
+const reward =
+Number(
+task.reward ??
+task.amount ??
+0
+);
 
+document.getElementById(
+"detailTitle"
+).textContent =
+title;
 
-  const description =
-    task.description ||
-    "Complete this task to earn your reward.";
+document.getElementById(
+"detailReward"
+).textContent =
+"+" + money(reward);
 
+document.getElementById(
+"detailDescription"
+).textContent =
+description;
 
-  const reward =
-    Number(
-      task.reward ??
-      task.amount ??
-      0
-    );
+const url =
+task.url ||
+task.link ||
+task.target_url ||
+task.task_url;
 
+const action =
+document.getElementById(
+"detailAction"
+);
 
-  document.getElementById(
-    "detailTitle"
-  ).textContent =
-    title;
+if(url){
 
+action.textContent =
+"Continue Task";
 
-  document.getElementById(
-    "detailReward"
-  ).textContent =
-    "+" + money(reward);
+action.disabled =
+false;
 
+}else{
 
-  document.getElementById(
-    "detailDescription"
-  ).textContent =
-    description;
+action.textContent =
+"Task Link Unavailable";
 
-
-  const url =
-    task.url ||
-    task.link ||
-    task.target_url ||
-    task.task_url;
-
-
-  const action =
-    document.getElementById(
-      "detailAction"
-    );
-
-
-  if(url){
-
-    action.textContent =
-      "Continue Task";
-
-    action.disabled =
-      false;
-
-  }else{
-
-    action.textContent =
-      "Task Link Unavailable";
-
-    action.disabled =
-      true;
-
-  }
-
-
-  document.getElementById(
-    "detailOverlay"
-  ).classList.add("show");
-
-
-  document.body.style.overflow =
-    "hidden";
+action.disabled =
+true;
 
 }
 
+document.getElementById(
+"detailOverlay"
+).classList.add("show");
 
-/* CONTINUE */
+document.body.style.overflow =
+"hidden";
+
+}
+
+/* =========================================================
+   CONTINUE TASK
+========================================================= */
 
 function continueTask(){
 
-  if(!currentTask) return;
+if(!currentTask) return;
 
+const url =
+currentTask.url ||
+currentTask.link ||
+currentTask.target_url ||
+currentTask.task_url;
 
-  const url =
-    currentTask.url ||
-    currentTask.link ||
-    currentTask.target_url ||
-    currentTask.task_url;
+if(!url) return;
 
-
-  if(!url) return;
-
-
-  window.open(
-    url,
-    "_blank",
-    "noopener,noreferrer"
-  );
+window.open(
+url,
+"_blank",
+"noopener,noreferrer"
+);
 
 }
 
-
-/* CLOSE */
+/* =========================================================
+   CLOSE DETAILS
+========================================================= */
 
 function closeTaskDetail(){
 
-  document.getElementById(
-    "detailOverlay"
-  ).classList.remove("show");
+document.getElementById(
+"detailOverlay"
+).classList.remove("show");
 
+document.body.style.overflow =
+"";
 
-  document.body.style.overflow =
-    "";
-
-
-  currentTask =
-    null;
+currentTask =
+null;
 
 }
-
 
 document.getElementById(
-  "detailOverlay"
+"detailOverlay"
 ).addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(event.target === this){
-      closeTaskDetail();
-    }
+if(event.target === this){
 
-  }
-);
-
-
-/* STATE */
-
-function showState(
-  title,
-  message
-){
-
-  document.getElementById(
-    "taskCountLabel"
-  ).textContent =
-    "";
-
-
-  document.getElementById(
-    "taskList"
-  ).innerHTML = `
-
-    <div class="state-card">
-
-      <div class="state-icon">
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round">
-
-          <circle
-            cx="12"
-            cy="12"
-            r="9"/>
-
-          <path d="M12 8v5"/>
-          <path d="M12 16h.01"/>
-
-        </svg>
-
-      </div>
-
-      <h3>
-        ${escapeHtml(title)}
-      </h3>
-
-      <p>
-        ${escapeHtml(message)}
-      </p>
-
-    </div>
-
-  `;
+closeTaskDetail();
 
 }
 
-
-/* AUTH STATE */
-
-db.auth.onAuthStateChange(
-  (event,session) => {
-
-    if(
-      event === "SIGNED_OUT" &&
-      !session
-    ){
-
-      window.location.href =
-        "auth.html?redirect=tasks.html";
-
-    }
-
-  }
+}
 );
 
+/* =========================================================
+   STATE
+========================================================= */
 
-/* START */
+function showState(
+title,
+message
+){
+
+document.getElementById(
+"taskCountLabel"
+).textContent =
+"";
+
+document.getElementById(
+"taskList"
+).innerHTML = `
+
+<div class="state-card">
+
+<div class="state-icon">
+
+<svg
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<circle
+cx="12"
+cy="12"
+r="9"/>
+
+<path d="M12 8v5"/>
+<path d="M12 16h.01"/>
+
+</svg>
+
+</div>
+
+<h3>
+${escapeHtml(title)}
+</h3>
+
+<p>
+${escapeHtml(message)}
+</p>
+
+</div>
+
+`;
+
+}
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+db.auth.onAuthStateChange(
+(event,session) => {
+
+if(
+event === "SIGNED_OUT" &&
+!session
+){
+
+window.location.href =
+"auth.html?redirect=tasks.html";
+
+}
+
+}
+);
+
+/* =========================================================
+   START
+========================================================= */
 
 loadTaskPage();
 
