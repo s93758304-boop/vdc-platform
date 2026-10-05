@@ -157,49 +157,6 @@ h1{
   line-height:1.55;
 }
 
-/* VPN WARNING */
-
-.security-warning{
-  display:flex;
-  gap:11px;
-  align-items:flex-start;
-  background:#fff7ed;
-  border:1px solid #fed7aa;
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:18px;
-}
-
-.security-warning-icon{
-  width:34px;
-  height:34px;
-  flex-shrink:0;
-  border-radius:10px;
-  background:#ffedd5;
-  color:#ea580c;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.security-warning-icon svg{
-  width:18px;
-  height:18px;
-}
-
-.security-warning h3{
-  font-size:12px;
-  font-weight:850;
-  color:#9a3412;
-  margin-bottom:4px;
-}
-
-.security-warning p{
-  color:#7c2d12;
-  font-size:10.5px;
-  line-height:1.5;
-}
-
 /* SUMMARY */
 
 .summary-card{
@@ -617,7 +574,7 @@ h1{
   line-height:1.55;
 }
 
-/* BOTTOM NAV — SAME AS DASHBOARD */
+/* BOTTOM NAV */
 
 .bottom-nav{
   position:fixed;
@@ -738,46 +695,6 @@ h1{
   </div>
 
 
-  <!-- VPN / PROXY WARNING -->
-
-  <div class="security-warning">
-
-    <div class="security-warning-icon">
-
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.9"
-        stroke-linecap="round"
-        stroke-linejoin="round">
-
-        <path d="M12 3 4.5 6v5.5c0 4.7 3.1 8.4 7.5 9.5 4.4-1.1 7.5-4.8 7.5-9.5V6L12 3Z"/>
-        <path d="M12 8v4"/>
-        <path d="M12 15h.01"/>
-
-      </svg>
-
-    </div>
-
-    <div>
-
-      <h3>
-        Security Notice
-      </h3>
-
-      <p>
-        VPNs, proxies and location-masking services are not allowed while completing tasks.
-        If suspicious traffic is detected, the task may not be credited.
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <!-- SUMMARY -->
-
   <section class="summary-card">
 
     <div class="summary-top">
@@ -837,8 +754,6 @@ h1{
   </section>
 
 
-  <!-- TASKS -->
-
   <section class="section">
 
     <div class="section-head">
@@ -896,8 +811,6 @@ h1{
   </section>
 
 
-  <!-- INFO -->
-
   <div class="info-card">
 
     <div class="info-row">
@@ -941,8 +854,6 @@ h1{
 
 </div>
 
-
-<!-- TASK DETAIL -->
 
 <div
   id="detailOverlay"
@@ -1020,11 +931,7 @@ h1{
 </div>
 
 
-<!-- BOTTOM NAV -->
-
 <nav class="bottom-nav">
-
-  <!-- HOME -->
 
   <a
     class="nav-item"
@@ -1044,14 +951,10 @@ h1{
 
     </svg>
 
-    <span>
-      Home
-    </span>
+    <span>Home</span>
 
   </a>
 
-
-  <!-- TASKS -->
 
   <a
     class="nav-item active"
@@ -1065,27 +968,17 @@ h1{
       stroke-linecap="round"
       stroke-linejoin="round">
 
-      <rect
-        x="4"
-        y="3"
-        width="16"
-        height="18"
-        rx="2"/>
-
+      <rect x="4" y="3" width="16" height="18" rx="2"/>
       <path d="M8 7h8"/>
       <path d="M8 11h8"/>
       <path d="M8 15h5"/>
 
     </svg>
 
-    <span>
-      Tasks
-    </span>
+    <span>Tasks</span>
 
   </a>
 
-
-  <!-- VIP -->
 
   <a
     class="nav-item"
@@ -1103,14 +996,10 @@ h1{
 
     </svg>
 
-    <span>
-      VIP
-    </span>
+    <span>VIP</span>
 
   </a>
 
-
-  <!-- EARN -->
 
   <a
     class="nav-item"
@@ -1124,25 +1013,16 @@ h1{
       stroke-linecap="round"
       stroke-linejoin="round">
 
-      <circle
-        cx="12"
-        cy="12"
-        r="8"/>
-
+      <circle cx="12" cy="12" r="8"/>
       <path d="M12 8v8"/>
-
       <path d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"/>
 
     </svg>
 
-    <span>
-      Earn
-    </span>
+    <span>Earn</span>
 
   </a>
 
-
-  <!-- MY -->
 
   <a
     class="nav-item"
@@ -1156,18 +1036,12 @@ h1{
       stroke-linecap="round"
       stroke-linejoin="round">
 
-      <circle
-        cx="12"
-        cy="8"
-        r="4"/>
-
+      <circle cx="12" cy="8" r="4"/>
       <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>
 
     </svg>
 
-    <span>
-      My
-    </span>
+    <span>My</span>
 
   </a>
 
@@ -1176,16 +1050,11 @@ h1{
 
 <script>
 
-/* =========================================================
-   SUPABASE
-========================================================= */
-
 const SUPABASE_URL =
   "https://wiorfxlodrcawxdeowbg.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
-
+  "sb_publishable_b3FIKdf_P_UKP0Ii8ZbMREw_CVqOQv9g";
 
 const db =
   window.supabase.createClient(
@@ -1204,18 +1073,14 @@ const db =
 let currentTask = null;
 
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+/* NAVIGATION */
 
 function go(page){
   window.location.href = page;
 }
 
 
-/* =========================================================
-   MONEY
-========================================================= */
+/* MONEY */
 
 function money(value){
 
@@ -1231,9 +1096,7 @@ function money(value){
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+/* ESCAPE HTML */
 
 function escapeHtml(value){
 
@@ -1247,9 +1110,7 @@ function escapeHtml(value){
 }
 
 
-/* =========================================================
-   AUTHENTICATED USER
-========================================================= */
+/* AUTHENTICATED USER */
 
 async function getAuthenticatedUser(){
 
@@ -1261,9 +1122,7 @@ async function getAuthenticatedUser(){
 
 
   if(session?.user){
-
     return session.user;
-
   }
 
 
@@ -1280,9 +1139,7 @@ async function getAuthenticatedUser(){
 
 
   if(secondSession?.user){
-
     return secondSession.user;
-
   }
 
 
@@ -1294,9 +1151,7 @@ async function getAuthenticatedUser(){
 }
 
 
-/* =========================================================
-   LOAD TASK PAGE
-========================================================= */
+/* LOAD PAGE */
 
 async function loadTaskPage(){
 
@@ -1308,10 +1163,6 @@ async function loadTaskPage(){
 
     if(!user) return;
 
-
-    /* -----------------------------------------------
-       VIP
-    ----------------------------------------------- */
 
     let vipName =
       "Free VIP";
@@ -1331,12 +1182,10 @@ async function loadTaskPage(){
 
 
     if(vipError){
-
       console.error(
         "VIP error:",
         vipError
       );
-
     }
 
 
@@ -1355,12 +1204,10 @@ async function loadTaskPage(){
 
 
       if(levelError){
-
         console.error(
           "VIP level error:",
           levelError
         );
-
       }
 
 
@@ -1391,9 +1238,7 @@ async function loadTaskPage(){
       taskLimit;
 
 
-    /* -----------------------------------------------
-       TODAY'S COMPLETIONS
-    ----------------------------------------------- */
+    /* TODAY'S COMPLETIONS */
 
     const now =
       new Date();
@@ -1421,12 +1266,10 @@ async function loadTaskPage(){
 
 
     if(completionError){
-
       console.error(
         "Completion error:",
         completionError
       );
-
     }
 
 
@@ -1449,9 +1292,7 @@ async function loadTaskPage(){
     );
 
 
-    /* -----------------------------------------------
-       TASKS
-    ----------------------------------------------- */
+    /* TASKS */
 
     const {
       data:tasks,
@@ -1510,9 +1351,7 @@ async function loadTaskPage(){
 }
 
 
-/* =========================================================
-   PROGRESS
-========================================================= */
+/* PROGRESS */
 
 function updateProgress(
   completedCount,
@@ -1552,9 +1391,7 @@ function updateProgress(
 }
 
 
-/* =========================================================
-   RENDER TASKS
-========================================================= */
+/* RENDER TASKS */
 
 function renderTasks(
   tasks,
@@ -1768,9 +1605,7 @@ function renderTasks(
 }
 
 
-/* =========================================================
-   OPEN TASK DETAILS
-========================================================= */
+/* TASK DETAILS */
 
 function openTaskDetails(task){
 
@@ -1861,9 +1696,7 @@ function openTaskDetails(task){
 }
 
 
-/* =========================================================
-   CONTINUE TASK
-========================================================= */
+/* CONTINUE */
 
 function continueTask(){
 
@@ -1889,9 +1722,7 @@ function continueTask(){
 }
 
 
-/* =========================================================
-   CLOSE DETAILS
-========================================================= */
+/* CLOSE */
 
 function closeTaskDetail(){
 
@@ -1917,18 +1748,14 @@ document.getElementById(
   function(event){
 
     if(event.target === this){
-
       closeTaskDetail();
-
     }
 
   }
 );
 
 
-/* =========================================================
-   STATE
-========================================================= */
+/* STATE */
 
 function showState(
   title,
@@ -1984,9 +1811,7 @@ function showState(
 }
 
 
-/* =========================================================
-   AUTH STATE
-========================================================= */
+/* AUTH STATE */
 
 db.auth.onAuthStateChange(
   (event,session) => {
@@ -2005,9 +1830,7 @@ db.auth.onAuthStateChange(
 );
 
 
-/* =========================================================
-   START
-========================================================= */
+/* START */
 
 loadTaskPage();
 
