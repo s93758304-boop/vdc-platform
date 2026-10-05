@@ -1,2351 +1,1863 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-    <title>VDC — Mystery Box</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        :root {
-            --purple: #6d28d9;
-            --purple-dark: #4c1d95;
-            --purple-light: #f3e8ff;
-            --orange: #f97316;
-            --orange-dark: #ea580c;
-            --green: #008751;
-
-            --bg: #faf9fc;
-            --card: #ffffff;
-            --text: #17121f;
-            --muted: #6b6474;
-            --border: #eee8f4;
-
-            --shadow: 0 8px 30px rgba(50, 20, 80, .07);
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: var(--text);
-            font-family:
-                Inter,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Arial,
-                sans-serif;
-            min-height: 100vh;
-        }
-
-        button,
-        a {
-            font: inherit;
-        }
-
-        button {
-            border: 0;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .app {
-            width: 100%;
-            max-width: 760px;
-            margin: 0 auto;
-            min-height: 100vh;
-            padding-bottom: 92px;
-        }
-
-        /* =========================================================
-           HEADER
-        ========================================================= */
-
-        .topbar {
-            height: 68px;
-            background: rgba(255,255,255,.96);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 18px;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(12px);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 900;
-            color: var(--purple-dark);
-            font-size: 19px;
-        }
-
-        .brand-mark {
-            width: 36px;
-            height: 36px;
-            border-radius: 11px;
-            background: linear-gradient(
-                135deg,
-                var(--purple),
-                var(--orange)
-            );
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 900;
-            font-size: 16px;
-            box-shadow: 0 5px 15px rgba(109,40,217,.2);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .icon-button {
-            width: 42px;
-            height: 42px;
-            border-radius: 13px;
-            background: #f7f4fa;
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--purple-dark);
-            position: relative;
-        }
-
-        .icon-button svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .notification-dot {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--orange);
-            right: 8px;
-            top: 7px;
-            border: 2px solid white;
-        }
-
-        /* =========================================================
-           MAIN
-        ========================================================= */
-
-        main {
-            padding: 18px;
-        }
-
-        .page-title {
-            margin-top: 5px;
-            margin-bottom: 4px;
-            font-size: 25px;
-            font-weight: 900;
-            letter-spacing: -.5px;
-        }
-
-        .page-subtitle {
-            margin: 0;
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.55;
-        }
-
-        /* =========================================================
-           LIVE REWARD TICKER
-        ========================================================= */
-
-        .live-reward-card {
-            margin-top: 18px;
-            background:
-                linear-gradient(
-                    135deg,
-                    #f3e8ff 0%,
-                    #ffffff 65%
-                );
-            border: 1px solid #e6d8f7;
-            border-radius: 18px;
-            padding: 14px 15px;
-            box-shadow: 0 5px 18px rgba(109,40,217,.05);
-            overflow: hidden;
-        }
-
-        .live-reward-top {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            margin-bottom: 6px;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 4px rgba(0,135,81,.10);
-            flex: 0 0 auto;
-        }
-
-        .live-label {
-            color: var(--purple);
-            font-size: 11px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-        }
-
-        .live-testimonial {
-            min-height: 22px;
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--text);
-            transition: opacity .2s ease, transform .2s ease;
-        }
-
-        .live-testimonial.reward-in {
-            animation: rewardIn .4s ease;
-        }
-
-        @keyframes rewardIn {
-            from {
-                opacity: 0;
-                transform: translateY(7px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* =========================================================
-           INFO CARDS
-        ========================================================= */
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .stat-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 17px;
-            padding: 14px;
-            box-shadow: var(--shadow);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--muted);
-            font-weight: 700;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: .04em;
-        }
-
-        .stat-value {
-            font-size: 17px;
-            font-weight: 900;
-            color: var(--text);
-        }
-
-        .stat-value.purple {
-            color: var(--purple);
-        }
-
-        .stat-value.orange {
-            color: var(--orange-dark);
-        }
-
-        /* =========================================================
-           COUNTDOWN
-        ========================================================= */
-
-        .countdown-card {
-            margin-top: 12px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 15px;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-
-        .countdown-label {
-            color: var(--muted);
-            font-size: 11px;
-            font-weight: 900;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-        }
-
-        .countdown {
-            margin-top: 5px;
-            color: var(--purple-dark);
-            font-size: 27px;
-            font-weight: 950;
-            letter-spacing: 1px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .countdown-help {
-            margin-top: 4px;
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        /* =========================================================
-           GAME CARD
-        ========================================================= */
-
-        .game-card {
-            margin-top: 14px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            padding: 17px;
-            box-shadow: var(--shadow);
-        }
-
-        .game-heading {
-            font-size: 18px;
-            font-weight: 900;
-            margin-bottom: 5px;
-        }
-
-        .game-description {
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.5;
-            margin-bottom: 16px;
-        }
-
-        /* =========================================================
-           BOX GRID
-        ========================================================= */
-
-        .box-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 430px;
-            margin: 0 auto;
-        }
-
-        .mystery-box {
-            aspect-ratio: 1 / 1;
-            border-radius: 18px;
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffffff,
-                    #f2eaff
-                );
-            border: 1px solid #dfd2f1;
-            box-shadow:
-                0 8px 20px rgba(76,29,149,.08),
-                inset 0 1px 0 rgba(255,255,255,.9);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition:
-                transform .18s ease,
-                box-shadow .18s ease,
-                opacity .18s ease;
-            touch-action: manipulation;
-        }
-
-        .mystery-box::before {
-            content: "";
-            position: absolute;
-            width: 55%;
-            height: 55%;
-            border-radius: 50%;
-            background: rgba(109,40,217,.08);
-            top: -18%;
-            right: -15%;
-        }
-
-        .mystery-box::after {
-            content: "";
-            position: absolute;
-            width: 75%;
-            height: 3px;
-            background: rgba(255,255,255,.85);
-            transform: rotate(-45deg);
-            left: -25%;
-            top: 25%;
-        }
-
-        .mystery-box:active {
-            transform: scale(.94);
-        }
-
-        .mystery-box:hover {
-            transform: translateY(-2px);
-            box-shadow:
-                0 12px 25px rgba(76,29,149,.13),
-                inset 0 1px 0 rgba(255,255,255,.9);
-        }
-
-        .mystery-box.selected {
-            transform: scale(.96);
-            border-color: var(--purple);
-            box-shadow:
-                0 0 0 4px rgba(109,40,217,.12),
-                0 12px 25px rgba(76,29,149,.16);
-        }
-
-        .mystery-box.disabled {
-            pointer-events: none;
-            opacity: .45;
-        }
-
-        .mystery-box.opening {
-            animation: boxShake .6s ease;
-        }
-
-        @keyframes boxShake {
-            0%,100% {
-                transform: rotate(0deg) scale(1);
-            }
-            20% {
-                transform: rotate(-4deg) scale(1.03);
-            }
-            40% {
-                transform: rotate(4deg) scale(1.05);
-            }
-            60% {
-                transform: rotate(-3deg) scale(1.04);
-            }
-            80% {
-                transform: rotate(2deg) scale(1.02);
-            }
-        }
-
-        .box-icon {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .box-icon svg {
-            width: 48%;
-            height: 48%;
-            color: var(--purple);
-            opacity: .9;
-        }
-
-        /* =========================================================
-           RESULT
-        ========================================================= */
-
-        .result-card {
-            display: none;
-            margin-top: 16px;
-            text-align: center;
-            padding: 19px 15px;
-            background:
-                linear-gradient(
-                    135deg,
-                    #f3e8ff,
-                    #fff7ed
-                );
-            border: 1px solid #eadcf7;
-            border-radius: 18px;
-        }
-
-        .result-card.show {
-            display: block;
-            animation: resultIn .45s ease;
-        }
-
-        @keyframes resultIn {
-            from {
-                opacity: 0;
-                transform: scale(.96) translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .result-title {
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .result-amount {
-            margin-top: 4px;
-            font-size: 31px;
-            font-weight: 950;
-            color: var(--purple-dark);
-        }
-
-        .result-message {
-            margin-top: 4px;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .action-button {
-            margin-top: 14px;
-            width: 100%;
-            min-height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(
-                135deg,
-                var(--purple),
-                var(--purple-dark)
-            );
-            color: white;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(109,40,217,.2);
-        }
-
-        .action-button:active {
-            transform: scale(.98);
-        }
-
-        .action-button.secondary {
-            background: #f5f1f8;
-            color: var(--purple-dark);
-            box-shadow: none;
-            border: 1px solid var(--border);
-        }
-
-        .action-button:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-        }
-
-        /* =========================================================
-           STATUS
-        ========================================================= */
-
-        .status {
-            margin-top: 13px;
-            text-align: center;
-            color: var(--muted);
-            font-size: 13px;
-            min-height: 20px;
-        }
-
-        .status.error {
-            color: #b42318;
-        }
-
-        .status.success {
-            color: var(--green);
-            font-weight: 700;
-        }
-
-        .loading {
-            pointer-events: none;
-            opacity: .65;
-        }
-
-        /* =========================================================
-           BOTTOM NAV
-        ========================================================= */
-
-        .bottom-nav {
-            position: fixed;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            width: min(760px, 100%);
-            height: 78px;
-            background: rgba(255,255,255,.97);
-            border-top: 1px solid var(--border);
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            z-index: 60;
-            backdrop-filter: blur(14px);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            color: #817a89;
-            font-size: 10px;
-            font-weight: 800;
-            position: relative;
-        }
-
-        .nav-item svg {
-            width: 21px;
-            height: 21px;
-        }
-
-        .nav-item.active {
-            color: var(--purple);
-        }
-
-        .nav-item.active::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 28px;
-            height: 3px;
-            border-radius: 0 0 5px 5px;
-            background: var(--purple);
-        }
-
-        /* =========================================================
-           SMALL SCREENS
-        ========================================================= */
-
-        @media (max-width: 390px) {
-            main {
-                padding: 15px;
-            }
-
-            .box-grid {
-                gap: 9px;
-            }
-
-            .mystery-box {
-                border-radius: 15px;
-            }
-
-            .countdown {
-                font-size: 24px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>VDC — Mystery Box</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --purple: #6d28d9;
+      --purple-dark: #4c1d95;
+      --purple-light: #f3e8ff;
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --green: #008751;
+
+      --bg: #faf9fc;
+      --card: #ffffff;
+      --text: #17121f;
+      --muted: #6b6474;
+      --border: #eee8f4;
+      --danger: #dc2626;
+
+      --shadow: 0 8px 28px rgba(76, 29, 149, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      padding-bottom: 88px;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 64px;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 800;
+      font-size: 19px;
+      color: var(--purple-dark);
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--purple), var(--orange));
+      box-shadow: 0 5px 15px rgba(109,40,217,.2);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: var(--purple-dark);
+      position: relative;
+    }
+
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .notification-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: none;
+    }
+
+    /* =========================
+       CONTENT
+    ========================= */
+
+    main {
+      padding: 18px 15px 24px;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top right, rgba(249,115,22,.18), transparent 38%),
+        linear-gradient(135deg, #5b21b6, #7c3aed);
+      border-radius: 22px;
+      padding: 22px 18px;
+      color: white;
+      box-shadow: var(--shadow);
+      margin-bottom: 15px;
+    }
+
+    .hero-small {
+      font-size: 12px;
+      font-weight: 700;
+      opacity: .82;
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+
+    .hero h1 {
+      margin: 0 0 7px;
+      font-size: 27px;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255,255,255,.87);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    /* =========================
+       TICKER
+    ========================= */
+
+    .ticker {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      min-height: 56px;
+      padding: 11px 13px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    .ticker-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    .ticker-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ticker-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--purple);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin-bottom: 2px;
+    }
+
+    .ticker-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* =========================
+       INFO GRID
+    ========================= */
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .info-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .info-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .info-value {
+      font-size: 18px;
+      font-weight: 850;
+      color: var(--purple-dark);
+    }
+
+    .info-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    /* =========================
+       RESET
+    ========================= */
+
+    .reset-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 15px;
+      box-shadow: var(--shadow);
+      margin-bottom: 15px;
+    }
+
+    .reset-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .reset-title {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .reset-time {
+      font-size: 19px;
+      font-weight: 900;
+      color: var(--orange-dark);
+      letter-spacing: .5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .reset-note {
+      margin-top: 7px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* =========================
+       GAME
+    ========================= */
+
+    .game-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 21px;
+      padding: 18px 15px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .game-head {
+      margin-bottom: 17px;
+    }
+
+    .game-title {
+      font-size: 18px;
+      font-weight: 850;
+      margin-bottom: 5px;
+    }
+
+    .game-description {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .boxes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 11px;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .box {
+      aspect-ratio: 1 / 1;
+      border: 0;
+      border-radius: 17px;
+      background:
+        linear-gradient(145deg, #7c3aed, #5b21b6);
+      box-shadow:
+        inset 0 -5px 0 rgba(0,0,0,.13),
+        0 8px 18px rgba(76,29,149,.17);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform .18s ease,
+        opacity .18s ease,
+        box-shadow .18s ease;
+      color: white;
+    }
+
+    .box::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.2);
+      pointer-events: none;
+    }
+
+    .box::after {
+      content: "";
+      position: absolute;
+      width: 70%;
+      height: 30%;
+      top: 9%;
+      left: 15%;
+      border-radius: 50%;
+      background: rgba(255,255,255,.11);
+      filter: blur(2px);
+    }
+
+    .box:hover {
+      transform: translateY(-2px);
+    }
+
+    .box:active {
+      transform: scale(.95);
+    }
+
+    .box:disabled {
+      cursor: default;
+    }
+
+    .box.locked {
+      opacity: .42;
+      transform: none;
+    }
+
+    .box.selected {
+      background: linear-gradient(145deg, #f97316, #ea580c);
+      box-shadow:
+        inset 0 -5px 0 rgba(0,0,0,.13),
+        0 10px 25px rgba(249,115,22,.25);
+    }
+
+    .box.revealed {
+      background: linear-gradient(145deg, #fff7ed, #ffedd5);
+      color: var(--orange-dark);
+      box-shadow:
+        inset 0 0 0 2px rgba(249,115,22,.35),
+        0 8px 20px rgba(249,115,22,.12);
+      cursor: default;
+    }
+
+    .box.revealed::before,
+    .box.revealed::after {
+      display: none;
+    }
+
+    .box-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .box-icon {
+      width: 42px;
+      height: 42px;
+    }
+
+    .reward-value {
+      font-size: 18px;
+      font-weight: 900;
+      margin-top: 3px;
+    }
+
+    .reward-caption {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-top: 3px;
+      opacity: .75;
+    }
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status {
+      min-height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 8px 0;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .status.success {
+      color: var(--green);
+    }
+
+    .status.warning {
+      color: var(--orange-dark);
+    }
+
+    .status.error {
+      color: var(--danger);
+    }
+
+    .status.debug {
+      display: block;
+      text-align: left;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      border-radius: 12px;
+      padding: 11px;
+      margin-top: 8px;
+      color: #991b1b;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .hint {
+      margin-top: 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    /* =========================
+       BOTTOM NAV
+    ========================= */
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 90;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 760px;
+      height: 72px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 7px 8px calc(7px + env(safe-area-inset-bottom));
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 12px;
+    }
+
+    .nav-item svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .nav-item.active {
+      color: var(--purple);
+      background: var(--purple-light);
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    .loading {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(250,249,252,.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .loading.show {
+      display: flex;
+    }
+
+    .loading-card {
+      width: min(300px, 90vw);
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,.12);
+    }
+
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 4px solid var(--purple-light);
+      border-top-color: var(--purple);
+      animation: spin .8s linear infinite;
+      margin: 0 auto 13px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 420px) {
+      .boxes {
+        gap: 9px;
+      }
+
+      .box {
+        border-radius: 14px;
+      }
+
+      .info-card {
+        padding: 13px;
+      }
+
+      .reset-time {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- =========================================================
-         HEADER
-    ========================================================== -->
+  <!-- HEADER -->
+  <header class="header">
 
-    <header class="topbar">
+    <a href="dashboard.html" class="brand">
+      <span class="brand-mark">V</span>
+      <span>VDC</span>
+    </a>
 
-        <a href="dashboard.html" class="brand">
+    <div class="header-right">
 
-            <div class="brand-mark">
-                V
-            </div>
+      <a href="notifications.html" class="icon-btn" aria-label="Notifications">
 
-            <span>VDC</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+          <path d="M10 21h4"></path>
+        </svg>
 
-        </a>
+        <span class="notification-dot" id="notificationDot"></span>
 
-        <div class="header-actions">
+      </a>
 
-            <a
-                href="notifications.html"
-                class="icon-button"
-                aria-label="Notifications"
-            >
+    </div>
 
-                <span class="notification-dot"></span>
+  </header>
 
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-                    <path d="M10 21h4"/>
-                </svg>
 
-            </a>
+  <main>
 
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="hero-small">VDC Lucky Draw</div>
+
+      <h1>Mystery Box</h1>
+
+      <p>
+        Choose one mystery box and reveal your reward.
+        Only the box you choose will open.
+      </p>
+
+    </section>
+
+
+    <!-- LIVE REWARD TICKER -->
+    <section class="ticker">
+
+      <div class="ticker-icon">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3v18"></path>
+          <path d="M3 12h18"></path>
+          <circle cx="12" cy="12" r="9"></circle>
+        </svg>
+
+      </div>
+
+      <div>
+        <div class="ticker-label">Recent reward</div>
+        <div class="ticker-text" id="tickerText">
+          Loading recent rewards...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- VIP + CHANCES -->
+    <section class="info-grid">
+
+      <div class="info-card">
+
+        <div class="info-label">Your VIP</div>
+
+        <div class="info-value" id="vipName">
+          Loading...
         </div>
 
-    </header>
-
-
-    <!-- =========================================================
-         MAIN
-    ========================================================== -->
-
-    <main>
-
-        <h1 class="page-title">
-            Mystery Box
-        </h1>
-
-        <p class="page-subtitle">
-            Choose one mystery box and reveal your reward.
-            Only the box you choose will open.
-        </p>
-
-
-        <!-- =====================================================
-             LIVE REWARD TICKER
-        ====================================================== -->
-
-        <div class="live-reward-card">
-
-            <div class="live-reward-top">
-
-                <span class="live-dot"></span>
-
-                <span class="live-label">
-                    Recent reward
-                </span>
-
-            </div>
-
-            <div
-                id="liveTestimonial"
-                class="live-testimonial"
-            >
-                Loading recent rewards...
-            </div>
-
+        <div class="info-sub" id="vipLevel">
+          Checking your VIP level
         </div>
 
+      </div>
 
-        <!-- =====================================================
-             STATS
-        ====================================================== -->
 
-        <div class="stats-grid">
+      <div class="info-card">
 
-            <div class="stat-card">
+        <div class="info-label">Chances left today</div>
 
-                <div class="stat-label">
-                    Your VIP
-                </div>
-
-                <div
-                    id="vipLevel"
-                    class="stat-value purple"
-                >
-                    Loading...
-                </div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-label">
-                    Chances left today
-                </div>
-
-                <div
-                    id="chancesLeft"
-                    class="stat-value orange"
-                >
-                    —
-                </div>
-
-            </div>
-
+        <div class="info-value" id="chancesLeft">
+          --
         </div>
 
-
-        <!-- =====================================================
-             COUNTDOWN
-        ====================================================== -->
-
-        <div class="countdown-card">
-
-            <div class="countdown-label">
-                Next Daily Reset
-            </div>
-
-            <div
-                id="countdown"
-                class="countdown"
-            >
-                00:00:00
-            </div>
-
-            <div class="countdown-help">
-                New daily chances become available at midnight Nigeria time.
-            </div>
-
+        <div class="info-sub">
+          One chance per round
         </div>
 
+      </div>
 
-        <!-- =====================================================
-             GAME
-        ====================================================== -->
-
-        <section class="game-card">
-
-            <div class="game-heading">
-                Choose Your Box
-            </div>
-
-            <div class="game-description">
-                You can choose only one box in each round.
-                Your reward is securely selected by VDC.
-            </div>
+    </section>
 
 
-            <div
-                id="boxGrid"
-                class="box-grid"
-            >
+    <!-- RESET -->
+    <section class="reset-card">
 
-                <!-- Boxes inserted by JavaScript -->
+      <div class="reset-top">
 
-            </div>
+        <div class="reset-title">
+          Next Daily Reset
+        </div>
 
+        <div class="reset-time" id="resetCountdown">
+          00:00:00
+        </div>
 
-            <div
-                id="resultCard"
-                class="result-card"
-            >
+      </div>
 
-                <div class="result-title">
-                    Your Mystery Box Result
-                </div>
+      <div class="reset-note">
+        New daily chances become available at midnight Nigeria time.
+      </div>
 
-                <div
-                    id="resultAmount"
-                    class="result-amount"
-                >
-                    ₦0.00
-                </div>
-
-                <div
-                    id="resultMessage"
-                    class="result-message"
-                >
-                    No reward this time.
-                </div>
-
-                <button
-                    id="anotherButton"
-                    class="action-button"
-                    type="button"
-                >
-                    Open Another Set
-                </button>
-
-                <button
-                    id="dashboardButton"
-                    class="action-button secondary"
-                    type="button"
-                    style="display:none;"
-                >
-                    Back to Dashboard
-                </button>
-
-            </div>
+    </section>
 
 
-            <div
-                id="status"
-                class="status"
-            >
-                Loading Lucky Draw...
-            </div>
+    <!-- GAME -->
+    <section class="game-card">
 
-        </section>
+      <div class="game-head">
 
-    </main>
+        <div class="game-title">
+          Choose Your Box
+        </div>
+
+        <div class="game-description">
+          You can choose only one box in each round.
+          Your reward is securely selected by VDC.
+        </div>
+
+      </div>
+
+
+      <div class="boxes" id="boxes">
+
+        <button class="box" type="button" data-box="1"></button>
+        <button class="box" type="button" data-box="2"></button>
+        <button class="box" type="button" data-box="3"></button>
+
+        <button class="box" type="button" data-box="4"></button>
+        <button class="box" type="button" data-box="5"></button>
+        <button class="box" type="button" data-box="6"></button>
+
+        <button class="box" type="button" data-box="7"></button>
+        <button class="box" type="button" data-box="8"></button>
+        <button class="box" type="button" data-box="9"></button>
+
+      </div>
+
+
+      <div class="status" id="status">
+        Choose one box to reveal your reward.
+      </div>
+
+      <div class="hint">
+        Rewards are selected securely on the VDC server.
+        Your selected box does not determine the prize.
+      </div>
+
+    </section>
+
+  </main>
 
 </div>
 
 
-<!-- =============================================================
-     BOTTOM NAVIGATION
-============================================================== -->
-
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
 
-    <a
-        href="dashboard.html"
-        class="nav-item"
-    >
+  <a class="nav-item" href="dashboard.html">
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <path d="m3 10 9-7 9 7"/>
-            <path d="M5 9v11h14V9"/>
-            <path d="M9 20v-6h6v6"/>
-        </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 10.5 12 3l9 7.5"></path>
+      <path d="M5 9.5V21h14V9.5"></path>
+      <path d="M9 21v-6h6v6"></path>
+    </svg>
 
-        <span>Home</span>
+    <span>Home</span>
 
-    </a>
+  </a>
 
 
-    <a
-        href="tasks.html"
-        class="nav-item"
-    >
+  <a class="nav-item" href="tasks.html">
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <rect x="4" y="3" width="16" height="18" rx="2"/>
-            <path d="M8 7h8"/>
-            <path d="M8 11h8"/>
-            <path d="M8 15h5"/>
-        </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 11l2 2 4-4"></path>
+      <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+      <path d="M8 3h8v3H8z"></path>
+    </svg>
 
-        <span>Tasks</span>
+    <span>Tasks</span>
 
-    </a>
+  </a>
 
 
-    <a
-        href="vip.html"
-        class="nav-item"
-    >
+  <a class="nav-item" href="vip.html">
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <path d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
-        </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="m12 3 2.5 5.1 5.5.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.5-.8L12 3z"></path>
+    </svg>
 
-        <span>VIP</span>
+    <span>VIP</span>
 
-    </a>
+  </a>
 
 
-    <a
-        href="earn.html"
-        class="nav-item active"
-    >
+  <a class="nav-item active" href="earn.html">
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <circle cx="12" cy="12" r="8"/>
-            <path d="M12 8v8"/>
-            <path d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5-2.5.5-2.5 1.5 1 1.5 2.5 1.5 2.5-.5 2.5-1.5"/>
-        </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 3v18"></path>
+      <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+    </svg>
 
-        <span>Earn</span>
+    <span>Earn</span>
 
-    </a>
+  </a>
 
 
-    <a
-        href="profile.html"
-        class="nav-item"
-    >
+  <a class="nav-item" href="profile.html">
 
-        <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.9"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        >
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>
-        </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="8" r="4"></circle>
+      <path d="M4 21a8 8 0 0 1 16 0"></path>
+    </svg>
 
-        <span>My</span>
+    <span>My</span>
 
-    </a>
+  </a>
 
 </nav>
 
 
+<!-- LOADING -->
+<div class="loading" id="loading">
+
+  <div class="loading-card">
+
+    <div class="spinner"></div>
+
+    <strong>Opening your mystery box...</strong>
+
+  </div>
+
+</div>
+
+
 <script>
+/* =========================================================
+   VDC SUPABASE
+========================================================= */
 
-    /* =========================================================
-       SUPABASE
-    ========================================================= */
+const SUPABASE_URL =
+  "https://wiorfxlodrcawxdeowbg.supabase.co";
 
-    const SUPABASE_URL =
-        "https://wiorfxlodrcawxdeowbg.supabase.co";
+const SUPABASE_KEY =
+  "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
 
-    const SUPABASE_KEY =
-        "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
-
-    const supabaseClient =
-        supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        );
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
-    /* =========================================================
-       STATE
-    ========================================================= */
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-    let currentUser = null;
+const boxes = [...document.querySelectorAll(".box")];
 
-    let currentVipLevel = 0;
+const vipNameEl =
+  document.getElementById("vipName");
 
-    let dailyLimit = 0;
+const vipLevelEl =
+  document.getElementById("vipLevel");
 
-    let usedToday = 0;
+const chancesEl =
+  document.getElementById("chancesLeft");
 
-    let remainingChances = 0;
+const countdownEl =
+  document.getElementById("resetCountdown");
 
-    let roundLocked = false;
+const statusEl =
+  document.getElementById("status");
 
-    let countdownTimer = null;
+const tickerEl =
+  document.getElementById("tickerText");
 
-    let recentRewardTimer = null;
-
-
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
-
-    const vipLevelEl =
-        document.getElementById("vipLevel");
-
-    const chancesLeftEl =
-        document.getElementById("chancesLeft");
-
-    const countdownEl =
-        document.getElementById("countdown");
-
-    const boxGrid =
-        document.getElementById("boxGrid");
-
-    const resultCard =
-        document.getElementById("resultCard");
-
-    const resultAmount =
-        document.getElementById("resultAmount");
-
-    const resultMessage =
-        document.getElementById("resultMessage");
-
-    const anotherButton =
-        document.getElementById("anotherButton");
-
-    const dashboardButton =
-        document.getElementById("dashboardButton");
-
-    const statusEl =
-        document.getElementById("status");
-
-    const liveTestimonial =
-        document.getElementById("liveTestimonial");
+const loadingEl =
+  document.getElementById("loading");
 
 
-    /* =========================================================
-       SOUND ENGINE
-    ========================================================= */
+/* =========================================================
+   STATE
+========================================================= */
 
-    let audioContext = null;
+let currentUser = null;
+let currentVip = 0;
+let dailyLimit = 0;
+let spinsToday = 0;
+let roundBusy = false;
+
+let recentRewards = [];
+let tickerIndex = 0;
 
 
-    function getAudioContext() {
+/* =========================================================
+   SOUND
+========================================================= */
 
-        if (!audioContext) {
+let audioContext = null;
 
-            const AudioCtx =
-                window.AudioContext ||
-                window.webkitAudioContext;
+function playSound(type) {
 
-            if (!AudioCtx) return null;
+  try {
 
-            audioContext =
-                new AudioCtx();
-
-        }
-
-        if (audioContext.state === "suspended") {
-            audioContext.resume();
-        }
-
-        return audioContext;
+    if (!audioContext) {
+      audioContext =
+        new (window.AudioContext || window.webkitAudioContext)();
     }
 
-
-    function playTone(
-        frequency,
-        duration,
-        type = "sine",
-        volume = 0.045
-    ) {
-
-        const ctx =
-            getAudioContext();
-
-        if (!ctx) return;
-
-        const oscillator =
-            ctx.createOscillator();
-
-        const gain =
-            ctx.createGain();
-
-        oscillator.type = type;
-
-        oscillator.frequency.value =
-            frequency;
-
-        gain.gain.setValueAtTime(
-            volume,
-            ctx.currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            ctx.currentTime + duration
-        );
-
-        oscillator.connect(gain);
-
-        gain.connect(ctx.destination);
-
-        oscillator.start();
-
-        oscillator.stop(
-            ctx.currentTime + duration
-        );
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
     }
 
+    const oscillator =
+      audioContext.createOscillator();
 
-    function playBoxSound() {
+    const gain =
+      audioContext.createGain();
 
-        playTone(
-            280,
-            .08,
-            "triangle",
-            .045
-        );
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
 
-        setTimeout(() => {
-            playTone(
-                420,
-                .12,
-                "triangle",
-                .035
-            );
-        }, 75);
+    const now =
+      audioContext.currentTime;
+
+    if (type === "tap") {
+
+      oscillator.frequency.setValueAtTime(
+        420,
+        now
+      );
+
+      oscillator.frequency.exponentialRampToValueAtTime(
+        700,
+        now + 0.08
+      );
+
+    } else if (type === "reward") {
+
+      oscillator.frequency.setValueAtTime(
+        520,
+        now
+      );
+
+      oscillator.frequency.exponentialRampToValueAtTime(
+        1000,
+        now + 0.18
+      );
+
+    } else {
+
+      oscillator.frequency.setValueAtTime(
+        260,
+        now
+      );
+
+      oscillator.frequency.exponentialRampToValueAtTime(
+        180,
+        now + 0.15
+      );
     }
 
-
-    function playWinSound() {
-
-        playTone(
-            520,
-            .12,
-            "sine",
-            .045
-        );
-
-        setTimeout(() => {
-            playTone(
-                660,
-                .12,
-                "sine",
-                .045
-            );
-        }, 100);
-
-        setTimeout(() => {
-            playTone(
-                880,
-                .2,
-                "sine",
-                .05
-            );
-        }, 200);
-    }
-
-
-    function playLoseSound() {
-
-        playTone(
-            300,
-            .12,
-            "sine",
-            .035
-        );
-
-        setTimeout(() => {
-            playTone(
-                220,
-                .2,
-                "sine",
-                .03
-            );
-        }, 110);
-    }
-
-
-    /* =========================================================
-       STATUS
-    ========================================================= */
-
-    function setStatus(
-        message,
-        type = ""
-    ) {
-
-        statusEl.textContent =
-            message;
-
-        statusEl.className =
-            "status " + type;
-
-    }
-
-
-    /* =========================================================
-       FORMAT MONEY
-    ========================================================= */
-
-    function formatMoney(amount) {
-
-        return Number(amount || 0)
-            .toLocaleString(
-                "en-NG",
-                {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }
-            );
-
-    }
-
-
-    /* =========================================================
-       NIGERIA MIDNIGHT COUNTDOWN
-    ========================================================= */
-
-    function getNigeriaDateParts() {
-
-        const formatter =
-            new Intl.DateTimeFormat(
-                "en-CA",
-                {
-                    timeZone: "Africa/Lagos",
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit"
-                }
-            );
-
-        const parts =
-            formatter.formatToParts(
-                new Date()
-            );
-
-        const result = {};
-
-        parts.forEach(part => {
-
-            if (
-                part.type !== "literal"
-            ) {
-
-                result[part.type] =
-                    part.value;
-
-            }
-
-        });
-
-        return result;
-    }
-
-
-    function getNextNigeriaMidnight() {
-
-        const parts =
-            getNigeriaDateParts();
-
-        const year =
-            Number(parts.year);
-
-        const month =
-            Number(parts.month);
-
-        const day =
-            Number(parts.day);
-
-        /*
-         * Nigeria uses UTC+1 year-round.
-         * Midnight Nigeria = 23:00 UTC previous day.
-         */
-
-        return new Date(
-            Date.UTC(
-                year,
-                month - 1,
-                day + 1,
-                23,
-                0,
-                0
-            )
-        );
-
-    }
-
-
-    function updateCountdown() {
-
-        const target =
-            getNextNigeriaMidnight();
-
-        const now =
-            new Date();
-
-        let difference =
-            target.getTime() -
-            now.getTime();
-
-        if (difference < 0) {
-            difference = 0;
-        }
-
-        const totalSeconds =
-            Math.floor(
-                difference / 1000
-            );
-
-        const hours =
-            Math.floor(
-                totalSeconds / 3600
-            );
-
-        const minutes =
-            Math.floor(
-                (totalSeconds % 3600) / 60
-            );
-
-        const seconds =
-            totalSeconds % 60;
-
-        countdownEl.textContent =
-            String(hours).padStart(2, "0") +
-            ":" +
-            String(minutes).padStart(2, "0") +
-            ":" +
-            String(seconds).padStart(2, "0");
-
-    }
-
-
-    function startCountdown() {
-
-        updateCountdown();
-
-        if (countdownTimer) {
-            clearInterval(countdownTimer);
-        }
-
-        countdownTimer =
-            setInterval(
-                updateCountdown,
-                1000
-            );
-
-    }
-
-
-    /* =========================================================
-       SESSION
-    ========================================================= */
-
-    async function loadSession() {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.getSession();
-
-        if (
-            error ||
-            !data ||
-            !data.session
-        ) {
-
-            window.location.href =
-                "auth.html";
-
-            return null;
-
-        }
-
-        currentUser =
-            data.session.user;
-
-        return currentUser;
-
-    }
-
-
-    /* =========================================================
-       LOAD VIP
-    ========================================================= */
-
-    async function loadVip() {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("user_vips")
-                .select(`
-                    vip_level_id,
-                    vip_levels (
-                        level_number,
-                        name
-                    )
-                `)
-                .eq(
-                    "user_id",
-                    currentUser.id
-                )
-                .maybeSingle();
-
-
-        if (error) {
-
-            console.error(
-                "VIP load error:",
-                error
-            );
-
-            currentVipLevel = 0;
-
-            vipLevelEl.textContent =
-                "Free VIP";
-
-            return;
-
-        }
-
-
-        if (
-            data &&
-            data.vip_levels
-        ) {
-
-            currentVipLevel =
-                Number(
-                    data.vip_levels.level_number || 0
-                );
-
-            vipLevelEl.textContent =
-                data.vip_levels.name ||
-                (
-                    currentVipLevel === 0
-                        ? "Free VIP"
-                        : `VIP ${currentVipLevel}`
-                );
-
-        } else {
-
-            currentVipLevel = 0;
-
-            vipLevelEl.textContent =
-                "Free VIP";
-
-        }
-
-    }
-
-
-    /* =========================================================
-       LOAD SETTINGS
-    ========================================================= */
-
-    async function loadLuckyDrawSettings() {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("lucky_draw_settings")
-                .select("*")
-                .eq("id", 1)
-                .maybeSingle();
-
-
-        if (error) {
-
-            console.error(
-                "Lucky Draw settings error:",
-                error
-            );
-
-            throw new Error(
-                "Unable to load Lucky Draw settings."
-            );
-
-        }
-
-
-        if (!data) {
-
-            throw new Error(
-                "Lucky Draw settings are unavailable."
-            );
-
-        }
-
-
-        if (!data.enabled) {
-
-            dailyLimit = 0;
-
-            chancesLeftEl.textContent =
-                "Closed";
-
-            return data;
-
-        }
-
-
-        if (currentVipLevel === 0) {
-
-            dailyLimit =
-                Number(
-                    data.free_daily_spins || 0
-                );
-
-        } else {
-
-            const column =
-                `daily_spins_vip${currentVipLevel}`;
-
-            dailyLimit =
-                Number(
-                    data[column] || 0
-                );
-
-        }
-
-
-        return data;
-
-    }
-
-
-    /* =========================================================
-       COUNT TODAY'S RESULTS
-    ========================================================= */
-
-    function getNigeriaTodayStartISO() {
-
-        const parts =
-            getNigeriaDateParts();
-
-        const year =
-            Number(parts.year);
-
-        const month =
-            Number(parts.month);
-
-        const day =
-            Number(parts.day);
-
-        /*
-         * Nigeria midnight is 23:00 UTC.
-         */
-
-        return new Date(
-            Date.UTC(
-                year,
-                month - 1,
-                day,
-                23,
-                0,
-                0
-            )
-        ).toISOString();
-
-    }
-
-
-    async function loadUsedToday() {
-
-        const todayStart =
-            getNigeriaTodayStartISO();
-
-
-        const {
-            count,
-            error
-        } =
-            await supabaseClient
-                .from("lucky_draw_results")
-                .select(
-                    "id",
-                    {
-                        count: "exact",
-                        head: true
-                    }
-                )
-                .eq(
-                    "user_id",
-                    currentUser.id
-                )
-                .gte(
-                    "created_at",
-                    todayStart
-                );
-
-
-        if (error) {
-
-            console.error(
-                "Daily count error:",
-                error
-            );
-
-            throw new Error(
-                "Unable to load today's chances."
-            );
-
-        }
-
-
-        usedToday =
-            Number(count || 0);
-
-        remainingChances =
-            Math.max(
-                0,
-                dailyLimit - usedToday
-            );
-
-
-        updateChanceDisplay();
-
-    }
-
-
-    /* =========================================================
-       CHANCE DISPLAY
-    ========================================================= */
-
-    function updateChanceDisplay() {
-
-        if (dailyLimit <= 0) {
-
-            chancesLeftEl.textContent =
-                "Closed";
-
-            return;
-
-        }
-
-        chancesLeftEl.textContent =
-            remainingChances;
-
-    }
-
-
-    /* =========================================================
-       CREATE BOXES
-    ========================================================= */
-
-    function createBoxes() {
-
-        boxGrid.innerHTML = "";
-
-        roundLocked = false;
-
-        for (
-            let i = 0;
-            i < 9;
-            i++
-        ) {
-
-            const button =
-                document.createElement("button");
-
-            button.type =
-                "button";
-
-            button.className =
-                "mystery-box";
-
-            button.setAttribute(
-                "aria-label",
-                "Mystery box"
-            );
-
-
-            button.innerHTML = `
-
-                <span class="box-icon">
-
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.7"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M4 9h16v11H4z"/>
-                        <path d="M3 6h18v3H3z"/>
-                        <path d="M12 6v14"/>
-                        <path d="M12 6H8.5a2.5 2.5 0 1 1 2.5-2.5C11 4.9 12 6 12 6Z"/>
-                        <path d="M12 6h3.5A2.5 2.5 0 1 0 13 3.5C13 4.9 12 6 12 6Z"/>
-                    </svg>
-
-                </span>
-
-            `;
-
-
-            button.addEventListener(
-                "click",
-                () => chooseBox(button)
-            );
-
-
-            boxGrid.appendChild(
-                button
-            );
-
-        }
-
-    }
-
-
-    /* =========================================================
-       CHOOSE BOX
-    ========================================================= */
-
-    async function chooseBox(selectedBox) {
-
-        if (roundLocked) {
-            return;
-        }
-
-        if (remainingChances <= 0) {
-
-            setStatus(
-                "No chances left today.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        roundLocked = true;
-
-        getAudioContext();
-
-        playBoxSound();
-
-
-        const boxes =
-            Array.from(
-                document.querySelectorAll(
-                    ".mystery-box"
-                )
-            );
-
-
-        boxes.forEach(box => {
-
-            if (box === selectedBox) {
-
-                box.classList.add(
-                    "selected"
-                );
-
-                box.classList.add(
-                    "opening"
-                );
-
-            } else {
-
-                box.classList.add(
-                    "disabled"
-                );
-
-            }
-
-        });
-
-
-        setStatus(
-            "Opening your mystery box..."
-        );
-
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .rpc(
-                        "enter_lucky_draw"
-                    );
-
-
-            if (error) {
-
-                throw error;
-
-            }
-
-
-            const prize =
-                Number(data || 0);
-
-
-            /*
-             * The RPC is authoritative.
-             * We only reveal the returned result.
-             */
-
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        650
-                    )
-            );
-
-
-            if (prize > 0) {
-
-                playWinSound();
-
-                resultAmount.textContent =
-                    `₦${formatMoney(prize)}`;
-
-                resultMessage.textContent =
-                    "Congratulations! The reward has been added to your wallet.";
-
-                resultAmount.style.color =
-                    "var(--green)";
-
-            } else {
-
-                playLoseSound();
-
-                resultAmount.textContent =
-                    "₦0.00";
-
-                resultMessage.textContent =
-                    "No reward this time.";
-
-                resultAmount.style.color =
-                    "var(--purple-dark)";
-
-            }
-
-
-            resultCard.classList.add(
-                "show"
-            );
-
-
-            /*
-             * One successful RPC call = one used chance.
-             */
-
-            usedToday += 1;
-
-            remainingChances =
-                Math.max(
-                    0,
-                    dailyLimit - usedToday
-                );
-
-            updateChanceDisplay();
-
-
-            if (
-                remainingChances > 0
-            ) {
-
-                anotherButton.style.display =
-                    "block";
-
-                dashboardButton.style.display =
-                    "none";
-
-            } else {
-
-                anotherButton.style.display =
-                    "none";
-
-                dashboardButton.style.display =
-                    "block";
-
-            }
-
-
-            setStatus(
-                prize > 0
-                    ? "Reward credited successfully."
-                    : "Round completed.",
-                prize > 0
-                    ? "success"
-                    : ""
-            );
-
-
-            /*
-             * Refresh live reward ticker because
-             * this user may have just created
-             * a new positive reward result.
-             */
-
-            await loadLiveTestimonials();
-
-
-            /*
-             * Refresh chance count from database.
-             */
-
-            try {
-
-                await loadUsedToday();
-
-            } catch (refreshError) {
-
-                console.error(
-                    refreshError
-                );
-
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                "Lucky Draw RPC error:",
-                error
-            );
-
-
-            /*
-             * Important:
-             * If RPC fails, restore the boxes.
-             * Do NOT consume a chance.
-             */
-
-            boxes.forEach(box => {
-
-                box.classList.remove(
-                    "selected",
-                    "disabled",
-                    "opening"
-                );
-
-            });
-
-
-            roundLocked = false;
-
-
-            resultCard.classList.remove(
-                "show"
-            );
-
-
-            setStatus(
-                "Unable to complete this round. Please try again.",
-                "error"
-            );
-
-        }
-
-    }
-
-
-    /* =========================================================
-       ANOTHER ROUND
-    ========================================================= */
-
-    anotherButton.addEventListener(
-        "click",
-        async () => {
-
-            if (
-                remainingChances <= 0
-            ) {
-
-                return;
-
-            }
-
-            resultCard.classList.remove(
-                "show"
-            );
-
-            createBoxes();
-
-            setStatus(
-                "Choose one mystery box."
-            );
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
+    gain.gain.setValueAtTime(
+      0.0001,
+      now
     );
 
-
-    /* =========================================================
-       DASHBOARD BUTTON
-    ========================================================= */
-
-    dashboardButton.addEventListener(
-        "click",
-        () => {
-
-            window.location.href =
-                "dashboard.html";
-
-        }
+    gain.gain.exponentialRampToValueAtTime(
+      0.08,
+      now + 0.01
     );
 
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      now + 0.2
+    );
 
-    /* =========================================================
-       LIVE RECENT REWARDS
-    ========================================================= */
+    oscillator.start(now);
+    oscillator.stop(now + 0.22);
 
-    async function loadLiveTestimonials() {
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await supabaseClient
-                    .from("lucky_draw_results")
-                    .select(
-                        "prize,created_at"
-                    )
-                    .gt(
-                        "prize",
-                        0
-                    )
-                    .order(
-                        "created_at",
-                        {
-                            ascending: false
-                        }
-                    )
-                    .limit(12);
+  } catch (e) {
+    console.log("Sound unavailable:", e);
+  }
+}
 
 
-            if (error) {
+/* =========================================================
+   STATUS
+========================================================= */
 
-                console.error(
-                    "Live rewards error:",
-                    error
-                );
+function setStatus(
+  message,
+  type = ""
+) {
 
-                liveTestimonial.textContent =
-                    "Recent rewards will appear here.";
+  statusEl.className =
+    "status" + (type ? " " + type : "");
 
-                return;
-
-            }
-
-
-            if (
-                !data ||
-                data.length === 0
-            ) {
-
-                liveTestimonial.textContent =
-                    "Be the first to win a Lucky Draw reward.";
-
-                return;
-
-            }
+  statusEl.textContent = message;
+}
 
 
-            const rewards =
-                data.filter(
-                    row =>
-                        Number(row.prize) > 0
-                );
+/* =========================================================
+   DEBUG ERROR
+========================================================= */
+
+function showDatabaseError(error) {
+
+  console.error(
+    "LUCKY DRAW ERROR:",
+    error
+  );
+
+  let message = "Unknown error";
+
+  if (error) {
+
+    if (error.message) {
+      message = error.message;
+    }
+
+    if (error.details) {
+      message += "\n\nDetails: " + error.details;
+    }
+
+    if (error.hint) {
+      message += "\n\nHint: " + error.hint;
+    }
+
+    if (error.code) {
+      message += "\n\nCode: " + error.code;
+    }
+
+  }
+
+  statusEl.className =
+    "status error debug";
+
+  statusEl.textContent =
+    "Lucky Draw error:\n\n" + message;
+}
 
 
-            if (!rewards.length) {
+/* =========================================================
+   GET SESSION
+========================================================= */
 
-                liveTestimonial.textContent =
-                    "Be the first to win a Lucky Draw reward.";
+async function loadSession() {
 
-                return;
+  const {
+    data,
+    error
+  } = await db.auth.getSession();
 
-            }
+  if (error) {
+    throw error;
+  }
 
+  currentUser =
+    data?.session?.user || null;
 
-            let index = 0;
+  if (!currentUser) {
 
+    window.location.href =
+      "auth.html";
 
-            function showNextReward() {
+    return false;
+  }
 
-                const reward =
-                    Number(
-                        rewards[index].prize || 0
-                    );
-
-
-                liveTestimonial.classList.remove(
-                    "reward-in"
-                );
-
-
-                setTimeout(
-                    () => {
-
-                        liveTestimonial.textContent =
-                            `Someone just won ₦${formatMoney(reward)}`;
-
-                        liveTestimonial.classList.add(
-                            "reward-in"
-                        );
-
-                    },
-                    100
-                );
+  return true;
+}
 
 
-                index =
-                    (index + 1) %
-                    rewards.length;
+/* =========================================================
+   LOAD VIP
+========================================================= */
 
-            }
+async function loadVip() {
+
+  const {
+    data,
+    error
+  } = await db
+    .from("user_vips")
+    .select(`
+      vip_level_id,
+      status,
+      vip_levels (
+        id,
+        level_number,
+        name,
+        active
+      )
+    `)
+    .eq("user_id", currentUser.id)
+    .eq("status", "active");
+
+  if (error) {
+    throw error;
+  }
+
+  let activeVip = null;
+
+  if (Array.isArray(data)) {
+
+    activeVip =
+      data
+        .filter(row =>
+          row.vip_levels &&
+          row.vip_levels.active === true
+        )
+        .sort((a, b) =>
+          Number(
+            b.vip_levels.level_number
+          ) -
+          Number(
+            a.vip_levels.level_number
+          )
+        )[0] || null;
+  }
+
+  if (activeVip?.vip_levels) {
+
+    currentVip =
+      Number(
+        activeVip.vip_levels.level_number
+      ) || 0;
+
+    vipNameEl.textContent =
+      activeVip.vip_levels.name ||
+      ("VIP " + currentVip);
+
+    vipLevelEl.textContent =
+      "Level " + currentVip;
+
+  } else {
+
+    currentVip = 0;
+
+    vipNameEl.textContent =
+      "Free VIP";
+
+    vipLevelEl.textContent =
+      "Level 0";
+  }
+}
 
 
-            showNextReward();
+/* =========================================================
+   LOAD SETTINGS
+========================================================= */
+
+async function loadSettings() {
+
+  const {
+    data,
+    error
+  } = await db
+    .from("lucky_draw_settings")
+    .select("*")
+    .order("id", {
+      ascending: false
+    })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) {
+    throw new Error(
+      "Lucky Draw settings could not be found."
+    );
+  }
+
+  if (!data.enabled) {
+
+    dailyLimit = 0;
+
+    chancesEl.textContent = "0";
+
+    boxes.forEach(box => {
+      box.disabled = true;
+      box.classList.add("locked");
+    });
+
+    setStatus(
+      "Lucky Draw is currently closed.",
+      "warning"
+    );
+
+    return;
+  }
+
+  const limits = {
+    0: data.free_daily_spins,
+    1: data.daily_spins_vip1,
+    2: data.daily_spins_vip2,
+    3: data.daily_spins_vip3,
+    4: data.daily_spins_vip4,
+    5: data.daily_spins_vip5,
+    6: data.daily_spins_vip6,
+    7: data.daily_spins_vip7,
+    8: data.daily_spins_vip8,
+    9: data.daily_spins_vip9,
+    10: data.daily_spins_vip10,
+    11: data.daily_spins_vip11,
+    12: data.daily_spins_vip12
+  };
+
+  dailyLimit =
+    Number(limits[currentVip]) || 0;
+
+  const minVip =
+    Number(data.min_vip) || 0;
+
+  if (currentVip < minVip) {
+
+    boxes.forEach(box => {
+      box.disabled = true;
+      box.classList.add("locked");
+    });
+
+    chancesEl.textContent = "0";
+
+    setStatus(
+      "Your current VIP level is not eligible for Lucky Draw.",
+      "warning"
+    );
+  }
+}
 
 
-            if (recentRewardTimer) {
+/* =========================================================
+   COUNT TODAY'S SPINS
+========================================================= */
 
-                clearInterval(
-                    recentRewardTimer
-                );
+async function loadSpinCount() {
 
-            }
+  const now =
+    new Date();
+
+  const start =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+
+  const end =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1
+    );
+
+  const {
+    count,
+    error
+  } = await db
+    .from("lucky_draw_results")
+    .select("*", {
+      count: "exact",
+      head: true
+    })
+    .eq("user_id", currentUser.id)
+    .gte(
+      "created_at",
+      start.toISOString()
+    )
+    .lt(
+      "created_at",
+      end.toISOString()
+    );
+
+  if (error) {
+    throw error;
+  }
+
+  spinsToday =
+    Number(count) || 0;
+
+  updateChances();
+}
 
 
-            recentRewardTimer =
-                setInterval(
-                    showNextReward,
-                    4000
-                );
+/* =========================================================
+   UPDATE CHANCES
+========================================================= */
 
-        } catch (error) {
+function updateChances() {
 
-            console.error(
-                error
-            );
+  const remaining =
+    Math.max(
+      0,
+      dailyLimit - spinsToday
+    );
 
-            liveTestimonial.textContent =
-                "Recent rewards will appear here.";
+  chancesEl.textContent =
+    remaining;
 
+  if (remaining <= 0) {
+
+    boxes.forEach(box => {
+      box.disabled = true;
+      box.classList.add("locked");
+    });
+
+    if (!roundBusy) {
+
+      setStatus(
+        "You have used all your Lucky Draw chances for today.",
+        "warning"
+      );
+    }
+
+  } else if (!roundBusy) {
+
+    boxes.forEach(box => {
+      box.disabled = false;
+      box.classList.remove("locked");
+    });
+
+    setStatus(
+      "Choose one box to reveal your reward."
+    );
+  }
+}
+
+
+/* =========================================================
+   COUNTDOWN TO NIGERIA MIDNIGHT
+========================================================= */
+
+function updateCountdown() {
+
+  try {
+
+    const now =
+      new Date();
+
+    const nigeriaString =
+      now.toLocaleString(
+        "en-US",
+        {
+          timeZone: "Africa/Lagos"
         }
+      );
+
+    const nigeriaNow =
+      new Date(nigeriaString);
+
+    const tomorrow =
+      new Date(nigeriaNow);
+
+    tomorrow.setHours(
+      24,
+      0,
+      0,
+      0
+    );
+
+    let seconds =
+      Math.max(
+        0,
+        Math.floor(
+          (tomorrow - nigeriaNow) / 1000
+        )
+      );
+
+    const hours =
+      Math.floor(
+        seconds / 3600
+      );
+
+    seconds %= 3600;
+
+    const minutes =
+      Math.floor(
+        seconds / 60
+      );
+
+    seconds %= 60;
+
+    countdownEl.textContent =
+      String(hours).padStart(2, "0") +
+      ":" +
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(seconds).padStart(2, "0");
+
+  } catch (error) {
+
+    countdownEl.textContent =
+      "--:--:--";
+  }
+}
+
+
+/* =========================================================
+   RECENT REWARDS
+========================================================= */
+
+async function loadRecentRewards() {
+
+  const {
+    data,
+    error
+  } = await db
+    .from("lucky_draw_results")
+    .select("prize,created_at")
+    .gt("prize", 0)
+    .order("created_at", {
+      ascending: false
+    })
+    .limit(8);
+
+  if (error) {
+
+    console.error(
+      "Recent rewards error:",
+      error
+    );
+
+    tickerEl.textContent =
+      "Be the first to win a Lucky Draw reward.";
+
+    return;
+  }
+
+  recentRewards =
+    Array.isArray(data)
+      ? data
+      : [];
+
+  if (!recentRewards.length) {
+
+    tickerEl.textContent =
+      "Be the first to win a Lucky Draw reward.";
+
+    return;
+  }
+
+  tickerIndex = 0;
+
+  showNextTicker();
+}
+
+
+/* =========================================================
+   TICKER ROTATION
+========================================================= */
+
+function showNextTicker() {
+
+  if (!recentRewards.length) {
+    return;
+  }
+
+  const item =
+    recentRewards[tickerIndex];
+
+  const amount =
+    Number(item.prize || 0)
+      .toLocaleString(
+        "en-NG",
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+  tickerEl.textContent =
+    "A Lucky Draw reward of ₦" +
+    amount +
+    " was won.";
+
+  tickerIndex =
+    (tickerIndex + 1) %
+    recentRewards.length;
+}
+
+
+/* =========================================================
+   BOX GRAPHICS
+========================================================= */
+
+function createBoxContent() {
+
+  return `
+    <div class="box-content">
+
+      <svg
+        class="box-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+      >
+        <path d="M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8"></path>
+        <path d="M2 7h20v5H2z"></path>
+        <path d="M12 7v14"></path>
+        <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7Z"></path>
+        <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7Z"></path>
+      </svg>
+
+    </div>
+  `;
+}
+
+
+function resetBoxes() {
+
+  boxes.forEach(box => {
+
+    box.className = "box";
+    box.disabled = false;
+    box.innerHTML = createBoxContent();
+
+  });
+
+}
+
+
+/* =========================================================
+   SHOW REWARD
+========================================================= */
+
+function revealReward(selectedBox, prize) {
+
+  boxes.forEach(box => {
+
+    box.disabled = true;
+
+    if (box !== selectedBox) {
+
+      box.classList.add("locked");
 
     }
 
+  });
 
-    /* =========================================================
-       INITIALIZE
-    ========================================================= */
+  selectedBox.classList.remove("locked");
+  selectedBox.classList.add("selected");
 
-    async function initialize() {
+  setTimeout(() => {
 
-        try {
+    selectedBox.classList.remove("selected");
+    selectedBox.classList.add("revealed");
 
-            setStatus(
-                "Loading Lucky Draw..."
-            );
+    const amount =
+      Number(prize || 0)
+        .toLocaleString(
+          "en-NG",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        );
 
+    if (Number(prize) > 0) {
 
-            const user =
-                await loadSession();
+      selectedBox.innerHTML = `
+        <div class="box-content">
 
+          <div class="reward-value">
+            ₦${amount}
+          </div>
 
-            if (!user) {
-                return;
-            }
+          <div class="reward-caption">
+            Reward
+          </div>
 
+        </div>
+      `;
 
-            await loadVip();
+      playSound("reward");
 
+      setStatus(
+        "Congratulations! You won ₦" + amount + ".",
+        "success"
+      );
 
-            const settings =
-                await loadLuckyDrawSettings();
+    } else {
 
+      selectedBox.innerHTML = `
+        <div class="box-content">
 
-            startCountdown();
+          <div class="reward-value">
+            ₦0.00
+          </div>
 
+          <div class="reward-caption">
+            No reward
+          </div>
 
-            if (!settings.enabled) {
+        </div>
+      `;
 
-                boxGrid.innerHTML = "";
+      playSound("empty");
 
-                setStatus(
-                    "Lucky Draw is currently unavailable.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            await loadUsedToday();
-
-
-            await loadLiveTestimonials();
-
-
-            createBoxes();
-
-
-            if (
-                remainingChances <= 0
-            ) {
-
-                boxGrid
-                    .querySelectorAll(
-                        ".mystery-box"
-                    )
-                    .forEach(
-                        box =>
-                            box.classList.add(
-                                "disabled"
-                            )
-                    );
-
-
-                setStatus(
-                    "No chances left today. Come back after the daily reset."
-                );
-
-            } else {
-
-                setStatus(
-                    "Choose one mystery box."
-                );
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Lucky Draw initialization error:",
-                error
-            );
-
-
-            boxGrid.innerHTML = "";
-
-
-            setStatus(
-                error.message ||
-                "Unable to load Lucky Draw. Please refresh.",
-                "error"
-            );
-
-        }
-
+      setStatus(
+        "No reward this time. You can try again if you have another chance.",
+        "warning"
+      );
     }
 
+  }, 420);
+}
 
-    /* =========================================================
-       AUTH STATE
-    ========================================================= */
 
-    supabaseClient.auth.onAuthStateChange(
-        (event, session) => {
+/* =========================================================
+   ENTER LUCKY DRAW
+========================================================= */
 
-            if (
-                event === "SIGNED_OUT"
-            ) {
+async function enterLuckyDraw(selectedBox) {
 
-                window.location.href =
-                    "auth.html";
+  if (roundBusy) {
+    return;
+  }
 
-            }
+  if (!currentUser) {
 
-        }
+    window.location.href =
+      "auth.html";
+
+    return;
+  }
+
+  const remaining =
+    Math.max(
+      0,
+      dailyLimit - spinsToday
     );
 
+  if (remaining <= 0) {
 
-    /* =========================================================
-       START
-    ========================================================= */
+    setStatus(
+      "You have no Lucky Draw chances left today.",
+      "warning"
+    );
 
-    initialize();
+    return;
+  }
+
+  roundBusy = true;
+
+  playSound("tap");
+
+  boxes.forEach(box => {
+    box.disabled = true;
+  });
+
+  selectedBox.classList.add("selected");
+
+  setStatus(
+    "Opening your mystery box..."
+  );
+
+  loadingEl.classList.add("show");
+
+  try {
+
+    const {
+      data,
+      error
+    } = await db.rpc(
+      "enter_lucky_draw"
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    const prize =
+      Number(data);
+
+    spinsToday += 1;
+
+    updateChances();
+
+    loadingEl.classList.remove("show");
+
+    revealReward(
+      selectedBox,
+      prize
+    );
+
+    /*
+      Refresh recent rewards after
+      a successful round.
+    */
+    await loadRecentRewards();
+
+  } catch (error) {
+
+    loadingEl.classList.remove("show");
+
+    selectedBox.classList.remove(
+      "selected"
+    );
+
+    roundBusy = false;
+
+    /*
+      IMPORTANT:
+      We intentionally display the
+      actual Supabase error here.
+    */
+    showDatabaseError(error);
+
+    updateChances();
+
+    /*
+      Restore all boxes because the
+      server did not successfully
+      complete the round.
+    */
+    boxes.forEach(box => {
+
+      box.disabled =
+        dailyLimit - spinsToday <= 0;
+
+      if (!box.disabled) {
+        box.classList.remove("locked");
+      }
+
+    });
+
+    return;
+  }
+
+  /*
+    Keep the round locked after a
+    successful result.
+  */
+  roundBusy = true;
+}
+
+
+/* =========================================================
+   BOX CLICK HANDLERS
+========================================================= */
+
+boxes.forEach(box => {
+
+  box.innerHTML =
+    createBoxContent();
+
+  box.addEventListener(
+    "click",
+    () => {
+
+      if (
+        roundBusy ||
+        box.disabled
+      ) {
+        return;
+      }
+
+      enterLuckyDraw(box);
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+async function initialize() {
+
+  try {
+
+    setStatus(
+      "Loading your Lucky Draw..."
+    );
+
+    const loggedIn =
+      await loadSession();
+
+    if (!loggedIn) {
+      return;
+    }
+
+    await loadVip();
+
+    await loadSettings();
+
+    await loadSpinCount();
+
+    await loadRecentRewards();
+
+    updateCountdown();
+
+    setInterval(
+      updateCountdown,
+      1000
+    );
+
+    setInterval(
+      showNextTicker,
+      5000
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Lucky Draw initialization error:",
+      error
+    );
+
+    showDatabaseError(error);
+  }
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initialize();
 
 </script>
 
