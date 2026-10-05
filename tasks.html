@@ -1,679 +1,865 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VDC — Tasks</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root{
-      --purple:#6d28d9;
-      --purple-dark:#4c1d95;
-      --purple-light:#f3e8ff;
-      --orange:#f97316;
-      --orange-dark:#ea580c;
-      --green:#008751;
-
-      --bg:#faf9fc;
-      --card:#ffffff;
-      --text:#17121f;
-      --muted:#6b6474;
-      --border:#eee8f4;
-      --shadow:0 8px 30px rgba(38,18,62,.07);
-    }
-
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
-
-    body{
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      min-height:100vh;
-    }
-
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
-
-    button{
-      font:inherit;
-    }
-
-    .app{
-      width:100%;
-      max-width:760px;
-      min-height:100vh;
-      margin:auto;
-      padding-bottom:90px;
-    }
-
-    /* HEADER */
-
-    .header{
-      position:sticky;
-      top:0;
-      z-index:50;
-      height:64px;
-      padding:0 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      background:rgba(250,249,252,.94);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid var(--border);
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      cursor:pointer;
-    }
-
-    .brand-mark{
-      width:38px;
-      height:38px;
-      border-radius:12px;
-      background:linear-gradient(135deg,var(--purple),var(--orange));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#fff;
-      font-size:17px;
-      font-weight:900;
-      box-shadow:0 6px 16px rgba(109,40,217,.2);
-    }
-
-    .brand-name{
-      font-size:19px;
-      font-weight:850;
-      letter-spacing:-.3px;
-    }
-
-    .header-actions{
-      display:flex;
-      align-items:center;
-    }
-
-    .icon-btn{
-      width:40px;
-      height:40px;
-      border:1px solid var(--border);
-      background:var(--card);
-      border-radius:12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:var(--text);
-      cursor:pointer;
-      position:relative;
-    }
-
-    .icon-btn svg{
-      width:20px;
-      height:20px;
-    }
-
-    .notification-dot{
-      position:absolute;
-      top:8px;
-      right:8px;
-      width:7px;
-      height:7px;
-      border-radius:50%;
-      background:var(--orange);
-      border:2px solid #fff;
-    }
-
-    /* CONTENT */
-
-    .content{
-      padding:22px 16px 30px;
-    }
-
-    .page-heading{
-      margin-bottom:19px;
-    }
-
-    .eyebrow{
-      color:var(--purple);
-      font-size:12px;
-      font-weight:850;
-      text-transform:uppercase;
-      letter-spacing:.7px;
-      margin-bottom:5px;
-    }
-
-    h1{
-      font-size:28px;
-      line-height:1.15;
-      letter-spacing:-.7px;
-      margin-bottom:7px;
-    }
-
-    .page-heading p{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.55;
-    }
-
-    /* SUMMARY */
-
-    .summary-card{
-      background:linear-gradient(135deg,var(--purple-dark),var(--purple));
-      color:#fff;
-      border-radius:22px;
-      padding:20px;
-      box-shadow:0 14px 34px rgba(76,29,149,.22);
-      position:relative;
-      overflow:hidden;
-      margin-bottom:20px;
-    }
-
-    .summary-card::after{
-      content:"";
-      position:absolute;
-      width:160px;
-      height:160px;
-      border-radius:50%;
-      right:-65px;
-      top:-75px;
-      background:rgba(255,255,255,.08);
-    }
-
-    .summary-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:15px;
-      position:relative;
-      z-index:1;
-    }
-
-    .summary-label{
-      font-size:12px;
-      opacity:.78;
-      margin-bottom:5px;
-    }
-
-    .summary-value{
-      font-size:28px;
-      font-weight:900;
-      letter-spacing:-.7px;
-    }
-
-    .vip-pill{
-      background:rgba(255,255,255,.13);
-      border:1px solid rgba(255,255,255,.2);
-      border-radius:12px;
-      padding:9px 11px;
-      text-align:right;
-    }
-
-    .vip-pill small{
-      display:block;
-      font-size:9px;
-      opacity:.7;
-      margin-bottom:2px;
-      text-transform:uppercase;
-      letter-spacing:.4px;
-    }
-
-    .vip-pill strong{
-      font-size:12px;
-    }
-
-    .progress-area{
-      margin-top:17px;
-      position:relative;
-      z-index:1;
-    }
-
-    .progress-label{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      font-size:11px;
-      opacity:.82;
-      margin-bottom:7px;
-    }
-
-    .progress-track{
-      width:100%;
-      height:7px;
-      border-radius:99px;
-      background:rgba(255,255,255,.16);
-      overflow:hidden;
-    }
-
-    .progress-bar{
-      width:0%;
-      height:100%;
-      border-radius:99px;
-      background:#fff;
-      transition:width .35s ease;
-    }
-
-    /* SECTION */
-
-    .section{
-      margin-top:23px;
-    }
-
-    .section-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:12px;
-    }
-
-    .section-title{
-      font-size:17px;
-      font-weight:850;
-      letter-spacing:-.2px;
-    }
-
-    .section-subtitle{
-      color:var(--muted);
-      font-size:11px;
-    }
-
-    /* TASK LIST */
-
-    .task-list{
-      display:flex;
-      flex-direction:column;
-      gap:11px;
-    }
-
-    .task-card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:19px;
-      padding:16px;
-      box-shadow:var(--shadow);
-    }
-
-    .task-main{
-      display:flex;
-      gap:13px;
-      align-items:flex-start;
-    }
-
-    .task-icon{
-      width:46px;
-      height:46px;
-      border-radius:14px;
-      background:var(--purple-light);
-      color:var(--purple);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-shrink:0;
-    }
-
-    .task-icon svg{
-      width:22px;
-      height:22px;
-    }
-
-    .task-info{
-      min-width:0;
-      flex:1;
-    }
-
-    .task-title{
-      font-size:14px;
-      font-weight:850;
-      line-height:1.35;
-      margin-bottom:4px;
-    }
-
-    .task-description{
-      color:var(--muted);
-      font-size:11px;
-      line-height:1.45;
-    }
-
-    .task-meta{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:14px;
-      padding-top:13px;
-      border-top:1px solid var(--border);
-    }
-
-    .task-reward{
-      color:var(--green);
-      font-size:13px;
-      font-weight:900;
-    }
-
-    .task-status{
-      color:var(--muted);
-      font-size:10px;
-      font-weight:700;
-    }
-
-    .task-action{
-      margin-top:13px;
-      width:100%;
-      border:0;
-      border-radius:12px;
-      padding:12px;
-      background:var(--purple);
-      color:#fff;
-      font-size:12px;
-      font-weight:850;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .task-action:active{
-      transform:scale(.98);
-    }
-
-    .task-action.completed{
-      background:#e8f7ef;
-      color:var(--green);
-      cursor:default;
-    }
-
-    .task-action.disabled{
-      background:#f1eef4;
-      color:#9a929f;
-      cursor:not-allowed;
-    }
-
-    /* EMPTY / LOADING */
-
-    .state-card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:19px;
-      padding:28px 20px;
-      text-align:center;
-      box-shadow:var(--shadow);
-    }
-
-    .state-icon{
-      width:48px;
-      height:48px;
-      margin:0 auto 12px;
-      border-radius:15px;
-      background:var(--purple-light);
-      color:var(--purple);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .state-icon svg{
-      width:23px;
-      height:23px;
-    }
-
-    .state-card h3{
-      font-size:14px;
-      font-weight:850;
-      margin-bottom:6px;
-    }
-
-    .state-card p{
-      color:var(--muted);
-      font-size:11px;
-      line-height:1.5;
-    }
-
-    /* INFO */
-
-    .info-card{
-      margin-top:22px;
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:17px;
-    }
-
-    .info-row{
-      display:flex;
-      align-items:flex-start;
-      gap:11px;
-    }
-
-    .info-icon{
-      color:var(--purple);
-      flex-shrink:0;
-    }
-
-    .info-icon svg{
-      width:18px;
-      height:18px;
-    }
-
-    .info-card h3{
-      font-size:13px;
-      font-weight:850;
-      margin-bottom:5px;
-    }
-
-    .info-card p{
-      color:var(--muted);
-      font-size:11px;
-      line-height:1.55;
-    }
-
-    /* BOTTOM NAV */
-
-    .bottom-nav{
-      position:fixed;
-      z-index:60;
-      bottom:0;
-      left:50%;
-      transform:translateX(-50%);
-      width:100%;
-      max-width:760px;
-      height:72px;
-      background:rgba(255,255,255,.96);
-      backdrop-filter:blur(14px);
-      border-top:1px solid var(--border);
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      padding:7px 8px calc(7px + env(safe-area-inset-bottom));
-    }
-
-    .nav-item{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      color:#918a99;
-      font-size:10px;
-      font-weight:750;
-      border-radius:12px;
-      cursor:pointer;
-    }
-
-    .nav-item svg{
-      width:21px;
-      height:21px;
-    }
-
-    .nav-item.active{
-      color:var(--purple);
-      background:var(--purple-light);
-    }
-
-    @media(max-width:380px){
-      h1{
-        font-size:25px;
-      }
-
-      .summary-value{
-        font-size:25px;
-      }
-
-      .content{
-        padding-left:14px;
-        padding-right:14px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VDC — Tasks</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --purple:#6d28d9;
+  --purple-dark:#4c1d95;
+  --purple-light:#f3e8ff;
+  --orange:#f97316;
+  --green:#008751;
+  --bg:#faf9fc;
+  --card:#fff;
+  --text:#17121f;
+  --muted:#6b6474;
+  --border:#eee8f4;
+  --shadow:0 8px 30px rgba(38,18,62,.07);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+}
+
+.app{
+  width:100%;
+  max-width:760px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:90px;
+}
+
+/* HEADER */
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:64px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:rgba(250,249,252,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--purple),var(--orange));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+  box-shadow:0 6px 16px rgba(109,40,217,.2);
+}
+
+.brand-name{
+  font-size:19px;
+  font-weight:850;
+  letter-spacing:-.3px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  background:var(--card);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--text);
+  cursor:pointer;
+  position:relative;
+}
+
+.icon-btn svg{
+  width:20px;
+  height:20px;
+}
+
+.notification-dot{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--orange);
+  border:2px solid #fff;
+}
+
+/* CONTENT */
+
+.content{
+  padding:22px 16px 30px;
+}
+
+.page-heading{
+  margin-bottom:19px;
+}
+
+.eyebrow{
+  color:var(--purple);
+  font-size:12px;
+  font-weight:850;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  margin-bottom:5px;
+}
+
+h1{
+  font-size:28px;
+  line-height:1.15;
+  letter-spacing:-.7px;
+  margin-bottom:7px;
+}
+
+.page-heading p{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+}
+
+/* SUMMARY */
+
+.summary-card{
+  background:linear-gradient(135deg,var(--purple-dark),var(--purple));
+  color:#fff;
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 14px 34px rgba(76,29,149,.22);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.summary-card:after{
+  content:"";
+  position:absolute;
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  right:-65px;
+  top:-75px;
+  background:rgba(255,255,255,.08);
+}
+
+.summary-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  position:relative;
+  z-index:1;
+}
+
+.summary-label{
+  font-size:12px;
+  opacity:.78;
+  margin-bottom:5px;
+}
+
+.summary-value{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-.7px;
+}
+
+.vip-pill{
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:12px;
+  padding:9px 11px;
+  text-align:right;
+}
+
+.vip-pill small{
+  display:block;
+  font-size:9px;
+  opacity:.7;
+  margin-bottom:2px;
+  text-transform:uppercase;
+}
+
+.vip-pill strong{
+  font-size:12px;
+}
+
+.progress-area{
+  margin-top:17px;
+  position:relative;
+  z-index:1;
+}
+
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-size:11px;
+  opacity:.82;
+  margin-bottom:7px;
+}
+
+.progress-track{
+  width:100%;
+  height:7px;
+  border-radius:99px;
+  background:rgba(255,255,255,.16);
+  overflow:hidden;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  border-radius:99px;
+  background:#fff;
+  transition:width .35s ease;
+}
+
+/* TASK LIST */
+
+.section{
+  margin-top:23px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.section-title{
+  font-size:17px;
+  font-weight:850;
+}
+
+.section-subtitle{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.task-list{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+.task-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:19px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+
+.task-main{
+  display:flex;
+  gap:13px;
+  align-items:flex-start;
+}
+
+.task-icon{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:var(--purple-light);
+  color:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.task-icon svg{
+  width:22px;
+  height:22px;
+}
+
+.task-info{
+  min-width:0;
+  flex:1;
+}
+
+.task-title{
+  font-size:14px;
+  font-weight:850;
+  line-height:1.35;
+  margin-bottom:4px;
+}
+
+.task-description{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.45;
+}
+
+.task-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:14px;
+  padding-top:13px;
+  border-top:1px solid var(--border);
+}
+
+.task-reward{
+  color:var(--green);
+  font-size:13px;
+  font-weight:900;
+}
+
+.task-status{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+}
+
+.task-action{
+  margin-top:13px;
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:12px;
+  background:var(--purple);
+  color:#fff;
+  font-size:12px;
+  font-weight:850;
+  cursor:pointer;
+}
+
+.task-action:active{
+  transform:scale(.98);
+}
+
+.task-action.completed{
+  background:#e8f7ef;
+  color:var(--green);
+  cursor:default;
+}
+
+.task-action.disabled{
+  background:#f1eef4;
+  color:#9a929f;
+  cursor:not-allowed;
+}
+
+/* DETAIL PANEL */
+
+.detail-overlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(20,10,30,.48);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.detail-overlay.show{
+  display:flex;
+}
+
+.detail-sheet{
+  width:100%;
+  max-width:760px;
+  max-height:88vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:25px 25px 0 0;
+  padding:20px 16px 30px;
+  animation:sheetIn .2s ease;
+}
+
+@keyframes sheetIn{
+  from{
+    transform:translateY(30px);
+    opacity:.5;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+.detail-handle{
+  width:42px;
+  height:4px;
+  border-radius:99px;
+  background:#ddd6e2;
+  margin:0 auto 18px;
+}
+
+.detail-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.detail-title{
+  font-size:20px;
+  font-weight:900;
+  line-height:1.25;
+}
+
+.detail-close{
+  width:36px;
+  height:36px;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.detail-close svg{
+  width:18px;
+  height:18px;
+}
+
+.detail-reward{
+  display:inline-flex;
+  margin-top:12px;
+  padding:8px 11px;
+  border-radius:10px;
+  background:#e8f7ef;
+  color:var(--green);
+  font-size:13px;
+  font-weight:900;
+}
+
+.detail-description{
+  margin-top:18px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.65;
+}
+
+.detail-link{
+  margin-top:20px;
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:13px;
+  background:var(--purple);
+  color:#fff;
+  font-size:13px;
+  font-weight:850;
+  cursor:pointer;
+}
+
+/* STATE */
+
+.state-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:19px;
+  padding:28px 20px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+
+.state-icon{
+  width:48px;
+  height:48px;
+  margin:0 auto 12px;
+  border-radius:15px;
+  background:var(--purple-light);
+  color:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.state-icon svg{
+  width:23px;
+  height:23px;
+}
+
+.state-card h3{
+  font-size:14px;
+  font-weight:850;
+  margin-bottom:6px;
+}
+
+.state-card p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+}
+
+/* INFO */
+
+.info-card{
+  margin-top:22px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:17px;
+}
+
+.info-row{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+}
+
+.info-icon{
+  color:var(--purple);
+  flex-shrink:0;
+}
+
+.info-icon svg{
+  width:18px;
+  height:18px;
+}
+
+.info-card h3{
+  font-size:13px;
+  font-weight:850;
+  margin-bottom:5px;
+}
+
+.info-card p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.55;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+  position:fixed;
+  z-index:60;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:760px;
+  height:72px;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+}
+
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  color:#918a99;
+  font-size:10px;
+  font-weight:750;
+  border-radius:12px;
+}
+
+.nav-item svg{
+  width:21px;
+  height:21px;
+}
+
+.nav-item.active{
+  color:var(--purple);
+  background:var(--purple-light);
+}
+
+@media(max-width:380px){
+  h1{
+    font-size:25px;
+  }
+
+  .summary-value{
+    font-size:25px;
+  }
+
+  .content{
+    padding-left:14px;
+    padding-right:14px;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <!-- HEADER -->
-  <header class="header">
+<header class="header">
 
-    <div class="brand" onclick="go('dashboard.html')">
-      <div class="brand-mark">V</div>
-      <div class="brand-name">VDC</div>
+  <div class="brand" onclick="go('dashboard.html')">
+    <div class="brand-mark">V</div>
+    <div class="brand-name">VDC</div>
+  </div>
+
+  <div>
+    <button class="icon-btn"
+      onclick="go('notifications.html')"
+      aria-label="Notifications">
+
+      <svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.9">
+
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+
+      </svg>
+
+      <span class="notification-dot"></span>
+
+    </button>
+  </div>
+
+</header>
+
+
+<main class="content">
+
+  <div class="page-heading">
+
+    <div class="eyebrow">VDC TASKS</div>
+
+    <h1>Daily Tasks</h1>
+
+    <p>
+      Complete available tasks and earn rewards based on your current VIP level.
+    </p>
+
+  </div>
+
+
+  <section class="summary-card">
+
+    <div class="summary-top">
+
+      <div>
+        <div class="summary-label">Today's Progress</div>
+
+        <div class="summary-value">
+          <span id="completedCount">0</span>/<span id="taskLimit">0</span>
+        </div>
+      </div>
+
+      <div class="vip-pill">
+        <small>Your VIP</small>
+        <strong id="vipName">Free VIP</strong>
+      </div>
+
     </div>
 
-    <div class="header-actions">
-      <button
-        class="icon-btn"
-        onclick="go('notifications.html')"
-        aria-label="Notifications"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
-          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+
+    <div class="progress-area">
+
+      <div class="progress-label">
+        <span>Daily task progress</span>
+        <span id="progressPercent">0%</span>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+
+      <div class="section-title">
+        Available Tasks
+      </div>
+
+      <div class="section-subtitle" id="taskCountLabel">
+        Loading...
+      </div>
+
+    </div>
+
+
+    <div id="taskList" class="task-list">
+
+      <div class="state-card">
+
+        <div class="state-icon">
+
+          <svg viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8">
+
+            <path d="M12 6v6l4 2"/>
+            <circle cx="12" cy="12" r="9"/>
+
+          </svg>
+
+        </div>
+
+        <h3>Loading tasks</h3>
+
+        <p>
+          Please wait while your available tasks are loaded.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="info-card">
+
+    <div class="info-row">
+
+      <div class="info-icon">
+
+        <svg viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
+
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 10v6"/>
+          <path d="M12 7h.01"/>
+
         </svg>
 
-        <span class="notification-dot"></span>
-      </button>
-    </div>
-
-  </header>
-
-
-  <main class="content">
-
-    <!-- PAGE HEADING -->
-    <div class="page-heading">
-      <div class="eyebrow">VDC TASKS</div>
-      <h1>Daily Tasks</h1>
-      <p>Complete available tasks and earn rewards based on your current VIP level.</p>
-    </div>
-
-
-    <!-- TASK SUMMARY -->
-    <section class="summary-card">
-
-      <div class="summary-top">
-
-        <div>
-          <div class="summary-label">Today's Progress</div>
-          <div class="summary-value">
-            <span id="completedCount">0</span>/<span id="taskLimit">0</span>
-          </div>
-        </div>
-
-        <div class="vip-pill">
-          <small>Your VIP</small>
-          <strong id="vipName">Free VIP</strong>
-        </div>
-
       </div>
 
-      <div class="progress-area">
+      <div>
 
-        <div class="progress-label">
-          <span>Daily task progress</span>
-          <span id="progressPercent">0%</span>
-        </div>
+        <h3>About daily tasks</h3>
 
-        <div class="progress-track">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- AVAILABLE TASKS -->
-    <section class="section">
-
-      <div class="section-head">
-        <div class="section-title">Available Tasks</div>
-        <div class="section-subtitle" id="taskCountLabel">Loading...</div>
-      </div>
-
-      <div id="taskList" class="task-list">
-
-        <div class="state-card">
-
-          <div class="state-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M12 6v6l4 2"/>
-              <circle cx="12" cy="12" r="9"/>
-            </svg>
-          </div>
-
-          <h3>Loading tasks</h3>
-          <p>Please wait while your available tasks are loaded.</p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- INFORMATION -->
-    <div class="info-card">
-
-      <div class="info-row">
-
-        <div class="info-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M12 10v6"/>
-            <path d="M12 7h.01"/>
-          </svg>
-        </div>
-
-        <div>
-          <h3>About daily tasks</h3>
-          <p>
-            Your daily task limit and reward amount are determined by your active VIP level.
-            Only eligible tasks count toward your daily progress.
-          </p>
-        </div>
+        <p>
+          Your daily task limit and reward amount are determined by your active VIP level.
+          Only eligible tasks count toward your daily progress.
+        </p>
 
       </div>
 
     </div>
 
-  </main>
+  </div>
+
+</main>
 
 </div>
 
 
-<!-- BOTTOM NAV -->
+<!-- TASK DETAIL -->
+
+<div id="detailOverlay" class="detail-overlay">
+
+  <div class="detail-sheet">
+
+    <div class="detail-handle"></div>
+
+    <div class="detail-head">
+
+      <div>
+        <div id="detailTitle" class="detail-title">
+          Task
+        </div>
+
+        <div id="detailReward" class="detail-reward">
+          +₦0.00
+        </div>
+      </div>
+
+      <button class="detail-close" onclick="closeTaskDetail()">
+
+        <svg viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2">
+
+          <path d="M6 6l12 12"/>
+          <path d="M18 6 6 18"/>
+
+        </svg>
+
+      </button>
+
+    </div>
+
+
+    <div id="detailDescription" class="detail-description">
+      Task information will appear here.
+    </div>
+
+
+    <button id="detailAction"
+      class="detail-link"
+      onclick="continueTask()">
+
+      Continue Task
+
+    </button>
+
+  </div>
+
+</div>
+
+
 <nav class="bottom-nav">
 
   <a class="nav-item" href="dashboard.html">
 
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <svg viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="1.8">
+
       <path d="m3 10 9-7 9 7"/>
       <path d="M5 9v11h14V9"/>
       <path d="M9 20v-6h6v6"/>
+
     </svg>
 
     <span>Home</span>
@@ -683,11 +869,14 @@
 
   <a class="nav-item active" href="tasks.html">
 
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <svg viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="1.8">
+
       <rect x="4" y="3" width="16" height="18" rx="2"/>
       <path d="M8 8h8"/>
       <path d="M8 12h8"/>
       <path d="M8 16h5"/>
+
     </svg>
 
     <span>Tasks</span>
@@ -697,8 +886,11 @@
 
   <a class="nav-item" href="vip.html">
 
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <svg viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="1.8">
+
       <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
+
     </svg>
 
     <span>VIP</span>
@@ -708,9 +900,12 @@
 
   <a class="nav-item" href="earn.html">
 
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <svg viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="1.8">
+
       <path d="M12 2v20"/>
       <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H7"/>
+
     </svg>
 
     <span>Earn</span>
@@ -720,9 +915,12 @@
 
   <a class="nav-item" href="profile.html">
 
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <svg viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="1.8">
+
       <circle cx="12" cy="8" r="4"/>
       <path d="M4 21a8 8 0 0 1 16 0"/>
+
     </svg>
 
     <span>My</span>
@@ -734,26 +932,38 @@
 
 <script>
 
-  const SUPABASE_URL =
-    "https://wiorfxlodrcawxdeowbg.supabase.co";
+const SUPABASE_URL =
+"https://wiorfxlodrcawxdeowbg.supabase.co";
 
-  const SUPABASE_KEY =
-    "sb_publishable_b3FIKdf_P_UKP0Ii8ZbMREw_CVqOQv9g";
+const SUPABASE_KEY =
+"sb_publishable_b3FIKdf_P_UKP0Ii8ZbMREw_CVqOQv9g";
 
-  const db = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-
-  function go(page){
-    window.location.href = page;
+const db =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
   }
+);
 
 
-  function money(value){
+let currentTask = null;
 
-    return "₦" + Number(value || 0).toLocaleString(
+
+function go(page){
+  window.location.href = page;
+}
+
+
+function money(value){
+
+  return "₦" +
+    Number(value || 0).toLocaleString(
       "en-NG",
       {
         minimumFractionDigits:2,
@@ -761,306 +971,269 @@
       }
     );
 
+}
+
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/*
+=========================================================
+GET AUTHENTICATED USER
+=========================================================
+*/
+
+async function getAuthenticatedUser(){
+
+  /*
+    First use the existing browser session.
+  */
+
+  const {
+    data:{
+      session
+    }
+  } = await db.auth.getSession();
+
+
+  if(session?.user){
+
+    return session.user;
+
   }
 
 
-  async function getUser(){
+  /*
+    Give Supabase a moment to restore the session.
+    This prevents false auth redirects when the page
+    is opened directly from another VDC page.
+  */
+
+  await new Promise(resolve =>
+    setTimeout(resolve,700)
+  );
+
+
+  const {
+    data:{
+      session:secondSession
+    }
+  } = await db.auth.getSession();
+
+
+  if(secondSession?.user){
+
+    return secondSession.user;
+
+  }
+
+
+  /*
+    Only redirect when there is genuinely no session.
+  */
+
+  window.location.href =
+    "auth.html?redirect=tasks.html";
+
+  return null;
+
+}
+
+
+/*
+=========================================================
+LOAD PAGE
+=========================================================
+*/
+
+async function loadTaskPage(){
+
+  try{
+
+    const user =
+      await getAuthenticatedUser();
+
+
+    if(!user) return;
+
+
+    /*
+    -----------------------------------------------
+    VIP
+    -----------------------------------------------
+    */
+
+    let vipName = "Free VIP";
+    let taskLimit = 5;
+
 
     const {
-      data,
-      error
-    } = await db.auth.getUser();
-
-    if(error || !data.user){
-
-      window.location.href = "auth.html";
-      return null;
-
-    }
-
-    return data.user;
-
-  }
-
-
-  async function loadTaskPage(){
-
-    try{
-
-      const user = await getUser();
-
-      if(!user) return;
-
-
-      /*
-        --------------------------------------------------
-        LOAD WALLET
-        --------------------------------------------------
-      */
-
-      const {
-        data: wallet,
-        error: walletError
-      } = await db
-        .from("wallets")
-        .select("balance")
-        .eq("user_id",user.id)
-        .maybeSingle();
-
-      if(walletError){
-
-        console.error("Wallet error:",walletError);
-
-      }
-
-
-      /*
-        --------------------------------------------------
-        LOAD VIP
-        --------------------------------------------------
-      */
-
-      let vipLevel = 0;
-      let vipName = "Free VIP";
-      let taskLimit = 5;
-
-
-      const {
-        data: userVip,
-        error: vipError
-      } = await db
-        .from("user_vips")
-        .select("vip_level_id")
-        .eq("user_id",user.id)
-        .maybeSingle();
-
-
-      if(vipError){
-
-        console.error("VIP error:",vipError);
-
-      }
-
-
-      if(userVip?.vip_level_id){
-
-        const {
-          data: vip,
-          error: levelError
-        } = await db
-          .from("vip_levels")
-          .select("level_number,name,daily_task_limit,task_reward")
-          .eq("id",userVip.vip_level_id)
-          .maybeSingle();
-
-
-        if(levelError){
-
-          console.error("VIP level error:",levelError);
-
-        }
-
-
-        if(vip){
-
-          vipLevel = Number(vip.level_number || 0);
-
-          vipName = vip.name || "Free VIP";
-
-          taskLimit = Number(vip.daily_task_limit || 5);
-
-        }
-
-      }
-
-
-      document.getElementById("vipName").textContent =
-        vipName;
-
-
-      document.getElementById("taskLimit").textContent =
-        taskLimit;
-
-
-      /*
-        --------------------------------------------------
-        LOAD TODAY'S COMPLETIONS
-        --------------------------------------------------
-      */
-
-      const todayStart = new Date();
-
-      todayStart.setHours(0,0,0,0);
-
-
-      const {
-        data: completions,
-        error: completionError
-      } = await db
-        .from("task_completions")
-        .select("task_id")
-        .eq("user_id",user.id)
-        .gte("created_at",todayStart.toISOString());
-
-
-      if(completionError){
-
-        console.error(
-          "Completion error:",
-          completionError
-        );
-
-      }
-
-
-      const completedIds = new Set(
-        (completions || []).map(
-          row => String(row.task_id)
-        )
-      );
-
-
-      const completedCount =
-        completedIds.size;
-
-
-      document.getElementById("completedCount").textContent =
-        completedCount;
-
-
-      const percent =
-        taskLimit > 0
-          ? Math.min(
-              100,
-              Math.round(
-                (completedCount / taskLimit) * 100
-              )
-            )
-          : 0;
-
-
-      document.getElementById("progressPercent").textContent =
-        percent + "%";
-
-
-      document.getElementById("progressBar").style.width =
-        percent + "%";
-
-
-      /*
-        --------------------------------------------------
-        LOAD ACTIVE TASKS
-        --------------------------------------------------
-      */
-
-      const {
-        data: tasks,
-        error: taskError
-      } = await db
-        .from("tasks")
-        .select("*")
-        .eq("active",true)
-        .order("created_at",{ascending:true});
-
-
-      if(taskError){
-
-        console.error(
-          "Task loading error:",
-          taskError
-        );
-
-        showState(
-          "Unable to load tasks",
-          "There was a problem loading the available tasks."
-        );
-
-        return;
-
-      }
-
-
-      renderTasks(
-        tasks || [],
-        completedIds,
-        completedCount,
-        taskLimit
-      );
-
-
-    }catch(error){
+      data:userVip,
+      error:vipError
+    } = await db
+      .from("user_vips")
+      .select("vip_level_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
+
+
+    if(vipError){
 
       console.error(
-        "Tasks page error:",
-        error
-      );
-
-      showState(
-        "Something went wrong",
-        "Please refresh the page and try again."
+        "VIP error:",
+        vipError
       );
 
     }
 
-  }
+
+    if(userVip?.vip_level_id){
+
+      const {
+        data:vip,
+        error:levelError
+      } = await db
+        .from("vip_levels")
+        .select(
+          "level_number,name,daily_task_limit,task_reward"
+        )
+        .eq("id",userVip.vip_level_id)
+        .maybeSingle();
 
 
-  function showState(title,message){
+      if(levelError){
 
-    document.getElementById("taskCountLabel").textContent =
-      "";
+        console.error(
+          "VIP level error:",
+          levelError
+        );
 
-    document.getElementById("taskList").innerHTML = `
-
-      <div class="state-card">
-
-        <div class="state-icon">
-
-          <svg viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="1.8">
-
-            <circle cx="12" cy="12" r="9"/>
-
-            <path d="M12 8v5"/>
-
-            <path d="M12 16h.01"/>
-
-          </svg>
-
-        </div>
-
-        <h3>${escapeHtml(title)}</h3>
-
-        <p>${escapeHtml(message)}</p>
-
-      </div>
-
-    `;
-
-  }
+      }
 
 
-  function renderTasks(
-    tasks,
-    completedIds,
-    completedCount,
-    taskLimit
-  ){
+      if(vip){
 
-    const list =
-      document.getElementById("taskList");
+        vipName =
+          vip.name || "Free VIP";
+
+        taskLimit =
+          Number(
+            vip.daily_task_limit || 5
+          );
+
+      }
+
+    }
 
 
-    if(!tasks.length){
+    document.getElementById(
+      "vipName"
+    ).textContent = vipName;
 
-      document.getElementById("taskCountLabel").textContent =
-        "0 available";
+
+    document.getElementById(
+      "taskLimit"
+    ).textContent = taskLimit;
+
+
+    /*
+    -----------------------------------------------
+    TODAY'S COMPLETIONS
+    -----------------------------------------------
+    */
+
+    const now = new Date();
+
+    const todayStart =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate()
+      );
+
+
+    const {
+      data:completions,
+      error:completionError
+    } = await db
+      .from("task_completions")
+      .select("task_id")
+      .eq("user_id",user.id)
+      .gte(
+        "created_at",
+        todayStart.toISOString()
+      );
+
+
+    if(completionError){
+
+      console.error(
+        "Completion error:",
+        completionError
+      );
+
+    }
+
+
+    const completedIds =
+      new Set(
+        (completions || [])
+          .map(
+            row => String(row.task_id)
+          )
+      );
+
+
+    const completedCount =
+      completedIds.size;
+
+
+    updateProgress(
+      completedCount,
+      taskLimit
+    );
+
+
+    /*
+    -----------------------------------------------
+    TASKS
+    -----------------------------------------------
+    */
+
+    const {
+      data:tasks,
+      error:taskError
+    } = await db
+      .from("tasks")
+      .select("*")
+      .eq("active",true)
+      .order(
+        "created_at",
+        {
+          ascending:true
+        }
+      );
+
+
+    if(taskError){
+
+      console.error(
+        "Task error:",
+        taskError
+      );
 
       showState(
-        "No tasks available",
-        "There are no active tasks available right now. Check again later."
+        "Unable to load tasks",
+        "We could not load the available tasks right now."
       );
 
       return;
@@ -1068,252 +1241,560 @@
     }
 
 
-    document.getElementById("taskCountLabel").textContent =
-      tasks.length + (
-        tasks.length === 1
-          ? " available"
-          : " available"
-      );
+    renderTasks(
+      tasks || [],
+      completedIds,
+      completedCount,
+      taskLimit
+    );
 
 
-    list.innerHTML = "";
+  }catch(error){
+
+    console.error(
+      "Tasks page error:",
+      error
+    );
+
+    showState(
+      "Something went wrong",
+      "Please refresh the page and try again."
+    );
+
+  }
+
+}
 
 
-    tasks.forEach(task => {
+/*
+=========================================================
+PROGRESS
+=========================================================
+*/
 
-      const id = String(task.id);
+function updateProgress(
+  completedCount,
+  taskLimit
+){
 
-      const completed =
-        completedIds.has(id);
-
-
-      const reachedLimit =
-        completedCount >= taskLimit &&
-        !completed;
-
-
-      const title =
-        task.title ||
-        task.name ||
-        "Daily Task";
+  document.getElementById(
+    "completedCount"
+  ).textContent =
+    completedCount;
 
 
-      const description =
-        task.description ||
-        "Complete this task to earn your reward.";
+  const percent =
+    taskLimit > 0
+      ? Math.min(
+          100,
+          Math.round(
+            completedCount /
+            taskLimit *
+            100
+          )
+        )
+      : 0;
 
 
-      const reward =
-        Number(
-          task.reward ??
-          task.amount ??
-          0
-        );
+  document.getElementById(
+    "progressPercent"
+  ).textContent =
+    percent + "%";
 
 
-      const card =
-        document.createElement("div");
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    percent + "%";
 
-      card.className =
-        "task-card";
-
-
-      let buttonText =
-        "Start Task";
+}
 
 
-      let buttonClass =
-        "task-action";
+/*
+=========================================================
+RENDER TASKS
+=========================================================
+*/
+
+function renderTasks(
+  tasks,
+  completedIds,
+  completedCount,
+  taskLimit
+){
+
+  const list =
+    document.getElementById(
+      "taskList"
+    );
 
 
-      if(completed){
+  if(!tasks.length){
 
-        buttonText =
-          "Completed";
-
-        buttonClass =
-          "task-action completed";
-
-      }else if(reachedLimit){
-
-        buttonText =
-          "Daily Limit Reached";
-
-        buttonClass =
-          "task-action disabled";
-
-      }
+    document.getElementById(
+      "taskCountLabel"
+    ).textContent =
+      "0 available";
 
 
-      card.innerHTML = `
+    showState(
+      "No tasks available",
+      "There are no active tasks available right now. Check again later."
+    );
 
-        <div class="task-main">
-
-          <div class="task-icon">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8">
-
-              <rect x="4"
-                    y="3"
-                    width="16"
-                    height="18"
-                    rx="2"/>
-
-              <path d="M8 8h8"/>
-
-              <path d="M8 12h8"/>
-
-              <path d="M8 16h5"/>
-
-            </svg>
-
-          </div>
-
-
-          <div class="task-info">
-
-            <div class="task-title">
-              ${escapeHtml(title)}
-            </div>
-
-            <div class="task-description">
-              ${escapeHtml(description)}
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="task-meta">
-
-          <div class="task-reward">
-            +${money(reward)}
-          </div>
-
-          <div class="task-status">
-            ${
-              completed
-                ? "Completed today"
-                : reachedLimit
-                  ? "Limit reached"
-                  : "Available"
-            }
-          </div>
-
-        </div>
-
-
-        <button
-          class="${buttonClass}"
-          ${completed || reachedLimit ? "disabled" : ""}
-          data-task-id="${escapeHtml(id)}"
-        >
-          ${buttonText}
-        </button>
-
-      `;
-
-
-      const button =
-        card.querySelector(".task-action");
-
-
-      if(!completed && !reachedLimit){
-
-        button.addEventListener(
-          "click",
-          () => openTask(task,button)
-        );
-
-      }
-
-
-      list.appendChild(card);
-
-    });
+    return;
 
   }
 
 
-  async function openTask(task,button){
-
-    if(!task || !task.id) return;
-
-
-    button.disabled = true;
-
-    button.textContent =
-      "Opening...";
+  document.getElementById(
+    "taskCountLabel"
+  ).textContent =
+    tasks.length +
+    " available";
 
 
-    try{
-
-      /*
-        If the task contains a URL, open it.
-        Otherwise keep the task available for the
-        existing task flow/backend.
-      */
-
-      const url =
-        task.url ||
-        task.link ||
-        task.target_url ||
-        task.task_url;
+  list.innerHTML = "";
 
 
-      if(url){
+  tasks.forEach(task => {
 
-        window.open(
-          url,
-          "_blank",
-          "noopener,noreferrer"
-        );
-
-      }else{
-
-        alert(
-          "This task is available, but it does not have a task link yet."
-        );
-
-      }
+    const id =
+      String(task.id);
 
 
-    }catch(error){
+    const completed =
+      completedIds.has(id);
 
-      console.error(
-        "Task open error:",
-        error
+
+    const limitReached =
+      completedCount >= taskLimit &&
+      !completed;
+
+
+    const title =
+      task.title ||
+      task.name ||
+      "Daily Task";
+
+
+    const description =
+      task.description ||
+      "Complete this task to earn your reward.";
+
+
+    const reward =
+      Number(
+        task.reward ??
+        task.amount ??
+        0
       );
 
-    }finally{
 
-      button.disabled = false;
+    const card =
+      document.createElement(
+        "div"
+      );
 
-      button.textContent =
-        "Start Task";
+
+    card.className =
+      "task-card";
+
+
+    let buttonText =
+      "View Task";
+
+
+    let buttonClass =
+      "task-action";
+
+
+    if(completed){
+
+      buttonText =
+        "Completed";
+
+      buttonClass =
+        "task-action completed";
+
+    }else if(limitReached){
+
+      buttonText =
+        "Daily Limit Reached";
+
+      buttonClass =
+        "task-action disabled";
+
+    }
+
+
+    card.innerHTML = `
+
+      <div class="task-main">
+
+        <div class="task-icon">
+
+          <svg viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8">
+
+            <rect x="4" y="3"
+              width="16"
+              height="18"
+              rx="2"/>
+
+            <path d="M8 8h8"/>
+            <path d="M8 12h8"/>
+            <path d="M8 16h5"/>
+
+          </svg>
+
+        </div>
+
+
+        <div class="task-info">
+
+          <div class="task-title">
+            ${escapeHtml(title)}
+          </div>
+
+          <div class="task-description">
+            ${escapeHtml(description)}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="task-meta">
+
+        <div class="task-reward">
+          +${money(reward)}
+        </div>
+
+        <div class="task-status">
+
+          ${
+            completed
+              ? "Completed today"
+              : limitReached
+                ? "Limit reached"
+                : "Available"
+          }
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="${buttonClass}"
+        ${completed || limitReached ? "disabled" : ""}
+      >
+        ${buttonText}
+      </button>
+
+    `;
+
+
+    const button =
+      card.querySelector(
+        ".task-action"
+      );
+
+
+    if(!completed && !limitReached){
+
+      button.addEventListener(
+        "click",
+        () => openTaskDetails(
+          task
+        )
+      );
+
+    }
+
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+/*
+=========================================================
+OPEN TASK DETAILS
+=========================================================
+*/
+
+function openTaskDetails(task){
+
+  if(!task) return;
+
+
+  currentTask =
+    task;
+
+
+  const title =
+    task.title ||
+    task.name ||
+    "Daily Task";
+
+
+  const description =
+    task.description ||
+    "Complete this task to earn your reward.";
+
+
+  const reward =
+    Number(
+      task.reward ??
+      task.amount ??
+      0
+    );
+
+
+  document.getElementById(
+    "detailTitle"
+  ).textContent =
+    title;
+
+
+  document.getElementById(
+    "detailReward"
+  ).textContent =
+    "+" + money(reward);
+
+
+  document.getElementById(
+    "detailDescription"
+  ).textContent =
+    description;
+
+
+  const url =
+    task.url ||
+    task.link ||
+    task.target_url ||
+    task.task_url;
+
+
+  const action =
+    document.getElementById(
+      "detailAction"
+    );
+
+
+  if(url){
+
+    action.textContent =
+      "Continue Task";
+
+    action.disabled =
+      false;
+
+  }else{
+
+    action.textContent =
+      "Task Link Unavailable";
+
+    action.disabled =
+      true;
+
+  }
+
+
+  document.getElementById(
+    "detailOverlay"
+  ).classList.add(
+    "show"
+  );
+
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+/*
+=========================================================
+CONTINUE TASK
+=========================================================
+*/
+
+function continueTask(){
+
+  if(!currentTask) return;
+
+
+  const url =
+    currentTask.url ||
+    currentTask.link ||
+    currentTask.target_url ||
+    currentTask.task_url;
+
+
+  if(!url){
+
+    return;
+
+  }
+
+
+  /*
+    Open the external task without
+    navigating the VDC page away.
+  */
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
+
+/*
+=========================================================
+CLOSE DETAILS
+=========================================================
+*/
+
+function closeTaskDetail(){
+
+  document.getElementById(
+    "detailOverlay"
+  ).classList.remove(
+    "show"
+  );
+
+
+  document.body.style.overflow =
+    "";
+
+
+  currentTask =
+    null;
+
+}
+
+
+document.getElementById(
+  "detailOverlay"
+).addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target ===
+      this
+    ){
+
+      closeTaskDetail();
 
     }
 
   }
+);
 
 
-  function escapeHtml(value){
+/*
+=========================================================
+STATE
+=========================================================
+*/
 
-    return String(value ?? "")
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;")
-      .replace(/'/g,"&#039;");
+function showState(
+  title,
+  message
+){
+
+  document.getElementById(
+    "taskCountLabel"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "taskList"
+  ).innerHTML = `
+
+    <div class="state-card">
+
+      <div class="state-icon">
+
+        <svg viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8">
+
+          <circle cx="12"
+            cy="12"
+            r="9"/>
+
+          <path d="M12 8v5"/>
+          <path d="M12 16h.01"/>
+
+        </svg>
+
+      </div>
+
+      <h3>
+        ${escapeHtml(title)}
+      </h3>
+
+      <p>
+        ${escapeHtml(message)}
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+/*
+=========================================================
+AUTH STATE MONITOR
+=========================================================
+*/
+
+db.auth.onAuthStateChange(
+  (event,session) => {
+
+    /*
+      Do NOT redirect when Supabase is simply
+      refreshing/restoring the session.
+    */
+
+    if(
+      event === "SIGNED_OUT" &&
+      !session
+    ){
+
+      window.location.href =
+        "auth.html?redirect=tasks.html";
+
+    }
 
   }
+);
 
 
-  loadTaskPage();
+/*
+=========================================================
+START
+=========================================================
+*/
+
+loadTaskPage();
 
 </script>
 
