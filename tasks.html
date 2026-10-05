@@ -574,7 +574,7 @@ h1{
   line-height:1.55;
 }
 
-/* BOTTOM NAV — SAME AS DASHBOARD */
+/* BOTTOM NAV */
 
 .bottom-nav{
   position:fixed;
@@ -647,26 +647,15 @@ h1{
 <header class="header">
 
 <div class="brand" onclick="go('dashboard.html')">
-<div class="brand-mark">V</div>
-<div class="brand-name">VDC</div>
+  <div class="brand-mark">V</div>
+  <div class="brand-name">VDC</div>
 </div>
 
-<button
-class="icon-btn"
-onclick="go('notifications.html')"
-aria-label="Notifications">
+<button class="icon-btn" onclick="go('notifications.html')" aria-label="Notifications">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9"
-stroke-linecap="round"
-stroke-linejoin="round">
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
 <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
 <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-
 </svg>
 
 <span class="notification-dot"></span>
@@ -741,10 +730,7 @@ Daily task progress
 
 <div class="progress-track">
 
-<div
-class="progress-bar"
-id="progressBar">
-</div>
+<div class="progress-bar" id="progressBar"></div>
 
 </div>
 
@@ -762,35 +748,21 @@ id="progressBar">
 Available Tasks
 </div>
 
-<div
-class="section-subtitle"
-id="taskCountLabel">
-
+<div class="section-subtitle" id="taskCountLabel">
 Loading...
-
 </div>
 
 </div>
 
-<div
-id="taskList"
-class="task-list">
+<div id="taskList" class="task-list">
 
 <div class="state-card">
 
 <div class="state-icon">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8"
-stroke-linecap="round"
-stroke-linejoin="round">
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
 <path d="M12 6v6l4 2"/>
 <circle cx="12" cy="12" r="9"/>
-
 </svg>
 
 </div>
@@ -817,18 +789,10 @@ Please wait while your available tasks are loaded.
 
 <div class="info-icon">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.8"
-stroke-linecap="round"
-stroke-linejoin="round">
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
 <circle cx="12" cy="12" r="9"/>
 <path d="M12 10v6"/>
 <path d="M12 7h.01"/>
-
 </svg>
 
 </div>
@@ -840,8 +804,7 @@ About daily tasks
 </h3>
 
 <p>
-Your daily task limit and reward amount are determined by your active VIP level.
-Only eligible tasks count toward your daily progress.
+Your daily task limit and reward amount are determined by your active VIP level. Only eligible tasks count toward your daily progress.
 </p>
 
 </div>
@@ -856,9 +819,7 @@ Only eligible tasks count toward your daily progress.
 
 <!-- TASK DETAIL -->
 
-<div
-id="detailOverlay"
-class="detail-overlay">
+<div id="detailOverlay" class="detail-overlay">
 
 <div class="detail-sheet">
 
@@ -868,52 +829,32 @@ class="detail-overlay">
 
 <div>
 
-<div
-id="detailTitle"
-class="detail-title">
+<div id="detailTitle" class="detail-title">
 Task
 </div>
 
-<div
-id="detailReward"
-class="detail-reward">
+<div id="detailReward" class="detail-reward">
 +₦0.00
 </div>
 
 </div>
 
-<button
-class="detail-close"
-onclick="closeTaskDetail()"
-aria-label="Close">
+<button class="detail-close" onclick="closeTaskDetail()" aria-label="Close">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2"
-stroke-linecap="round"
-stroke-linejoin="round">
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 <path d="M6 6l12 12"/>
 <path d="M18 6 6 18"/>
-
 </svg>
 
 </button>
 
 </div>
 
-<div
-id="detailDescription"
-class="detail-description">
+<div id="detailDescription" class="detail-description">
 Task information will appear here.
 </div>
 
-<button
-id="detailAction"
-class="detail-link"
-onclick="continueTask()">
+<button id="detailAction" class="detail-link" onclick="continueTask()">
 Continue Task
 </button>
 
@@ -927,143 +868,69 @@ Continue Task
 
 <!-- HOME -->
 
-<a
-class="nav-item"
-href="dashboard.html">
+<a class="nav-item" href="dashboard.html">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9"
-stroke-linecap="round"
-stroke-linejoin="round">
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
 <path d="m3 10 9-7 9 7"/>
 <path d="M5 9v11h14V9"/>
 <path d="M9 20v-6h6v6"/>
-
 </svg>
 
-<span>
-Home
-</span>
+<span>Home</span>
 
 </a>
 
 <!-- TASKS -->
 
-<a
-class="nav-item active"
-href="tasks.html">
+<a class="nav-item active" href="tasks.html">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9"
-stroke-linecap="round"
-stroke-linejoin="round">
-
-<rect
-x="4"
-y="3"
-width="16"
-height="18"
-rx="2"/>
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<rect x="4" y="3" width="16" height="18" rx="2"/>
 <path d="M8 7h8"/>
 <path d="M8 11h8"/>
 <path d="M8 15h5"/>
-
 </svg>
 
-<span>
-Tasks
-</span>
+<span>Tasks</span>
 
 </a>
 
 <!-- VIP -->
 
-<a
-class="nav-item"
-href="vip.html">
+<a class="nav-item" href="vip.html">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9"
-stroke-linecap="round"
-stroke-linejoin="round">
-
-<path d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<path d="m12 3 2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6 9.2 8.7 12 3Z"/>
 </svg>
 
-<span>
-VIP
-</span>
+<span>VIP</span>
 
 </a>
 
 <!-- EARN -->
 
-<a
-class="nav-item"
-href="earn.html">
+<a class="nav-item" href="earn.html">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9"
-stroke-linecap="round"
-stroke-linejoin="round">
-
-<circle
-cx="12"
-cy="12"
-r="8"/>
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="8"/>
 <path d="M12 8v8"/>
 <path d="M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5 1.5 2.5 1.5"/>
-
 </svg>
 
-<span>
-Earn
-</span>
+<span>Earn</span>
 
 </a>
 
 <!-- MY -->
 
-<a
-class="nav-item"
-href="profile.html">
+<a class="nav-item" href="profile.html">
 
-<svg
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="1.9"
-stroke-linecap="round"
-stroke-linejoin="round">
-
-<circle
-cx="12"
-cy="8"
-r="4"/>
-
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="8" r="4"/>
 <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>
-
 </svg>
 
-<span>
-My
-</span>
+<span>My</span>
 
 </a>
 
@@ -1188,13 +1055,11 @@ if(!user) return;
 
 /* -----------------------------------------------
    VIP
------------------------------------------------ */
+------------------------------------------------ */
 
-let vipName =
-"Free VIP";
-
-let taskLimit =
-5;
+let vipName = "Free VIP";
+let taskLimit = 5;
+let vipLevelNumber = 0;
 
 const {
 data:userVip,
@@ -1239,11 +1104,17 @@ levelError
 if(vip){
 
 vipName =
-vip.name || "Free VIP";
+vip.name ||
+"Free VIP";
 
 taskLimit =
 Number(
 vip.daily_task_limit || 5
+);
+
+vipLevelNumber =
+Number(
+vip.level_number || 0
 );
 
 }
@@ -1252,17 +1123,15 @@ vip.daily_task_limit || 5
 
 document.getElementById(
 "vipName"
-).textContent =
-vipName;
+).textContent = vipName;
 
 document.getElementById(
 "taskLimit"
-).textContent =
-taskLimit;
+).textContent = taskLimit;
 
 /* -----------------------------------------------
    TODAY'S COMPLETIONS
------------------------------------------------ */
+------------------------------------------------ */
 
 const now =
 new Date();
@@ -1313,14 +1182,32 @@ taskLimit
 
 /* -----------------------------------------------
    TASKS
------------------------------------------------ */
+------------------------------------------------ */
+
+/*
+   IMPORTANT:
+   These are the exact columns currently
+   confirmed in public.tasks.
+*/
 
 const {
 data:tasks,
 error:taskError
 } = await db
 .from("tasks")
-.select("*")
+.select(`
+id,
+title,
+description,
+task_type,
+target_url,
+active,
+created_at,
+reward,
+min_vip_level,
+max_completions_per_day,
+url
+`)
 .eq("active",true)
 .order(
 "created_at",
@@ -1332,12 +1219,13 @@ ascending:true
 if(taskError){
 
 console.error(
-"Task error:",
+"TASK SUPABASE ERROR:",
 taskError
 );
 
 showState(
 "Unable to load tasks",
+taskError.message ||
 "We could not load the available tasks right now."
 );
 
@@ -1345,11 +1233,17 @@ return;
 
 }
 
+console.log(
+"TASKS LOADED:",
+tasks
+);
+
 renderTasks(
 tasks || [],
 completedIds,
 completedCount,
-taskLimit
+taskLimit,
+vipLevelNumber
 );
 
 }catch(error){
@@ -1392,7 +1286,7 @@ taskLimit *
 100
 )
 )
-: 0;
+:0;
 
 document.getElementById(
 "progressPercent"
@@ -1414,7 +1308,8 @@ function renderTasks(
 tasks,
 completedIds,
 completedCount,
-taskLimit
+taskLimit,
+vipLevelNumber
 ){
 
 const list =
@@ -1438,15 +1333,47 @@ return;
 
 }
 
+/*
+   Filter tasks according to minimum VIP.
+*/
+
+const eligibleTasks =
+tasks.filter(task => {
+
+const minimumVip =
+Number(
+task.min_vip_level || 0
+);
+
+return vipLevelNumber >= minimumVip;
+
+});
+
+if(!eligibleTasks.length){
+
 document.getElementById(
 "taskCountLabel"
 ).textContent =
-tasks.length +
+"0 available";
+
+showState(
+"No tasks available",
+"There are no tasks available for your current VIP level right now."
+);
+
+return;
+
+}
+
+document.getElementById(
+"taskCountLabel"
+).textContent =
+eligibleTasks.length +
 " available";
 
 list.innerHTML = "";
 
-tasks.forEach(task => {
+eligibleTasks.forEach(task => {
 
 const id =
 String(task.id);
@@ -1512,17 +1439,14 @@ card.innerHTML = `
 
 <div class="task-icon">
 
-<svg
-viewBox="0 0 24 24"
+<svg viewBox="0 0 24 24"
 fill="none"
 stroke="currentColor"
 stroke-width="1.8"
 stroke-linecap="round"
 stroke-linejoin="round">
 
-<rect
-x="4"
-y="3"
+<rect x="4" y="3"
 width="16"
 height="18"
 rx="2"/>
@@ -1571,10 +1495,9 @@ completed
 
 <button
 class="${buttonClass}"
-${completed || limitReached ? "disabled" : ""}>
-
+${completed || limitReached ? "disabled" : ""}
+>
 ${buttonText}
-
 </button>
 
 `;
@@ -1584,7 +1507,10 @@ card.querySelector(
 ".task-action"
 );
 
-if(!completed && !limitReached){
+if(
+!completed &&
+!limitReached
+){
 
 button.addEventListener(
 "click",
@@ -1641,10 +1567,15 @@ document.getElementById(
 ).textContent =
 description;
 
+/*
+   The database currently contains both
+   url and target_url, so support both.
+*/
+
 const url =
 task.url ||
-task.link ||
 task.target_url ||
+task.link ||
 task.task_url;
 
 const action =
@@ -1685,15 +1616,17 @@ document.body.style.overflow =
 
 function continueTask(){
 
-if(!currentTask) return;
+if(!currentTask)
+return;
 
 const url =
 currentTask.url ||
-currentTask.link ||
 currentTask.target_url ||
+currentTask.link ||
 currentTask.task_url;
 
-if(!url) return;
+if(!url)
+return;
 
 window.open(
 url,
@@ -1711,7 +1644,9 @@ function closeTaskDetail(){
 
 document.getElementById(
 "detailOverlay"
-).classList.remove("show");
+).classList.remove(
+"show"
+);
 
 document.body.style.overflow =
 "";
@@ -1758,16 +1693,14 @@ document.getElementById(
 
 <div class="state-icon">
 
-<svg
-viewBox="0 0 24 24"
+<svg viewBox="0 0 24 24"
 fill="none"
 stroke="currentColor"
 stroke-width="1.8"
 stroke-linecap="round"
 stroke-linejoin="round">
 
-<circle
-cx="12"
+<circle cx="12"
 cy="12"
 r="9"/>
 
