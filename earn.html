@@ -1,667 +1,882 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#ffffff">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VDC — Earn</title>
 
-<title>VDC — Ways to Earn</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{
+      --purple:#6d28d9;
+      --purple-dark:#4c1d95;
+      --purple-light:#f3e8ff;
+      --orange:#f97316;
+      --orange-dark:#ea580c;
+      --green:#008751;
 
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+      --bg:#faf9fc;
+      --card:#ffffff;
+      --text:#17121f;
+      --muted:#6b6474;
+      --border:#eee8f4;
+      --nav:#ffffff;
+      --shadow:0 8px 30px rgba(38,18,62,.07);
+    }
 
-:root{
-    --purple:#6d28d9;
-    --purple-dark:#4c1d95;
-    --purple-light:#f3e8ff;
-    --orange:#f97316;
-    --orange-light:#fff0e7;
-    --green:#008751;
-    --green-light:#e8f7f0;
-    --bg:#faf9fc;
-    --white:#ffffff;
-    --text:#171717;
-    --muted:#737373;
-    --border:#eeeeee;
-}
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
 
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-}
+    body{
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
 
-a{
-    text-decoration:none;
-    color:inherit;
-}
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
 
-.header{
-    height:64px;
-    background:#fff;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 18px;
-    position:sticky;
-    top:0;
-    z-index:20;
-}
+    button{
+      font:inherit;
+    }
 
-.logo{
-    font-size:22px;
-    font-weight:800;
-    color:var(--purple);
-}
+    .app{
+      width:100%;
+      max-width:760px;
+      margin:auto;
+      min-height:100vh;
+      padding-bottom:88px;
+    }
 
-.logo span{
-    color:var(--orange);
-}
+    /* HEADER */
+    .header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      height:64px;
+      background:rgba(250,249,252,.94);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+    }
 
-.back-btn{
-    width:40px;
-    height:40px;
-    border:1px solid var(--border);
-    background:#fff;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--purple);
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      cursor:pointer;
+    }
 
-.back-btn svg{
-    width:20px;
-    height:20px;
-}
+    .brand-mark{
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--purple),var(--orange));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:900;
+      font-size:17px;
+      box-shadow:0 6px 16px rgba(109,40,217,.2);
+    }
 
-.container{
-    width:100%;
-    max-width:760px;
-    margin:auto;
-    padding:24px 16px 95px;
-}
+    .brand-name{
+      font-size:19px;
+      font-weight:850;
+      letter-spacing:-.3px;
+    }
 
-.page-title{
-    font-size:26px;
-    font-weight:800;
-    margin-bottom:6px;
-}
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
 
-.page-subtitle{
-    color:var(--muted);
-    font-size:14px;
-    line-height:1.5;
-    margin-bottom:20px;
-}
+    .icon-btn{
+      width:40px;
+      height:40px;
+      border:1px solid var(--border);
+      background:var(--card);
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      position:relative;
+      color:var(--text);
+    }
 
-.balance-card{
-    background:linear-gradient(
-        135deg,
-        var(--purple),
-        var(--purple-dark)
-    );
-    color:#fff;
-    border-radius:20px;
-    padding:20px;
-    margin-bottom:22px;
-    box-shadow:0 8px 24px rgba(76,29,149,.18);
-}
+    .icon-btn svg{
+      width:20px;
+      height:20px;
+    }
 
-.balance-label{
-    font-size:13px;
-    opacity:.85;
-}
+    .notification-dot{
+      position:absolute;
+      top:8px;
+      right:8px;
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:var(--orange);
+      border:2px solid white;
+    }
 
-.balance{
-    font-size:30px;
-    font-weight:800;
-    margin-top:5px;
-}
+    /* CONTENT */
+    .content{
+      padding:22px 16px 30px;
+    }
 
-.balance-note{
-    margin-top:7px;
-    font-size:12px;
-    opacity:.8;
-}
+    .page-heading{
+      margin-bottom:20px;
+    }
 
-.section-title{
-    font-size:17px;
-    font-weight:800;
-    margin:22px 0 12px;
-}
+    .eyebrow{
+      color:var(--purple);
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.7px;
+      margin-bottom:5px;
+    }
 
-.earn-card{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:17px;
-    margin-bottom:12px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    transition:.15s ease;
-}
+    h1{
+      font-size:28px;
+      line-height:1.15;
+      letter-spacing:-.7px;
+      margin-bottom:7px;
+    }
 
-.earn-card:active{
-    transform:scale(.99);
-}
+    .page-heading p{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+    }
 
-.earn-icon{
-    width:52px;
-    height:52px;
-    border-radius:15px;
-    background:var(--purple-light);
-    color:var(--purple);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-}
+    /* BALANCE */
+    .balance-card{
+      background:linear-gradient(135deg,var(--purple-dark),var(--purple));
+      color:white;
+      border-radius:22px;
+      padding:20px;
+      box-shadow:0 14px 34px rgba(76,29,149,.22);
+      margin-bottom:20px;
+      position:relative;
+      overflow:hidden;
+    }
 
-.earn-icon.orange{
-    background:var(--orange-light);
-    color:var(--orange);
-}
+    .balance-card::after{
+      content:"";
+      position:absolute;
+      width:150px;
+      height:150px;
+      border-radius:50%;
+      right:-60px;
+      top:-70px;
+      background:rgba(255,255,255,.08);
+    }
 
-.earn-icon.green{
-    background:var(--green-light);
-    color:var(--green);
-}
+    .balance-label{
+      font-size:12px;
+      opacity:.78;
+      margin-bottom:6px;
+    }
 
-.earn-icon.vip{
-    background:#eee8ff;
-    color:var(--purple-dark);
-}
+    .balance{
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:-.8px;
+    }
 
-.earn-icon svg{
-    width:27px;
-    height:27px;
-    stroke:currentColor;
-    fill:none;
-    stroke-width:2;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
+    .balance-sub{
+      margin-top:8px;
+      font-size:12px;
+      opacity:.72;
+    }
 
-.earn-icon.vip svg{
-    width:31px;
-    height:31px;
-    stroke-width:2.5;
-}
+    /* SECTION */
+    .section{
+      margin-top:24px;
+    }
 
-.earn-content{
-    flex:1;
-    min-width:0;
-}
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
+    }
 
-.earn-title{
-    font-size:15px;
-    font-weight:800;
-    margin-bottom:4px;
-}
+    .section-title{
+      font-size:17px;
+      font-weight:850;
+      letter-spacing:-.2px;
+    }
 
-.earn-text{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.45;
-}
+    .section-link{
+      color:var(--purple);
+      font-size:12px;
+      font-weight:800;
+    }
 
-.action{
-    border:0;
-    background:var(--purple);
-    color:#fff;
-    padding:10px 13px;
-    border-radius:10px;
-    font-size:12px;
-    font-weight:700;
-    white-space:nowrap;
-}
+    /* MYSTERY BOX */
+    .mystery-card{
+      display:block;
+      background:linear-gradient(135deg,#fff7ed,#f3e8ff);
+      border:1px solid #eadcf8;
+      border-radius:22px;
+      padding:20px;
+      position:relative;
+      overflow:hidden;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
 
-.action.orange{
-    background:var(--orange);
-}
+    .mystery-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:15px;
+    }
 
-.info-box{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:16px;
-    margin-top:20px;
-}
+    .mystery-icon{
+      width:54px;
+      height:54px;
+      border-radius:17px;
+      background:white;
+      border:1px solid #eadcf8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--purple);
+      flex-shrink:0;
+    }
 
-.info-title{
-    font-size:14px;
-    font-weight:800;
-    margin-bottom:7px;
-}
+    .mystery-icon svg{
+      width:27px;
+      height:27px;
+    }
 
-.info-text{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.6;
-}
+    .mystery-content{
+      flex:1;
+    }
 
-.bottom-nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    height:70px;
-    background:#fff;
-    border-top:1px solid var(--border);
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    z-index:30;
-}
+    .mystery-badge{
+      display:inline-flex;
+      padding:5px 8px;
+      border-radius:8px;
+      background:white;
+      color:var(--purple);
+      font-size:10px;
+      font-weight:850;
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      margin-bottom:7px;
+    }
 
-.nav-item{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:4px;
-    color:#777;
-    font-size:10px;
-    min-width:55px;
-}
+    .mystery-title{
+      font-size:19px;
+      font-weight:900;
+      margin-bottom:5px;
+    }
 
-.nav-item svg{
-    width:19px;
-    height:19px;
-    stroke:currentColor;
-    fill:none;
-    stroke-width:2;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
+    .mystery-text{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
 
-.nav-item.active{
-    color:var(--purple);
-    font-weight:700;
-}
+    .mystery-bottom{
+      margin-top:17px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
 
-@media(max-width:420px){
+    .mystery-info{
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    .play-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      background:var(--purple);
+      color:white;
+      padding:11px 15px;
+      border-radius:12px;
+      font-size:12px;
+      font-weight:850;
+      box-shadow:0 7px 18px rgba(109,40,217,.2);
+    }
+
+    .play-btn svg{
+      width:15px;
+      height:15px;
+    }
+
+    /* EARNING OPTIONS */
+    .earn-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
 
     .earn-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:17px;
+      box-shadow:var(--shadow);
+      min-height:155px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .earn-card-icon{
+      width:43px;
+      height:43px;
+      border-radius:13px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--purple-light);
+      color:var(--purple);
+      margin-bottom:15px;
+    }
+
+    .earn-card-icon.green{
+      background:#e8f7ef;
+      color:var(--green);
+    }
+
+    .earn-card-icon.orange{
+      background:#fff0e6;
+      color:var(--orange-dark);
+    }
+
+    .earn-card-icon svg{
+      width:21px;
+      height:21px;
+    }
+
+    .earn-card h3{
+      font-size:14px;
+      font-weight:850;
+      margin-bottom:5px;
+    }
+
+    .earn-card p{
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.45;
+    }
+
+    .card-arrow{
+      margin-top:13px;
+      color:var(--purple);
+      font-size:11px;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      gap:4px;
+    }
+
+    /* REFERRAL */
+    .referral-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:19px;
+      box-shadow:var(--shadow);
+    }
+
+    .referral-row{
+      display:flex;
+      align-items:center;
+      gap:13px;
+    }
+
+    .referral-icon{
+      width:48px;
+      height:48px;
+      border-radius:15px;
+      background:#e8f7ef;
+      color:var(--green);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+    }
+
+    .referral-icon svg{
+      width:24px;
+      height:24px;
+    }
+
+    .referral-title{
+      font-size:15px;
+      font-weight:850;
+      margin-bottom:4px;
+    }
+
+    .referral-text{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .referral-btn{
+      width:100%;
+      margin-top:16px;
+      border:0;
+      border-radius:12px;
+      background:#f3f0f7;
+      color:var(--purple);
+      padding:12px;
+      font-size:12px;
+      font-weight:850;
+      cursor:pointer;
+    }
+
+    /* INFO */
+    .info-card{
+      margin-top:24px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:17px;
+    }
+
+    .info-row{
+      display:flex;
+      gap:11px;
+      align-items:flex-start;
+    }
+
+    .info-icon{
+      color:var(--purple);
+      flex-shrink:0;
+      margin-top:1px;
+    }
+
+    .info-icon svg{
+      width:18px;
+      height:18px;
+    }
+
+    .info-card h3{
+      font-size:13px;
+      font-weight:850;
+      margin-bottom:5px;
+    }
+
+    .info-card p{
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.55;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav{
+      position:fixed;
+      z-index:60;
+      bottom:0;
+      left:50%;
+      transform:translateX(-50%);
+      width:100%;
+      max-width:760px;
+      height:72px;
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(14px);
+      border-top:1px solid var(--border);
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+    }
+
+    .nav-item{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      color:#918a99;
+      font-size:10px;
+      font-weight:750;
+      border-radius:12px;
+      cursor:pointer;
+    }
+
+    .nav-item svg{
+      width:21px;
+      height:21px;
+    }
+
+    .nav-item.active{
+      color:var(--purple);
+      background:var(--purple-light);
+    }
+
+    @media(max-width:380px){
+      h1{
+        font-size:25px;
+      }
+
+      .earn-grid{
+        gap:9px;
+      }
+
+      .earn-card{
         padding:14px;
-        gap:11px;
-    }
+      }
 
-    .earn-icon{
-        width:48px;
-        height:48px;
+      .mystery-card{
+        padding:17px;
+      }
     }
-
-    .action{
-        padding:9px 10px;
-    }
-}
-</style>
+  </style>
 </head>
 
 <body>
 
-<header class="header">
+<div class="app">
 
-    <a href="dashboard.html" class="logo">
-        VD<span>C</span>
-    </a>
+  <!-- HEADER -->
+  <header class="header">
 
-    <a href="dashboard.html" class="back-btn" aria-label="Back">
+    <div class="brand" onclick="go('dashboard.html')">
+      <div class="brand-mark">V</div>
+      <div class="brand-name">VDC</div>
+    </div>
 
-        <svg viewBox="0 0 24 24">
-            <path d="M19 12H5"></path>
-            <path d="M12 19l-7-7 7-7"></path>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="go('notifications.html')" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
+        <span class="notification-dot"></span>
+      </button>
+    </div>
 
-    </a>
+  </header>
 
-</header>
+  <main class="content">
 
+    <!-- PAGE HEADING -->
+    <div class="page-heading">
+      <div class="eyebrow">VDC EARN</div>
+      <h1>Earn More</h1>
+      <p>Explore the available ways to earn rewards on VDC.</p>
+    </div>
 
-<main class="container">
-
-    <h1 class="page-title">
-        Ways to Earn
-    </h1>
-
-    <p class="page-subtitle">
-        Explore the different earning opportunities available on VDC.
-    </p>
-
-
+    <!-- BALANCE -->
     <section class="balance-card">
+      <div class="balance-label">Available Balance</div>
+      <div class="balance" id="balance">₦0.00</div>
+      <div class="balance-sub">Your current withdrawable balance</div>
+    </section>
 
-        <div class="balance-label">
-            Available Balance
+    <!-- MYSTERY BOX -->
+    <section class="section">
+
+      <div class="section-head">
+        <div class="section-title">Featured</div>
+      </div>
+
+      <a href="lucky-draw.html" class="mystery-card">
+
+        <div class="mystery-top">
+
+          <div class="mystery-content">
+            <div class="mystery-badge">Lucky Draw</div>
+
+            <div class="mystery-title">
+              Mystery Box
+            </div>
+
+            <div class="mystery-text">
+              Choose one mystery box and reveal your reward. Your daily chances reset at midnight Nigeria time.
+            </div>
+          </div>
+
+          <div class="mystery-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 8h16v12H4z"/>
+              <path d="M12 8v12"/>
+              <path d="M4 12h16"/>
+              <path d="M12 8c-2.2 0-4-1.1-4-2.5S9.1 3 10.5 4.2C11.4 5 12 6.2 12 8Z"/>
+              <path d="M12 8c2.2 0 4-1.1 4-2.5S14.9 3 13.5 4.2C12.6 5 12 6.2 12 8Z"/>
+            </svg>
+          </div>
+
         </div>
 
-        <div class="balance" id="balance">
-            ₦—
+        <div class="mystery-bottom">
+          <div class="mystery-info">
+            Rewards are selected securely by VDC.
+          </div>
+
+          <div class="play-btn">
+            Open
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </div>
         </div>
 
-        <div class="balance-note" id="balanceNote">
-            Sign in to view your actual wallet balance.
-        </div>
+      </a>
 
     </section>
 
+    <!-- EARNING OPTIONS -->
+    <section class="section">
 
-    <h2 class="section-title">
-        Earning Options
-    </h2>
+      <div class="section-head">
+        <div class="section-title">Ways to Earn</div>
+      </div>
 
+      <div class="earn-grid">
 
-    <!-- EARN TASKS -->
+        <!-- TASKS -->
+        <a href="tasks.html" class="earn-card">
 
-    <div class="earn-card">
+          <div>
+            <div class="earn-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="4" y="3" width="16" height="18" rx="2"/>
+                <path d="M8 8h8"/>
+                <path d="M8 12h8"/>
+                <path d="M8 16h5"/>
+              </svg>
+            </div>
 
-        <div class="earn-icon">
+            <h3>Daily Tasks</h3>
+            <p>
+              Complete available tasks and earn according to your VIP level.
+            </p>
+          </div>
 
-            <svg viewBox="0 0 24 24">
-                <rect x="4" y="3" width="16" height="18" rx="2"></rect>
-                <path d="M8 7h8"></path>
-                <path d="M8 11h2"></path>
-                <path d="M8 15h2"></path>
-                <path d="M13 11l1.5 1.5L18 9"></path>
+          <div class="card-arrow">
+            Open Tasks
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m9 18 6-6-6-6"/>
             </svg>
+          </div>
 
-        </div>
-
-        <div class="earn-content">
-
-            <div class="earn-title">
-                Earn Tasks
-            </div>
-
-            <div class="earn-text">
-                Complete available VDC tasks and receive verified rewards.
-            </div>
-
-        </div>
-
-        <a href="tasks.html" class="action">
-            Open
         </a>
 
-    </div>
+        <!-- VIP -->
+        <a href="vip.html" class="earn-card">
 
+          <div>
+            <div class="earn-card-icon orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
+              </svg>
+            </div>
 
-    <!-- LUCKY DRAW -->
+            <h3>VIP Rewards</h3>
+            <p>
+              View VIP levels, task limits and the rewards available to each level.
+            </p>
+          </div>
 
-    <div class="earn-card">
-
-        <div class="earn-icon orange">
-
-            <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="8"></circle>
-                <path d="M12 8v4l3 2"></path>
-                <path d="M7 4l-2-2"></path>
-                <path d="M17 4l2-2"></path>
+          <div class="card-arrow">
+            View VIP
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m9 18 6-6-6-6"/>
             </svg>
+          </div>
 
-        </div>
-
-        <div class="earn-content">
-
-            <div class="earn-title">
-                Lucky Draw
-            </div>
-
-            <div class="earn-text">
-                Participate in available Lucky Draw events and qualify for prizes.
-            </div>
-
-        </div>
-
-        <a href="lucky.html" class="action orange">
-            Open
         </a>
 
-    </div>
+      </div>
 
+    </section>
 
-    <!-- REFER & EARN -->
+    <!-- REFERRAL -->
+    <section class="section">
 
-    <div class="earn-card">
+      <div class="section-head">
+        <div class="section-title">Referral Earnings</div>
+      </div>
 
-        <div class="earn-icon green">
+      <div class="referral-card">
 
-            <svg viewBox="0 0 24 24">
-                <circle cx="9" cy="8" r="3"></circle>
-                <circle cx="17" cy="9" r="2.5"></circle>
-                <path d="M3.5 19c.5-3 2.4-5 5.5-5s5 2 5.5 5"></path>
-                <path d="M15 14c2.8.2 4.5 1.8 5 4"></path>
-                <path d="M19 5v4"></path>
-                <path d="M17 7h4"></path>
+        <div class="referral-row">
+
+          <div class="referral-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
+          </div>
+
+          <div>
+            <div class="referral-title">Invite & Earn</div>
+            <div class="referral-text">
+              Share your VDC referral link and earn referral rewards when eligible activity is completed.
+            </div>
+          </div>
 
         </div>
 
-        <div class="earn-content">
+        <button class="referral-btn" onclick="go('profile.html')">
+          Open Referral Area
+        </button>
 
-            <div class="earn-title">
-                Refer & Earn
-            </div>
+      </div>
 
-            <div class="earn-text">
-                Invite people using your referral code and receive eligible rewards.
-            </div>
+    </section>
 
+    <!-- INFO -->
+    <div class="info-card">
+
+      <div class="info-row">
+
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 10v6"/>
+            <path d="M12 7h.01"/>
+          </svg>
         </div>
 
-        <a href="referral.html" class="action">
-            Open
-        </a>
+        <div>
+          <h3>How earning works</h3>
+          <p>
+            Your available earning opportunities can depend on your account and VIP level.
+            Complete eligible activities through their dedicated sections and your rewards will be reflected in your VDC balance.
+          </p>
+        </div>
+
+      </div>
 
     </div>
 
+  </main>
 
-    <!-- VIP UPGRADE -->
+</div>
 
-    <div class="earn-card">
-
-        <div class="earn-icon vip">
-
-            <svg viewBox="0 0 24 24">
-
-                <!-- Big upgrade arrow -->
-
-                <path d="M12 20V5"></path>
-
-                <path d="M6 11l6-6 6 6"></path>
-
-                <!-- Base -->
-
-                <path d="M5 20h14"></path>
-
-            </svg>
-
-        </div>
-
-        <div class="earn-content">
-
-            <div class="earn-title">
-                VIP Upgrade
-            </div>
-
-            <div class="earn-text">
-                View VIP levels, task access and reward information.
-            </div>
-
-        </div>
-
-        <a href="vip.html" class="action">
-            View
-        </a>
-
-    </div>
-
-
-    <div class="info-box">
-
-        <div class="info-title">
-            How VDC earnings work
-        </div>
-
-        <div class="info-text">
-            VDC rewards should only be credited after the required activity has actually been completed and verified. Available tasks, Lucky Draw events and referral rewards may vary.
-        </div>
-
-    </div>
-
-</main>
-
-
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
 
-    <a href="dashboard.html" class="nav-item">
+  <a class="nav-item" href="dashboard.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="m3 10 9-7 9 7"/>
+      <path d="M5 9v11h14V9"/>
+      <path d="M9 20v-6h6v6"/>
+    </svg>
+    <span>Home</span>
+  </a>
 
-        <svg viewBox="0 0 24 24">
-            <path d="M3 11l9-8 9 8"></path>
-            <path d="M5 10v10h14V10"></path>
-            <path d="M9 20v-6h6v6"></path>
-        </svg>
+  <a class="nav-item" href="tasks.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <rect x="4" y="3" width="16" height="18" rx="2"/>
+      <path d="M8 8h8"/>
+      <path d="M8 12h8"/>
+      <path d="M8 16h5"/>
+    </svg>
+    <span>Tasks</span>
+  </a>
 
-        <div>Home</div>
+  <a class="nav-item" href="vip.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>
+    </svg>
+    <span>VIP</span>
+  </a>
 
-    </a>
+  <a class="nav-item active" href="earn.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M12 2v20"/>
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H7"/>
+    </svg>
+    <span>Earn</span>
+  </a>
 
-
-    <a href="tasks.html" class="nav-item">
-
-        <svg viewBox="0 0 24 24">
-            <rect x="4" y="3" width="16" height="18" rx="2"></rect>
-            <path d="M8 7h8"></path>
-            <path d="M8 11h2"></path>
-            <path d="M8 15h2"></path>
-            <path d="M13 11l1.5 1.5L18 9"></path>
-        </svg>
-
-        <div>Tasks</div>
-
-    </a>
-
-
-    <a href="vip.html" class="nav-item">
-
-        <svg viewBox="0 0 24 24">
-            <path d="M12 20V5"></path>
-            <path d="M6 11l6-6 6 6"></path>
-            <path d="M5 20h14"></path>
-        </svg>
-
-        <div>VIP</div>
-
-    </a>
-
-
-    <a href="earn.html" class="nav-item active">
-
-        <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="8"></circle>
-            <path d="M12 8v8"></path>
-            <path d="M8 12h8"></path>
-        </svg>
-
-        <div>Earn</div>
-
-    </a>
-
-
-    <a href="profile.html" class="nav-item">
-
-        <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="8" r="3"></circle>
-            <path d="M5 21c.7-4 3-6 7-6s6.3 2 7 6"></path>
-        </svg>
-
-        <div>My</div>
-
-    </a>
+  <a class="nav-item" href="profile.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21a8 8 0 0 1 16 0"/>
+    </svg>
+    <span>My</span>
+  </a>
 
 </nav>
 
-
 <script>
+  const SUPABASE_URL = "https://wiorfxlodrcawxdeowbg.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
 
-const SUPABASE_URL =
-    "https://wiorfxlodrcawxdeowbg.supabase.co";
+  const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
-const SUPABASE_KEY =
-    "sb_publishable_b3FIKdfP_UKP0Ii8ZbMREw_CVqOQv9g";
+  function go(page){
+    window.location.href = page;
+  }
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+  async function loadBalance(){
 
+    try{
 
-async function loadPage(){
+      const {
+        data: { user },
+        error: userError
+      } = await db.auth.getUser();
 
-    const {
-        data: { session }
-    } = await supabaseClient.auth.getSession();
-
-
-    // Public page.
-    // Visitors can view this page without an account.
-
-    if(!session){
-
-        document.getElementById("balance").textContent = "₦—";
-
-        document.getElementById("balanceNote").textContent =
-            "Sign in to view your actual wallet balance.";
-
+      if(userError || !user){
+        window.location.href = "auth.html";
         return;
-    }
+      }
 
-
-    // Logged-in members see their real balance.
-
-    const userId = session.user.id;
-
-
-    const { data: wallet } =
-        await supabaseClient
+      const { data: wallet, error } = await db
         .from("wallets")
         .select("balance")
-        .eq("user_id", userId)
+        .eq("user_id", user.id)
         .maybeSingle();
 
+      if(error){
+        console.error("Wallet error:", error);
+        return;
+      }
 
-    if(wallet){
+      const balance = Number(wallet?.balance || 0);
 
-        const amount =
-            Number(wallet.balance || 0);
+      document.getElementById("balance").textContent =
+        "₦" + balance.toLocaleString("en-NG", {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        });
 
-        document.getElementById("balance").textContent =
-            "₦" +
-            amount.toLocaleString("en-NG", {
-                minimumFractionDigits:2,
-                maximumFractionDigits:2
-            });
+    }catch(err){
 
-        document.getElementById("balanceNote").textContent =
-            "Your current VDC wallet balance.";
+      console.error("Earn page error:", err);
+
     }
 
-}
+  }
 
-
-loadPage();
-
+  loadBalance();
 </script>
 
 </body>
